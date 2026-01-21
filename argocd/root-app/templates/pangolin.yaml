@@ -30,15 +30,14 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: pangolin-creds
-  namespace: pangolin
 spec:
   secretStoreRef:
     kind: SecretStore
     name: infisical
-    namespace: external-secrets
 
   target:
     name: newt-creds
+    namespace: pangolin
 
   dataFrom:
     - find:
