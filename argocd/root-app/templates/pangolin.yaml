@@ -9,10 +9,13 @@ spec:
   source:
     repoURL: https://charts.fossorial.io
     chart: fossorial
-    # helm:
-    #   values: |
-    #     pushgateway:
-    #       enabled: false
+    helm:
+      values: |
+        newtInstances:
+          - name: main
+            enabled: true
+            auth:
+              existingSecretName: newt-creds
   destination:
     server: https://kubernetes.default.svc
     namespace: pangolin
@@ -22,3 +25,21 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: pangolin-creds
+  namespace: pangolin
+spec:
+  secretStoreRef:
+    kind: SecretStore
+    name: infisical
+    namespace: external-secrets
+
+  target:
+    name: newt-creds
+
+  dataFrom:
+    - find:
+        path: pangolin
