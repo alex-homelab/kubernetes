@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pgadmin
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://helm.runix.net
+    chart: runix/pgadmin4
+    targetRevision: 1.57.0
+    helm:
+      values: |
+        httpRoute:
+          enabled: true
+          hostnames:
+            - pgadmin.lan
+          parentRefs:
+            - name: traefik-gateway
+              namespace: traefik
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: db
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
