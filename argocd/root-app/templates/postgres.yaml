@@ -48,8 +48,7 @@ spec:
             storageClass: local-path
 
           enableSuperuserAccess: true
-          superuserSecret: 
-            name: pg-superuser
+          superuserSecret: pg-superuser
   destination:
     server: https://kubernetes.default.svc
     namespace: db
