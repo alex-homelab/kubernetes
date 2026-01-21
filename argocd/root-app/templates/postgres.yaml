@@ -45,7 +45,9 @@ spec:
             size: 20Gi
             storageClass: local-path
 
-          superuserSecret: pg-superuser
+        enableSuperuserAccess: true
+        superuserSecret: 
+          name: pg-superuser
   destination:
     server: https://kubernetes.default.svc
     namespace: db
