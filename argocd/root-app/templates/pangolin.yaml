@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://charts.fossorial.io
-    chart: fossorial
+    chart: newt
     targetRevision: 1.1.0
     helm:
       values: |
