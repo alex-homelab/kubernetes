@@ -9,6 +9,7 @@ spec:
   source:
     repoURL: https://charts.fossorial.io
     chart: fossorial
+    targetRevision: 1.1.0
     helm:
       values: |
         newtInstances:
