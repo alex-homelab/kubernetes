@@ -29,8 +29,8 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: pangolin-creds
-  namespace: external-secrets
+  name: newt-creds
+  namespace: pangolin
 spec:
   secretStoreRef:
     kind: SecretStore
@@ -40,19 +40,15 @@ spec:
     name: newt-creds
     namespace: pangolin
 
-  # dataFrom:
-  #   - find:
-  #       path: pangolin
-
   data:
     - secretKey: NEWT_ID
       remoteRef:
-        key: NEWT_ID
+        key: /pangolin/NEWT_ID
 
     - secretKey: NEWT_SECRET
       remoteRef:
-        key: NEWT_SECRET
+        key: /pangolin/NEWT_SECRET
 
     - secretKey: PANGOLIN_ENDPOINT
       remoteRef:
-        key: PANGOLIN_ENDPOINT
+        key: /pangolin/PANGOLIN_ENDPOINT
