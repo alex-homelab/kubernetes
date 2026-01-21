@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cnpg-operator
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: database
+  source:
+    repoURL: https://cloudnative-pg.github.io/charts
+    chart: cloudnative-pg
+    targetRevision: 0.27.0
+    helm:
+      valuesObject:
+        config:
+          clusterWide: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cnpg-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: database
+  source:
+    repoURL: https://cloudnative-pg.github.io/charts
+    chart: cluster
+    targetRevision: 0.5.0
+    helm:
+      valuesObject:
+        cluster:
+          instances: 2
+
+          storage:
+            size: 20Gi
+            storageClass: local-path
+
+          superuserSecret: pg-superuser
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: db
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
