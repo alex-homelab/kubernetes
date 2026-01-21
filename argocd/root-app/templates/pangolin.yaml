@@ -30,6 +30,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: pangolin-creds
+  namespace: external-secrets
 spec:
   secretStoreRef:
     kind: SecretStore
