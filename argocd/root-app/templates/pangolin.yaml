@@ -30,7 +30,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: newt-creds
-  namespace: pangolin
+  namespace: external-secrets
 spec:
   secretStoreRef:
     kind: SecretStore
@@ -38,7 +38,6 @@ spec:
 
   target:
     name: newt-creds
-    namespace: pangolin
 
   data:
     - secretKey: NEWT_ID
