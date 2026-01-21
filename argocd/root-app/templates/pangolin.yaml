@@ -40,6 +40,19 @@ spec:
     name: newt-creds
     namespace: pangolin
 
-  dataFrom:
-    - find:
-        path: pangolin
+  # dataFrom:
+  #   - find:
+  #       path: pangolin
+
+  data:
+    - secretKey: NEWT_ID
+      remoteRef:
+        key: NEWT_ID
+
+    - secretKey: NEWT_SECRET
+      remoteRef:
+        key: NEWT_SECRET
+
+    - secretKey: PANGOLIN_ENDPOINT
+      remoteRef:
+        key: PANGOLIN_ENDPOINT
