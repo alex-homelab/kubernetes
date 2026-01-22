@@ -13,20 +13,11 @@ spec:
     helm:
       valuesObject:
         env:
-          PGADMIN_DEFAULT_PASSWORD: ""
-          PGADMIN_DEFAULT_EMAIL: ""
-          
-        envVarsExtra:
-          - name: PGADMIN_DEFAULT_EMAIL
-            valueFrom:
-              secretKeyRef:
-                name: pgadmin-credentials
-                key: PGADMIN_DEFAULT_EMAIL
-          - name: PGADMIN_DEFAULT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pgadmin-credentials
-                key: PGADMIN_DEFAULT_PASSWORD
+          email: "admin"
+
+        existingSecret: pgadmin-credentials
+        secretKeys:
+          pgadminPasswordKey: PGADMIN_DEFAULT_PASSWORD
 
         serverDefinitions:
           enabled: true
