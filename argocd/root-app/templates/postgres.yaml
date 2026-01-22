@@ -41,6 +41,7 @@ spec:
       valuesObject:
         nameOverride: postgres
         cluster:
+          externalClusters: []
           instances: 2
 
           storage:
