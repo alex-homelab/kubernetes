@@ -16,12 +16,13 @@ spec:
           - pgadmin-credentials
 
         serverDefinitions:
-          - name: Local Server
-            group: Servers
-            host: postgres-rw
-            maintenanceDB: postgres
-            username: postgres
-            password: ""
+          enabled: true
+          servers:
+            local:
+              Name: Local Postgres
+              Group: Servers
+              Host: postgres-rw
+
         httpRoute:
           enabled: true
           hostnames:
