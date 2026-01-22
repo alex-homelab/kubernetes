@@ -11,7 +11,17 @@ spec:
     chart: pgadmin4
     targetRevision: 1.57.0
     helm:
-      values: |
+      valuesObject:
+        envVarsFromSecrets:
+          - pgadmin-credentials
+
+        serverDefinitions:
+          - name: Local Server
+            group: Servers
+            host: postgres-rw
+            maintenanceDB: postgres
+            username: postgres
+            password: ""
         httpRoute:
           enabled: true
           hostnames:
@@ -19,6 +29,9 @@ spec:
           parentRefs:
             - name: traefik-gateway
               namespace: traefik
+        
+        persistentVolume:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: db
@@ -28,3 +41,25 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: pgadmin-credentials
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: pgadmin-credentials
+
+  data:
+    - secretKey: PGADMIN_DEFAULT_EMAIL
+      remoteRef:
+        key: /pgadmin/PGADMIN_DEFAULT_EMAIL
+
+    - secretKey: PGADMIN_DEFAULT_PASSWORD
+      remoteRef:
+        key: /pgadmin/PGADMIN_DEFAULT_PASSWORD
