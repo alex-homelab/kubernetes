@@ -12,8 +12,17 @@ spec:
     targetRevision: 1.57.0
     helm:
       valuesObject:
-        envVarsFromSecrets:
-          - pgadmin-credentials
+        envVarsExtra:
+          - name: POSTGRES_DEFAULT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: pgadmin-credentials
+                key: POSTGRES_DEFAULT_USERNAME
+          - name: POSTGRES_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pgadmin-credentials
+                key: POSTGRES_DEFAULT_PASSWORD
 
         serverDefinitions:
           enabled: true
