@@ -13,16 +13,16 @@ spec:
     helm:
       valuesObject:
         envVarsExtra:
-          - name: POSTGRES_DEFAULT_EMAIL
+          - name: PGADMIN_DEFAULT_EMAIL
             valueFrom:
               secretKeyRef:
                 name: pgadmin-credentials
-                key: POSTGRES_DEFAULT_EMAIL
-          - name: POSTGRES_DEFAULT_PASSWORD
+                key: PGADMIN_DEFAULT_EMAIL
+          - name: PGADMIN_DEFAULT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: pgadmin-credentials
-                key: POSTGRES_DEFAULT_PASSWORD
+                key: PGADMIN_DEFAULT_PASSWORD
 
         serverDefinitions:
           enabled: true
