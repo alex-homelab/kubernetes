@@ -13,7 +13,7 @@ spec:
     helm:
       valuesObject:
         env:
-          email: "admin"
+          email: "admin@pgadmin.lan"
 
         existingSecret: pgadmin-credentials
         secretKeys:
