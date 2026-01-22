@@ -13,11 +13,11 @@ spec:
     helm:
       valuesObject:
         envVarsExtra:
-          - name: POSTGRES_DEFAULT_USERNAME
+          - name: POSTGRES_DEFAULT_EMAIL
             valueFrom:
               secretKeyRef:
                 name: pgadmin-credentials
-                key: POSTGRES_DEFAULT_USERNAME
+                key: POSTGRES_DEFAULT_EMAIL
           - name: POSTGRES_DEFAULT_PASSWORD
             valueFrom:
               secretKeyRef:
