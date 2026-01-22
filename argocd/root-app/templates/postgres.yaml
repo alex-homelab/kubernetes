@@ -41,7 +41,6 @@ spec:
       valuesObject:
         nameOverride: postgres
         cluster:
-          externalClusters: []
           instances: 2
 
           storage:
@@ -49,7 +48,6 @@ spec:
             storageClass: local-path
 
           enableSuperuserAccess: true
-          superuserSecret: pg-superuser
   destination:
     server: https://kubernetes.default.svc
     namespace: db
