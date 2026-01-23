@@ -23,8 +23,9 @@ spec:
           data:
             filesystem:
               pvc:
-                storageClass: local-path
-                size: 1Gi
+                # storageClass: local-path
+                # size: 1Gi
+                existingClaim: 
             storageType: s3
             s3:
               endpoint: http://minio.minio.svc.cluster.local:9000
