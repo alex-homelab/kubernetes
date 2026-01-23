@@ -28,6 +28,8 @@ spec:
               existingSecret: s3-credentials
           database:
             existingSecret: linkwarden-pg-secret
+          postgresql:
+            enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: linkwarden
