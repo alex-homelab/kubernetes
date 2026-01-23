@@ -172,7 +172,7 @@ spec:
               mc mb --ignore-existing r2/data-backup
 
               mc admin replicate add local/data \
-                --remote-bucket r2/data-backup \
+                --remote-bucket r2/minio-backup \
                 --replicate delete,existing-objects || true
 
               echo "Replication configured"
