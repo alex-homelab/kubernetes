@@ -48,6 +48,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: linkwarden-db
+  namespace: db
 spec:
   name: linkwarden
   owner: linkwarden
