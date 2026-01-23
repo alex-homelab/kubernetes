@@ -31,7 +31,7 @@ spec:
               bucket: linkwarden
               existingSecret: s3-credentials
           database:
-            existingSecret: linkwarden-pg-secret
+            existingSecret: linkwarden-db
         postgresql:
           enabled: false
   destination:
@@ -82,7 +82,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: linkwarden-pg-secret
+  name: linkwarden-db
   namespace: db
 spec:
   secretStoreRef:
@@ -90,7 +90,7 @@ spec:
     name: infisical
 
   target:
-    name: linkwarden-pg-secret
+    name: linkwarden-db
 
   data:
     - secretKey: uri
