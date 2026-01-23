@@ -61,11 +61,11 @@ spec:
     name: linkwarden-pg-user
 
   data:
-    - secretKey: PG_USER
+    - secretKey: username
       remoteRef:
         key: /linkwarden/PG_USER
 
-    - secretKey: PG_PASSWORD
+    - secretKey: password
       remoteRef:
         key: /linkwarden/PG_PASSWORD
 ---
