@@ -29,7 +29,7 @@ spec:
             s3:
               endpoint: http://minio.minio.svc.cluster.local:9000
               bucketName: linkwarden
-              forcePathStyle: true
+              forcePathStyle: "true"
               existingSecret: s3-credentials
           database:
             existingSecret: linkwarden-db
