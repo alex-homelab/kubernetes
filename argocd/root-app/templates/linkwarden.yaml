@@ -17,7 +17,9 @@ spec:
         linkwarden:
           domain: linkwarden.vcov.org
           nextAuthSecret:
-            existingSecret: linkwarden-nextauth-secret
+            existingSecret:
+              name: next-auth-secret
+              key: secret
           data:
             storageType: s3
             s3:
@@ -110,3 +112,21 @@ spec:
     - secretKey: secretKey
       remoteRef:
         key: /linkwarden/S3_SECRET_KEY
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: next-auth-secret
+  namespace: linkwarden
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: next-auth-secret
+
+  data:
+    - secretKey: secret
+      remoteRef:
+        key: /linkwarden/NEXTAUTH_SECRET
