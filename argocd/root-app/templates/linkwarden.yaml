@@ -13,7 +13,7 @@ spec:
     helm:
       valuesObject:
         image:
-          tag: 2.13.5
+          tag: v2.13.5
         linkwarden:
           domain: linkwarden.vcov.org
           nextAuthSecret:
