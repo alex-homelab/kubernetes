@@ -171,7 +171,7 @@ spec:
               mc mb --ignore-existing local/linkwarden
               mc mb --ignore-existing r2/linkwarden-data-backup
 
-              mc admin replicate add local/data r2/data-backup \
-                --replicate delete,existing-objects || true
+              echo "Adding replication rule (idempotent)"
+              mc admin replicate add local/linkwarden r2/linkwarden-data-backup || true
 
               echo "Replication configured"
