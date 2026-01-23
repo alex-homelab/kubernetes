@@ -1,0 +1,152 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+spec:
+  project: default
+
+  source:
+    repoURL: https://charts.min.io/
+    chart: minio
+    targetRevision: 5.0.15
+    helm:
+      valuesObject:
+        mode: distributed
+
+        replicas: 2
+
+        image:
+          repository: minio/minio
+          tag: RELEASE.2024-02-17T01-15-57Z
+
+        existingSecret: minio-root-credentials
+        rootUser:
+        rootPassword:
+
+        persistence:
+          enabled: true
+          storageClass: local-path
+          accessMode: ReadWriteOnce
+          size: 20Gi
+
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+
+        consoleService:
+          type: ClusterIP
+          port: 9001
+
+        service:
+          type: ClusterIP
+          port: 9000
+
+        extraArgs:
+          - --console-address=:9001
+
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app: minio
+                topologyKey: kubernetes.io/hostname
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: minio
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: minio-root-credentials
+  namespace: minio
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: minio-root-credentials
+
+  data:
+    - secretKey: rootUser
+      remoteRef:
+        key: /minio/rootUser
+
+    - secretKey: rootPassword
+      remoteRef:
+        key: /minio/rootPassword
+---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: minio-r2-replication
+#   namespace: storage
+#   annotations:
+#     argocd.argoproj.io/hook: PostSync
+#     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+# spec:
+#   backoffLimit: 3
+#   template:
+#     spec:
+#       restartPolicy: OnFailure
+#       containers:
+#         - name: mc
+#           image: minio/mc:latest
+#           env:
+#             - name: MINIO_ROOT_USER
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: minio-root-credentials
+#                   key: rootUser
+#             - name: MINIO_ROOT_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: minio-root-credentials
+#                   key: rootPassword
+#             - name: R2_ENDPOINT
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: r2-credentials
+#                   key: R2_ENDPOINT
+#             - name: R2_ACCESS_KEY
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: r2-credentials
+#                   key: R2_ACCESS_KEY
+#             - name: R2_SECRET_KEY
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: r2-credentials
+#                   key: R2_SECRET_KEY
+#           command:
+#             - /bin/sh
+#             - -c
+#             - |
+#               set -e
+
+#               echo "Configuring MinIO → R2 replication"
+
+#               mc alias set local http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+#               mc alias set r2 "$R2_ENDPOINT" "$R2_ACCESS_KEY" "$R2_SECRET_KEY"
+
+#               mc mb --ignore-existing local/data
+#               mc mb --ignore-existing r2/data-backup
+
+#               mc admin replicate add local/data \
+#                 --remote-bucket r2/data-backup \
+#                 --replicate delete,existing-objects || true
+
+#               echo "Replication configured"
