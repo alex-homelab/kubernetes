@@ -48,6 +48,13 @@ spec:
             storageClass: local-path
 
           enableSuperuserAccess: true
+        
+          roles:
+            - name: linkwarden
+              ensure: present
+              login: true
+              passwordSecret:
+                name: linkwarden-pg-user
   destination:
     server: https://kubernetes.default.svc
     namespace: db
