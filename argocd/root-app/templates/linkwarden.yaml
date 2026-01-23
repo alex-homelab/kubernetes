@@ -1,0 +1,110 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkwarden
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://fmjstudios.github.io/helm
+    chart: linkwarden
+    targetRevision: 1.1.0
+    helm:
+      valuesObject:
+        linkwarden:
+          domain: linkwarden.vcov.org
+          nextAuthSecret:
+            existingSecret: linkwarden-nextauth-secret
+          data:
+            storageType: s3
+            s3:
+              endpoint: http://minio.minio.svc.cluster.local:9000
+              bucket: linkwarden
+              existingSecret: s3-credentials
+          database:
+            existingSecret: linkwarden-pg-secret
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkwarden
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: linkwarden-db
+spec:
+  name: linkwarden
+  owner: linkwarden
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: linkwarden-pg-user
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: linkwarden-pg-user
+
+  data:
+    - secretKey: PG_USER
+      remoteRef:
+        key: /linkwarden/PG_USER
+
+    - secretKey: PG_PASSWORD
+      remoteRef:
+        key: /linkwarden/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: linkwarden-pg-secret
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: linkwarden-pg-secret
+
+  data:
+    - secretKey: uri
+      remoteRef:
+        key: /linkwarden/PG_URI
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: s3-credentials
+  namespace: linkwarden
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: s3-credentials
+
+  data:
+    - secretKey: accessKey
+      remoteRef:
+        key: /linkwarden/S3_ACCESS_KEY
+
+    - secretKey: secretKey
+      remoteRef:
+        key: /linkwarden/S3_SECRET_KEY
