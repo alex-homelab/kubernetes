@@ -9,9 +9,11 @@ spec:
   source:
     repoURL: https://fmjstudios.github.io/helm
     chart: linkwarden
-    targetRevision: 1.1.0
+    targetRevision: 0.3.3
     helm:
       valuesObject:
+        image:
+          tag: 2.13.5
         linkwarden:
           domain: linkwarden.vcov.org
           nextAuthSecret:
