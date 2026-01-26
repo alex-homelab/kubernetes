@@ -52,10 +52,9 @@ spec:
         providers:
           kubernetesIngress:
             enabled: true
+            allowExternalNameServices: true
           kubernetesGateway:
             enabled: true
-          kubernetesCRD:
-            allowExternalNameServices: true
 
         gateway:
           listeners:
