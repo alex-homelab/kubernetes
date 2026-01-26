@@ -1,4 +1,4 @@
-{{- if and .Values.linkwarden.data.storageType eq "filesystem" not .Values.linkwarden.data.filesystem.pvc.existingClaim }}
+{{- if and (eq .Values.linkwarden.data.storageType "filesystem") (not .Values.linkwarden.data.filesystem.pvc.existingClaim) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
