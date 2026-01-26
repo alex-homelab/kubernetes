@@ -99,24 +99,13 @@ metadata:
   name: technitium
   namespace: traefik
 spec:
-  ports:
-  - name: http
-    protocol: TCP
-    port: 5380
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: dns
-  namespace: traefik
-spec:
   type: ExternalName
   externalName: dns.lan
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dns
+  name: technitium
   namespace: traefik
 spec:
   rules:
@@ -127,44 +116,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: dns
+            name: technitium
             port:
               number: 5380
----
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
-metadata:
-  name: technitium
-  namespace: traefik
-  labels:
-    kubernetes.io/service-name: technitium
-addressType: IPv4
-endpoints:
-  - addresses:
-    - 192.168.1.5
-    conditions:
-      ready: true
-ports:
-  - name: http
-    protocol: TCP
-    port: 5380
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: technitium
-  namespace: traefik
-spec:
-  parentRefs:
-  - name: traefik-gateway
-    namespace: traefik
-  hostnames:
-  - dns.lan
-  rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: technitium
-      port: 5380
