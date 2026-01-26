@@ -127,6 +127,7 @@ spec:
           serviceName: dns
           servicePort: 5380
         path: /
+        pathType: Prefix
 ---
 apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
