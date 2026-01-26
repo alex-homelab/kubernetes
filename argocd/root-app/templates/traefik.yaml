@@ -99,11 +99,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: technitium
+  name: technitium-primary
   namespace: traefik
 spec:
   type: ExternalName
-  externalName: dns.lan
+  externalName: dns1.lan
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-secondary
+  namespace: traefik
+spec:
+  type: ExternalName
+  externalName: mini.lan
 # ---
 # apiVersion: networking.k8s.io/v1
 # kind: Ingress
@@ -135,5 +144,7 @@ spec:
     - match: Host(`dns.lan`)
       kind: Rule
       services:
-        - name: technitium
+        - name: technitium-primary
+          port: 5380
+        - name: technitium-secondary
           port: 5380
