@@ -8,9 +8,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/alex-homelab/kubernetes.git
-    path: charts
-    chart: linkwarden
-    targetRevision: 0.3.3
+    path: charts/linkwarden
+    targetRevision: HEAD
     helm:
       valuesObject:
         image:
