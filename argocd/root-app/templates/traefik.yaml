@@ -127,7 +127,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            mame: dns
+            name: dns
             port:
               number: 5380
 ---
