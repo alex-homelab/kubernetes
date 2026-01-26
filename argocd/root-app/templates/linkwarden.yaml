@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://fmjstudios.github.io/helm
+    repoURL: https://github.com/alex-homelab/kubernetes.git
     chart: linkwarden
     targetRevision: 0.3.3
     helm:
