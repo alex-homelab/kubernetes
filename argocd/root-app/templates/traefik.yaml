@@ -54,6 +54,8 @@ spec:
             enabled: true
           kubernetesGateway:
             enabled: true
+          kubernetesCRD:
+            allowExternalNameServices: true
 
         gateway:
           listeners:
