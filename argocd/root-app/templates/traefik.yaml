@@ -118,5 +118,4 @@ spec:
         backend:
           service:
             name: technitium
-            port:
-              number: 5380
+            port: 5380
