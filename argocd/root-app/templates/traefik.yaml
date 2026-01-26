@@ -102,22 +102,36 @@ metadata:
 spec:
   type: ExternalName
   externalName: dns.lan
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: technitium
+#   namespace: traefik
+# spec:
+#   rules:
+#   - host: dns.lan
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: technitium
+#             port:
+#               number: 5380
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: technitium
   namespace: traefik
 spec:
-  rules:
-  - host: dns.lan
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: technitium
-            namespace: traefik
-            port:
-              number: 5380
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dns.lan`)
+      kind: Rule
+      services:
+        - name: technitium
+          port: 5380
