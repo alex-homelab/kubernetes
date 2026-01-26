@@ -118,5 +118,6 @@ spec:
         backend:
           service:
             name: technitium
+            namespace: traefik
             port:
               number: 5380
