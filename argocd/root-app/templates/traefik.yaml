@@ -146,7 +146,15 @@ spec:
       services:
         - name: technitium-primary
           port: 5380
-          weight: 20
+          sticky:
+            cookie:
+              name: traefik-sticky-cookie
+              secure: true
+              httpOnly: true
         - name: technitium-secondary
           port: 5380
-          weight: 10
+          sticky:
+            cookie:
+              name: traefik-sticky-cookie
+              secure: true
+              httpOnly: true
