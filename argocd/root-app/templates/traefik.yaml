@@ -146,5 +146,7 @@ spec:
       services:
         - name: technitium-primary
           port: 5380
+          weight: 20
         - name: technitium-secondary
           port: 5380
+          weight: 10
