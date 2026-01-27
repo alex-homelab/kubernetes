@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obico
+spec:
+  project: default
+
+  source:
+    repoURL: oci://ghcr.io/gabe565/charts/obico
+    chart: obico
+    targetRevision: 0.6.0
+    helm:
+      valuesObject:
+        server:
+          persistence:
+            static:
+              enabled: false
+          
+          ingress:
+            main:
+              hosts:
+                - host: obico.lan
+                  paths:
+                    - path: /
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: obico
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
