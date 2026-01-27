@@ -14,7 +14,9 @@ spec:
         server:
           persistence:
             static:
-              enabled: false
+              # enabled: false
+              type: emptyDir
+              mountPath: /app/static_build
           
           ingress:
             main:
