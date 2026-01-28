@@ -13,11 +13,11 @@ spec:
       valuesObject:
         server:
           env:
-            - name: OBI_API_KEY
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: obico-server-secret
-                  key: api-key
+                  name: obico-db-url
+                  key: url
           persistence:
             static:
               # enabled: false
@@ -78,3 +78,20 @@ spec:
       remoteRef:
         key: /obico/PG_PASSWORD
 ---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: obico-db-url
+  namespace: obico
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: obico-db-url
+
+  data:
+    - secretKey: url
+      remoteRef:
+        key: /obico/PG_URL
