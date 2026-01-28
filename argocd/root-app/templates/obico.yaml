@@ -12,7 +12,7 @@ spec:
     helm:
       valuesObject:
         server:
-          env:
+          envFrom:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
