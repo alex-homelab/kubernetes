@@ -19,6 +19,9 @@ spec:
             data:
               enabled: true
               retain: true
+              size: 1Gi
+              storageClass: local-path
+              accessMode: ReadWriteOnce
             static:
               # enabled: false
               type: emptyDir
