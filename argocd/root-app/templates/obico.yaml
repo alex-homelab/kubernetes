@@ -12,6 +12,8 @@ spec:
     helm:
       valuesObject:
         server:
+          env:
+            SITE_USES_HTTPS: True
           envFrom:
             - secretRef: 
                 name: obico-db-url
