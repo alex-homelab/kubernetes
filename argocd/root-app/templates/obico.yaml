@@ -13,11 +13,8 @@ spec:
       valuesObject:
         server:
           envFrom:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: obico-db-url
-                  key: url
+            - secretRef: 
+                name: obico-db-url
           persistence:
             static:
               # enabled: false
@@ -92,6 +89,6 @@ spec:
     name: obico-db-url
 
   data:
-    - secretKey: url
+    - secretKey: DATABASE_URL
       remoteRef:
         key: /obico/PG_URL
