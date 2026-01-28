@@ -17,7 +17,7 @@ spec:
                 name: obico-db-url
           persistence:
             data:
-              enabled: false
+              enabled: true
               retain: true
             static:
               # enabled: false
