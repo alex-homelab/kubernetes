@@ -28,8 +28,8 @@ spec:
               mountPath: /app/static_build
           
           ingress:
-            enabled: true
             main:
+              enabled: true
               hosts:
                 - host: obico.lan
                   paths:
