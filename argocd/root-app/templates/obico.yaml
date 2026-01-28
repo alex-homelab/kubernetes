@@ -89,6 +89,6 @@ spec:
     name: obico-db-url
 
   data:
-    - secretKey: DATABASE_URL
+    - secretKey: TEST
       remoteRef:
         key: /obico/PG_URL
