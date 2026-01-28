@@ -16,6 +16,9 @@ spec:
             - secretRef: 
                 name: obico-db-url
           persistence:
+            data:
+              enabled: false
+              retain: true
             static:
               # enabled: false
               type: emptyDir
@@ -27,7 +30,9 @@ spec:
                 - host: obico.lan
                   paths:
                     - path: /
-
+        redis:
+          image:
+            tag: "latest"
   destination:
     server: https://kubernetes.default.svc
     namespace: obico
