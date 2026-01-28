@@ -55,6 +55,11 @@ spec:
               login: true
               passwordSecret:
                 name: linkwarden-pg-user
+            - name: obico
+              ensure: present
+              login: true
+              passwordSecret:
+                name: obico-pg-user
   destination:
     server: https://kubernetes.default.svc
     namespace: db

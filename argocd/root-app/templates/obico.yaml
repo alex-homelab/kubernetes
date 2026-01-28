@@ -12,6 +12,12 @@ spec:
     helm:
       valuesObject:
         server:
+          env:
+            - name: OBI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: obico-server-secret
+                  key: api-key
           persistence:
             static:
               # enabled: false
@@ -35,3 +41,40 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+# ---
+# apiVersion: postgresql.cnpg.io/v1
+# kind: Database
+# metadata:
+#   name: obico-db
+#   namespace: db
+# spec:
+#   name: obico
+#   owner: obico
+#   cluster:
+#     name: postgres
+#   extensions:
+#     - name: bloom
+#       ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: obico-pg-user
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: obico-pg-user
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /obico/PG_USER
+
+    - secretKey: password
+      remoteRef:
+        key: /obico/PG_PASSWORD
+---
