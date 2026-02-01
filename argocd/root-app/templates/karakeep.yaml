@@ -30,6 +30,7 @@ spec:
               backup:
                 image:
                   repository: amazon/aws-cli
+                  tag: latest
                 command:
                   - sh
                   - -c
