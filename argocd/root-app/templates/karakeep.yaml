@@ -49,8 +49,8 @@ spec:
                   OCR_LANGS: "eng,rus,est"
                   OAUTH_PROVIDER_NAME: "Google"
                   OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING: "true"
-                  MEILI_ADDR: "http://{{ .Release.Name }}-meilisearch:7700"
-                  BROWSER_WEB_URL: http://{{ .Release.Name }}-chrome:9222
+                  MEILI_ADDR: "http://karakeep-meilisearch:7700"
+                  BROWSER_WEB_URL: http://karakeep-chrome:9222
               db-backup:
                 image:
                   repository: amazon/aws-cli
