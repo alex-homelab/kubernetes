@@ -18,6 +18,22 @@ spec:
               karakeep:
                 image:
                   tag: 0.30.0
+              db-backup:
+                image: amazon/aws-cli
+                envFrom:
+                  - secretRef:
+                      name: karakeep-r2-backup
+                command:
+                  - sh
+                  - -c
+                  - |
+                    while true; do
+                      sleep 600
+                      ls -la /
+                      ls -la /data
+                      aws --endpoint-url=$AWS_ENDPOINT \
+                        s3 cp /data/db.db s3://$BUCKET/db.db
+                    done
             statefulset:
               volumeClaimTemplates: []
           
@@ -38,27 +54,27 @@ spec:
                     drop:
                       - ALL
           
-          db-backup:
-            enabled: true
-            type: cronjob
-            cronjob:
-              schedule: "0/10 * * * *"
-            containers:
-              backup:
-                image:
-                  repository: amazon/aws-cli
-                  tag: latest
-                command:
-                  - sh
-                  - -c
-                  - |
-                    ls -la /
-                    ls -la /data
-                    aws --endpoint-url=$AWS_ENDPOINT \
-                      s3 cp /data/db.db s3://$BUCKET/db.db
-                envFrom:
-                  - secretRef:
-                      name: karakeep-r2-backup
+          # db-backup:
+          #   enabled: true
+          #   type: cronjob
+          #   cronjob:
+          #     schedule: "0/10 * * * *"
+          #   containers:
+          #     backup:
+          #       image:
+          #         repository: amazon/aws-cli
+          #         tag: latest
+          #       command:
+          #         - sh
+          #         - -c
+          #         - |
+          #           ls -la /
+          #           ls -la /data
+          #           aws --endpoint-url=$AWS_ENDPOINT \
+          #             s3 cp /data/db.db s3://$BUCKET/db.db
+          #       envFrom:
+          #         - secretRef:
+          #             name: karakeep-r2-backup
         
         route:
           karakeep:
