@@ -19,7 +19,9 @@ spec:
                 image:
                   tag: 0.30.0
               db-backup:
-                image: amazon/aws-cli
+                image:
+                  repository: amazon/aws-cli
+                  tag: latest
                 envFrom:
                   - secretRef:
                       name: karakeep-r2-backup
