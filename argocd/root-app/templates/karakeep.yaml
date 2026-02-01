@@ -50,6 +50,7 @@ spec:
                   OAUTH_PROVIDER_NAME: "Google"
                   OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING: "true"
                   ASSET_STORE_S3_FORCE_PATH_STYLE: "true"
+                  ASSET_STORE_S3_REGION: "home"
                   NEXTAUTH_URL:
                     valueFrom:
                       secretKeyRef:
