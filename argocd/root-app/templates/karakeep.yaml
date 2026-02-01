@@ -42,7 +42,7 @@ spec:
                   tag: 0.30.0
                 env:
                   DATA_DIR: /data
-                  DISABLE_PASSWORD_AUTH: "true"
+                  DISABLE_PASSWORD_AUTH: "false"
                   CRAWLER_FULL_PAGE_ARCHIVE: "true"
                   DISABLE_SIGNUPS: "true"
                   INFERENCE_LANG: "russian"
