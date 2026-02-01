@@ -35,6 +35,8 @@ spec:
                   - sh
                   - -c
                   - |
+                    ls -la /
+                    ls -la /data
                     aws --endpoint-url=$AWS_ENDPOINT \
                       s3 cp /data/db.db s3://$BUCKET/db.db
                 envFrom:
