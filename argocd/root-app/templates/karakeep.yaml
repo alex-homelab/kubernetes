@@ -1,0 +1,165 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: karakeep
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://karakeep-app.github.io/helm-charts
+    path: karakeep
+    targetRevision: 0.27.0
+    helm:
+      valuesObject:
+        controllers:
+          karakeep:
+            containers:
+              karakeep:
+                image:
+                  tag: 0.30.0
+            statefulset:
+              volumeClaimTemplates: []
+          
+          db-backup:
+            enabled: true
+            type: cronjob
+            cronjob:
+              schedule: "0/10 * * * *"
+            containers:
+              backup:
+                image:
+                  repository: amazon/aws-cli
+                command:
+                  - sh
+                  - -c
+                  - |
+                    aws --endpoint-url=$AWS_ENDPOINT \
+                      s3 cp /data/db.db s3://$BUCKET/db.db
+                env:
+                  - secretRef:
+                      name: karakeep-r2-backup
+        
+        route:
+          karakeep:
+            enabled: true
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            hostnames:
+              - karakeep.lan
+            rules:
+              - matches:
+                - path:
+                    type: PathPrefix
+                    value: /
+                backendRefs:
+                - name: karakeep
+                  port: http
+        
+        persistence:
+          karakeep:
+            enabled: true
+            type: emptyDir
+            size: 20Gi
+            storageClass: local-path
+            globalMounts:
+              - path: /data
+                readOnly: false
+
+        secrets:
+          karakeep:
+            enabled: false
+          meilesearch:
+            enabled: false
+        
+        meilisearch:
+          environment:
+            MEILI_NO_ANALYTICS: "true"
+          persistence:
+            enabled: false
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: karakeep
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: karakeep
+  namespace: karakeep
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: karakeep
+
+  data:
+    - secretKey: NEXTAUTH_URL
+      remoteRef:
+        key: /karakeep/NEXTAUTH_URL
+    - secretKey: NEXTAUTH_SECRET
+      remoteRef:
+        key: /karakeep/NEXTAUTH_SECRET
+    - secretKey: OAUTH_CLIENT_ID
+      remoteRef:
+        key: /karakeep/OAUTH_CLIENT_ID
+    - secretKey: OAUTH_CLIENT_SECRET
+      remoteRef:
+        key: /karakeep/OAUTH_CLIENT_SECRET
+    - secretKey: OPENAI_API_KEY
+      remoteRef:
+        key: /karakeep/OPENAI_API_KEY
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: karakeep-meilesearch
+  namespace: karakeep
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: karakeep-meilesearch
+
+  data:
+    - secretKey: MEILI_MASTER_KEY
+      remoteRef:
+        key: /karakeep/MEILI_MASTER_KEY
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: karakeep-r2-backup
+  namespace: karakeep
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: karakeep-r2-backup
+
+  data:
+    - secretKey: AWS_ENDPOINT
+      remoteRef:
+        key: /karakeep/R2_ENDPOINT
+    - secretKey: BUCKET
+      remoteRef:
+        key: /karakeep/R2_BUCKET
+    - secretKey: AWS_ACCESS_KEY_ID
+      remoteRef:
+        key: /karakeep/R2_ACCESS_KEY
+    - secretKey: AWS_SECRET_ACCESS_KEY
+      remoteRef:
+        key: /karakeep/R2_SECRET_KEY
