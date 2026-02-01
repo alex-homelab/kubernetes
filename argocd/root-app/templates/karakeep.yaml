@@ -37,7 +37,7 @@ spec:
                   - |
                     aws --endpoint-url=$AWS_ENDPOINT \
                       s3 cp /data/db.db s3://$BUCKET/db.db
-                env:
+                envFrom:
                   - secretRef:
                       name: karakeep-r2-backup
         
