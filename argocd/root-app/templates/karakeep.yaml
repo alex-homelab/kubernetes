@@ -44,6 +44,8 @@ spec:
                   DATA_DIR: /data
                   DISABLE_PASSWORD_AUTH: "false"
                   CRAWLER_FULL_PAGE_ARCHIVE: "true"
+                  CRAWLER_FULL_PAGE_SCREENSHOT: "true"
+                  CRAWLER_STORE_PDF: "true"
                   DISABLE_SIGNUPS: "false"
                   INFERENCE_LANG: "russian"
                   OCR_LANGS: "eng,rus,est"
