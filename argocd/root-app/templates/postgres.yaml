@@ -50,6 +50,11 @@ spec:
           enableSuperuserAccess: true
         
           roles:
+            - name: kestra
+              ensure: present
+              login: true
+              passwordSecret:
+                name: kestra-pg-user
             - name: obico
               ensure: present
               login: true

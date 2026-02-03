@@ -1,0 +1,116 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kestra
+spec:
+  project: default
+
+  source:
+    repoURL: https://helm.kestra.io/
+    chart: kestra
+    targetRevision: 1.0.31
+    helm:
+      valuesObject:
+        configurations:
+          application:
+            datasources:
+              postgres:
+                url: jdbc:postgresql://postgres-rw.db.svc.cluster.local:5432/kestra
+                driver-class-name: org.postgresql.Driver
+                maximum-pool-size: 20
+                minimum-idle: 10
+            kestra:
+              anonymous-usage-report:
+                enabled: false
+              ui-anonymous-usage-report:
+                enabled: false
+              queue:
+                type: postgres
+              repository:
+                type: postgres
+              storage:
+                s3:
+                  endpoint: http://minio-svc.minio.svc.cluster.local:9000
+                  bucket: kestra
+                  accessKeyId:
+                    existingSecret:
+                      name: kestra-s3-credentials
+                      key: accesskey
+                  secretAccessKey:
+                    existingSecret:
+                      name: kestra-s3-credentials
+                      key: secretkey
+        ingress:
+          enabled: true
+          hosts:
+            - host: kestra.lan
+              paths:
+                - path: /
+            - host: kestra.vcov.org
+              paths:
+                - path: /
+        extraManifests:
+          - apiVersion: postgresql.cnpg.io/v1
+            kind: Database
+            metadata:
+              name: kestra-db
+              namespace: db
+            spec:
+              name: kestra
+              owner: kestra
+              cluster:
+                name: postgres
+              extensions:
+                - name: bloom
+                  ensure: present
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: kestra-pg-user
+              namespace: db
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: kestra-pg-user
+
+              data:
+                - secretKey: username
+                  remoteRef:
+                    key: /kestra/PG_USER
+
+                - secretKey: password
+                  remoteRef:
+                    key: /kestra/PG_PASSWORD
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: kestra-s3-credentials
+              namespace: kestra
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: kestra-s3-credentials
+
+              data:
+                - secretKey: accesskey
+                  remoteRef:
+                    key: /kestra/S3_ACCESS_KEY
+                - secretKey: secretkey
+                  remoteRef:
+                    key: /kestra/S3_SECRET_KEY
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kestra
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
