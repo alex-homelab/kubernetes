@@ -46,9 +46,11 @@ spec:
             - host: kestra.lan
               paths:
                 - path: /
+                  pathType: Prefix
             - host: kestra.vcov.org
               paths:
                 - path: /
+                  pathType: Prefix
         extraManifests:
           - apiVersion: postgresql.cnpg.io/v1
             kind: Database
