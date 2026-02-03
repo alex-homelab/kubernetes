@@ -79,11 +79,11 @@ spec:
                 name: kestra-pg-user
 
               data:
-                - secretKey: username
+                - secretKey: POSTGRES_USER
                   remoteRef:
                     key: /kestra/PG_USER
 
-                - secretKey: password
+                - secretKey: POSTGRES_PASSWORD
                   remoteRef:
                     key: /kestra/PG_PASSWORD
           - apiVersion: external-secrets.io/v1
