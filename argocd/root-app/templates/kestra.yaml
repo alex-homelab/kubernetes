@@ -72,7 +72,7 @@ spec:
             kind: ExternalSecret
             metadata:
               name: kestra-pg-user
-              namespace: db
+              namespace: kestra
             spec:
               secretStoreRef:
                 kind: ClusterSecretStore
