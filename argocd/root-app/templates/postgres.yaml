@@ -54,7 +54,7 @@ spec:
               ensure: present
               login: true
               passwordSecret:
-                name: kestra-pg-user
+                name: kestra-password
             - name: obico
               ensure: present
               login: true

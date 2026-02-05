@@ -94,6 +94,23 @@ spec:
           - apiVersion: external-secrets.io/v1
             kind: ExternalSecret
             metadata:
+              name: kestra-password
+              namespace: db
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: kestra-password
+
+              data:
+                - secretKey: POSTGRES_PASSWORD
+                  remoteRef:
+                    key: /kestra/PG_PASSWORD
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
               name: kestra-s3-credentials
               namespace: kestra
             spec:
