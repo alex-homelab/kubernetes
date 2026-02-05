@@ -55,13 +55,11 @@ spec:
               login: true
               passwordSecret:
                 name: kestra-pg-user
-                namespace: kestra
             - name: obico
               ensure: present
               login: true
               passwordSecret:
                 name: obico-pg-user
-                namespace: obico
   destination:
     server: https://kubernetes.default.svc
     namespace: db
