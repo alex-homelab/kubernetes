@@ -15,6 +15,7 @@ spec:
           extraEnvFrom:
             - secretRef:
                 name: kestra-pg-user
+                namespace: db
             - secretRef:
                 name: kestra-s3-credentials
         configurations:
@@ -73,7 +74,7 @@ spec:
             kind: ExternalSecret
             metadata:
               name: kestra-pg-user
-              namespace: kestra
+              namespace: db
             spec:
               secretStoreRef:
                 kind: ClusterSecretStore
