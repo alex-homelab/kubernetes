@@ -126,6 +126,7 @@ spec:
                 namespace: traefik
             hostnames:
               - karakeep.lan
+              - karakeep.vcov.org
             rules:
               - matches:
                 - path:
