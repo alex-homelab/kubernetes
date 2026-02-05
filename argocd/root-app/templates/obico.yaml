@@ -68,7 +68,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: obico-pg-user
-  namespace: db
+  namespace: obico
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
