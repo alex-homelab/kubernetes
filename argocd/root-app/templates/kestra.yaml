@@ -17,6 +17,14 @@ spec:
               postgres:
                 url: jdbc:postgresql://postgres-rw.db.svc.cluster.local:5432/kestra
                 driver-class-name: org.postgresql.Driver
+                username:
+                  existingSecret:
+                    name: kestra-pg-user
+                    key: POSTGRES_USER
+                password:
+                  existingSecret:
+                    name: kestra-pg-user
+                    key: POSTGRES_PASSWORD
                 maximum-pool-size: 20
                 minimum-idle: 10
             kestra:
