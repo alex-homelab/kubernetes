@@ -37,13 +37,13 @@ spec:
               repository:
                 type: postgres
               storage:
-                type: s3
-                s3:
-                  endpoint: http://minio-svc.minio.svc.cluster.local:9000
+                type: minio
+                minio:
+                  endpoint: http://minio-svc.minio.svc.cluster.local
+                  port: 9000
                   bucket: kestra
                   accessKey: ${S3_ACCESS_KEY}
                   secretKey: ${S3_SECRET_KEY}
-                  pathStyleAccess: true
         ingress:
           enabled: true
           hosts:
