@@ -12,10 +12,8 @@ spec:
     helm:
       valuesObject:
         envFrom:
-          - secretRef:
-              name: kestra-pg-user
-          - secretRef:
-              name: kestra-s3-credentials
+          - secret: kestra-pg-user
+          - secret: kestra-s3-credentials
         configurations:
           application:
             datasources:
