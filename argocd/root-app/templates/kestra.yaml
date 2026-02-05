@@ -37,6 +37,7 @@ spec:
               repository:
                 type: postgres
               storage:
+                type: s3
                 s3:
                   endpoint: http://minio-svc.minio.svc.cluster.local:9000
                   bucket: kestra
