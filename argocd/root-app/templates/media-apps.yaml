@@ -86,7 +86,7 @@ spec:
                     EOF
         service:
           truenas:
-            controller: media
+            controller: endpoint-config
             ports:
               jellyfin: 
                 port: 30013
