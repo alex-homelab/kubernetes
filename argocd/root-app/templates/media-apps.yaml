@@ -29,8 +29,9 @@ spec:
               backoffLimit: 1
             containers:
               main:
-                image: bitnami/kubectl
-                tag: 1.29
+                image:
+                  repository: bitnami/kubectl
+                  tag: 1.29
                 command:
                   - /bin/sh
                   - -c
