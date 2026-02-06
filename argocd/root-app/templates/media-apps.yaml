@@ -12,6 +12,24 @@ spec:
     targetRevision: 4.6.2
     helm:
       valuesObject:
+        serviceAccount:
+          default:
+            enabled: true
+        rbac:
+          roles:
+            manage-endpointslices:
+              forceRename: manage-endpointslices
+              rules:
+                - apiGroups: ["discovery.k8s.io"]
+                  resources: ["endpointslices"]
+                  verbs: ["get", "list", "create"]
+          bindings:
+            manage-endpointslices-binding:
+              forceRename: allow-job-to-manage-endpointslices
+              roleRef:
+                identifier: manage-endpointslices
+              subjects:
+                - identifier: default
         controllers:
           media:
             enabled: true
