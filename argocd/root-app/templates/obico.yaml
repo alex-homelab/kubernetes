@@ -67,7 +67,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: obico-pg-user
+  name: obico-password
   namespace: db
 spec:
   secretStoreRef:
@@ -75,7 +75,7 @@ spec:
     name: infisical
 
   target:
-    name: obico-pg-user
+    name: obico-password
 
   data:
     - secretKey: username

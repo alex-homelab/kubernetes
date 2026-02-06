@@ -59,7 +59,7 @@ spec:
               ensure: present
               login: true
               passwordSecret:
-                name: obico-pg-user
+                name: obico-password
             - name: umami
               ensure: present
               login: true
