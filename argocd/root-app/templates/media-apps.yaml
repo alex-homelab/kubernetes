@@ -80,7 +80,7 @@ spec:
                         port: 30024
                       - name: jellyseerr
                         protocol: TCP
-                        port: 30002
+                        port: 30042
                     endpoints:
                       - conditions:
                           ready: true
