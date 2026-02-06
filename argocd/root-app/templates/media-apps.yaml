@@ -13,7 +13,7 @@ spec:
     helm:
       valuesObject:
         controllers:
-          media:
+          truenas:
             enabled: true
             type: statefulset
             replicas: 0
@@ -24,7 +24,7 @@ spec:
                   tag: latest
         service:
           truenas:
-            controller: media
+            controller: truenas
             type: ExternalName
             externalName: truenas.lan
         route:
