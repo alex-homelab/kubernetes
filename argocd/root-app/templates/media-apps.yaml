@@ -65,6 +65,18 @@ spec:
                       - name: jellyfin
                         protocol: TCP
                         port: 30013
+                      - name: sonarr
+                        protocol: TCP
+                        port: 30113
+                      - name: radarr
+                        protocol: TCP
+                        port: 30025
+                      - name: prowlarr
+                        protocol: TCP
+                        port: 30050
+                      - name: qb
+                        protocol: TCP
+                        port: 30024
                     endpoints:
                       - conditions:
                           ready: true
