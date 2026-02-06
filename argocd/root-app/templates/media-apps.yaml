@@ -58,7 +58,7 @@ spec:
                   - |
                     set -e
 
-                    NS=tools
+                    NS=media
                     SLICE=truenas
                     
                     if kubectl get endpointslice "$SLICE" -n "$NS" >/dev/null 2>&1; then
