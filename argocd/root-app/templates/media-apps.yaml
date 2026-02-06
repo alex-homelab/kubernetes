@@ -100,7 +100,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: truenas
+                - name: media
                   port: 30013
         # ingress:
         #   media:
