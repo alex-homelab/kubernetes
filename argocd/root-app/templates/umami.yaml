@@ -20,7 +20,7 @@ spec:
         route:
           main:
             enabled: true
-            hostsnames:
+            hostnames:
               - umami.lan
               - umami.vcov.org
             parentRefs:
