@@ -47,6 +47,8 @@ spec:
             type: job
             job:
               backoffLimit: 1
+            serviceAccount:
+              identifier: default
             containers:
               main:
                 image:
