@@ -25,7 +25,6 @@ spec:
                   tag: latest
         service:
           truenas:
-            name: truenas
             controller: truenas
             type: ExternalName
             externalName: truenas.lan
