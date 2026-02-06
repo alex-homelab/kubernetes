@@ -107,7 +107,8 @@ spec:
           jellyfin:
             enabled: true
             hostnames:
-              - jellyfin2.vcov.org
+              - jellyfin.vcov.org
+              - jellyfin.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
@@ -118,7 +119,8 @@ spec:
           sonarr:
             enabled: true
             hostnames:
-              - sonarr2.vcov.org
+              - sonarr.vcov.org
+              - sonarr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
@@ -129,7 +131,8 @@ spec:
           radarr:
             enabled: true
             hostnames:
-              - radarr2.vcov.org
+              - radarr.vcov.org
+              - radarr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
@@ -140,7 +143,8 @@ spec:
           prowlarr:
             enabled: true
             hostnames:
-              - prowlarr2.vcov.org
+              - prowlarr.vcov.org
+              - prowlarr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
@@ -151,7 +155,8 @@ spec:
           qb:
             enabled: true
             hostnames:
-              - qb2.vcov.org
+              - qb.vcov.org
+              - qb.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
@@ -163,6 +168,7 @@ spec:
             enabled: true
             hostnames:
               - overseerr.vcov.org
+              - overseerr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
