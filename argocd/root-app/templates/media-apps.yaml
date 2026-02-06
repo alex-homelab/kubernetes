@@ -33,15 +33,6 @@ spec:
               subjects:
                 - identifier: default
         controllers:
-          # media:
-          #   enabled: true
-          #   type: statefulset
-          #   replicas: 0
-          #   containers:
-          #     dummy:
-          #       image:
-          #         repository: nginx
-          #         tag: latest
           endpoint-config:
             enabled: true
             type: job
@@ -83,6 +74,14 @@ spec:
             ports:
               jellyfin: 
                 port: 30013
+              sonarr: 
+                port: 30113
+              radarr:
+                port: 30025
+              prowlarr:
+                port: 30050
+              qb:
+                port: 30024
         route:
           jellyfin:
             enabled: true
@@ -95,16 +94,50 @@ spec:
             -  backendRefs:
                 - name: media
                   port: 30013
-        # ingress:
-        #   media:
-        #     hosts:
-        #       - host: jellyfin2.vcov.org
-        #         paths:
-        #           - path: /
-        #             pathType: Prefix
-        #             service:
-        #               identifier: truenas
-        #               port: 30013
+          sonarr:
+            enabled: true
+            hostnames:
+              - sonarr2.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: media
+                  port: 30113
+          radarr:
+            enabled: true
+            hostnames:
+              - radarr2.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: media
+                  port: 30025
+          prowlarr:
+            enabled: true
+            hostnames:
+              - prowlarr2.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: media
+                  port: 30050
+          qb:
+            enabled: true
+            hostnames:
+              - qb2.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: media
+                  port: 30024
   destination:
     server: https://kubernetes.default.svc
     namespace: media
@@ -114,18 +147,3 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
-# ---
-# apiVersion: discovery.k8s.io/v1
-# kind: EndpointSlice
-# metadata:
-#   name: truenas
-#   namespace: media
-#   labels:
-#     kubernetes.io/service-name: media
-# addressType: IPv4
-# ports:
-#   - name: jellyfin
-#     port: 30013
-# endpoints:
-#   - addresses:
-#     - 192.168.1.10
