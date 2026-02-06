@@ -36,12 +36,16 @@ spec:
           endpoint-config:
             enabled: true
             type: job
+            annotations:
+              argocd.argoproj.io/hook: Sync
+              argocd.argoproj.io/hook-delete-policy: HookSucceeded
             job:
               backoffLimit: 1
             serviceAccount:
               identifier: default
             containers:
               main:
+                nameOverride: create-endpoint-slice
                 image:
                   repository: alpine/kubectl
                   tag: 1.35.0
@@ -57,9 +61,6 @@ spec:
                       namespace: media
                       labels:
                         kubernetes.io/service-name: media
-                      annotations:
-                        argocd.argoproj.io/hook: Sync
-                        argocd.argoproj.io/hook-delete-policy: HookSucceeded
                     addressType: IPv4
                     ports:
                       - name: jellyfin
