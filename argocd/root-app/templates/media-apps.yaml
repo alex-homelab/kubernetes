@@ -26,6 +26,7 @@ spec:
           bindings:
             manage-endpointslices-binding:
               forceRename: allow-job-to-manage-endpointslices
+              type: RoleBinding
               roleRef:
                 identifier: manage-endpointslices
               subjects:
