@@ -22,6 +22,45 @@ spec:
                 image:
                   repository: nginx
                   tag: latest
+          endpoint-config:
+            enabled: true
+            type: job
+            job:
+              backoffLimit: 1
+            containers:
+              main:
+                image: bitnami/kubectl
+                tag: 1.29
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    set -e
+
+                    NS=tools
+                    SLICE=truenas
+                    
+                    if kubectl get endpointslice "$SLICE" -n "$NS" >/dev/null 2>&1; then
+                      echo "EndpointSlice already exists, nothing to do"
+                      exit 0
+                    fi
+
+                    cat <<'EOF' | kubectl apply -f -
+                    apiVersion: discovery.k8s.io/v1
+                    kind: EndpointSlice
+                    metadata:
+                      name: truenas
+                      namespace: media
+                      labels:
+                        kubernetes.io/service-name: media
+                    addressType: IPv4
+                    ports:
+                      - name: jellyfin
+                        port: 30013
+                    endpoints:
+                      - addresses:
+                        - 192.168.1.10
+                    EOF
         service:
           truenas:
             controller: media
@@ -59,18 +98,18 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
----
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
-metadata:
-  name: truenas
-  namespace: media
-  labels:
-    kubernetes.io/service-name: media
-addressType: IPv4
-ports:
-  - name: jellyfin
-    port: 30013
-endpoints:
-  - addresses:
-    - 192.168.1.10
+# ---
+# apiVersion: discovery.k8s.io/v1
+# kind: EndpointSlice
+# metadata:
+#   name: truenas
+#   namespace: media
+#   labels:
+#     kubernetes.io/service-name: media
+# addressType: IPv4
+# ports:
+#   - name: jellyfin
+#     port: 30013
+# endpoints:
+#   - addresses:
+#     - 192.168.1.10
