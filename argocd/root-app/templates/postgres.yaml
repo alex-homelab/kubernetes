@@ -60,6 +60,11 @@ spec:
               login: true
               passwordSecret:
                 name: obico-pg-user
+            - name: umami
+              ensure: present
+              login: true
+              passwordSecret:
+                name: umami-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db

@@ -1,0 +1,76 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: umami
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://charts.christianhuth.de
+    chart: umami
+    targetRevision: 7.4.4
+    helm:
+      valuesObject:
+        database:
+          existingSecret: umami-db-url
+          databaseUrlKey: PG_URL
+        postgresql:
+          enabled: false
+        route:
+          main:
+            enabled: true
+            hostsnames:
+              - umami.lan
+              - umami.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: umami
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: umami-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: umami-password
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /umami/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /umami/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: umami-db-url
+  namespace: umami
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: umami-db-url
+
+  data:
+    - secretKey: PG_URL
+      remoteRef:
+        key: /umami/PG_URL
