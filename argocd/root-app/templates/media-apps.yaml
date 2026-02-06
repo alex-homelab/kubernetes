@@ -15,6 +15,7 @@ spec:
         controllers:
           truenas:
             enabled: true
+            name: truenas
             type: statefulset
             replicas: 0
             containers:
@@ -24,6 +25,7 @@ spec:
                   tag: latest
         service:
           truenas:
+            name: truenas
             controller: truenas
             type: ExternalName
             externalName: truenas.lan
