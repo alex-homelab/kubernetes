@@ -57,6 +57,9 @@ spec:
                       namespace: media
                       labels:
                         kubernetes.io/service-name: media
+                      annotations:
+                        argocd.argoproj.io/hook: Sync
+                        argocd.argoproj.io/hook-delete-policy: HookSucceeded
                     addressType: IPv4
                     ports:
                       - name: jellyfin
