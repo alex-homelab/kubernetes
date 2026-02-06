@@ -113,15 +113,6 @@ metadata:
 spec:
   type: ExternalName
   externalName: mini.lan
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: 3d-printer
-  namespace: traefik
-spec:
-  type: ExternalName
-  externalName: 3dprinter.lan
 # ---
 # apiVersion: networking.k8s.io/v1
 # kind: Ingress
@@ -161,26 +152,6 @@ spec:
               secure: true
               httpOnly: true
         - name: technitium-secondary
-          port: 5380
-          sticky:
-            cookie:
-              name: traefik-sticky-cookie
-              secure: true
-              httpOnly: true
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: 3d-printer
-  namespace: traefik
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`dns.lan`)
-      kind: Rule
-      services:
-        - name: technitium-primary
           port: 5380
           sticky:
             cookie:
