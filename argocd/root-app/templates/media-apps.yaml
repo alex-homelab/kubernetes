@@ -33,15 +33,15 @@ spec:
               subjects:
                 - identifier: default
         controllers:
-          media:
-            enabled: true
-            type: statefulset
-            replicas: 0
-            containers:
-              dummy:
-                image:
-                  repository: nginx
-                  tag: latest
+          # media:
+          #   enabled: true
+          #   type: statefulset
+          #   replicas: 0
+          #   containers:
+          #     dummy:
+          #       image:
+          #         repository: nginx
+          #         tag: latest
           endpoint-config:
             enabled: true
             type: job
