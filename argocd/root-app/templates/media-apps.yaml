@@ -58,16 +58,6 @@ spec:
                   - /bin/sh
                   - -c
                   - |
-                    set -e
-
-                    NS=media
-                    SLICE=truenas
-                    
-                    if kubectl get endpointslice "$SLICE" -n "$NS" >/dev/null 2>&1; then
-                      echo "EndpointSlice already exists, nothing to do"
-                      exit 0
-                    fi
-
                     cat <<'EOF' | kubectl apply -f -
                     apiVersion: discovery.k8s.io/v1
                     kind: EndpointSlice
@@ -79,9 +69,12 @@ spec:
                     addressType: IPv4
                     ports:
                       - name: jellyfin
+                        protocol: TCP
                         port: 30013
                     endpoints:
-                      - addresses:
+                      - conditions:
+                          ready: true
+                        addresses:
                         - 192.168.1.10
                     EOF
         service:
