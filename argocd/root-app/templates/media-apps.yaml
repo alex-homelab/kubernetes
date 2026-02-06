@@ -23,7 +23,7 @@ spec:
               rules:
                 - apiGroups: ["discovery.k8s.io"]
                   resources: ["endpointslices"]
-                  verbs: ["get", "list", "create"]
+                  verbs: ["get", "list", "create", "update", "patch"]
           bindings:
             manage-endpointslices-binding:
               forceRename: allow-job-to-manage-endpointslices
