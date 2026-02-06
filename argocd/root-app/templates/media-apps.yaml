@@ -78,7 +78,7 @@ spec:
                       - name: qb
                         protocol: TCP
                         port: 30024
-                      - name: overseerr
+                      - name: jellyseerr
                         protocol: TCP
                         port: 30002
                     endpoints:
@@ -101,8 +101,8 @@ spec:
                 port: 30050
               qb:
                 port: 30024
-              overseerr:
-                port: 30002
+              jellyseerr:
+                port: 30042
         route:
           jellyfin:
             enabled: true
@@ -164,18 +164,18 @@ spec:
             -  backendRefs:
                 - name: media
                   port: 30024
-          overseerr:
+          jellyseerr:
             enabled: true
             hostnames:
-              - overseerr.vcov.org
-              - overseerr.lan
+              - jellyseerr.vcov.org
+              - jellyseerr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30002
+                  port: 30042
   destination:
     server: https://kubernetes.default.svc
     namespace: media
