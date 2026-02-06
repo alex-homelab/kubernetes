@@ -30,8 +30,8 @@ spec:
             containers:
               main:
                 image:
-                  repository: bitnami/kubectl
-                  tag: 1.29
+                  repository: alpine/kubectl
+                  tag: 1.35.0
                 command:
                   - /bin/sh
                   - -c
