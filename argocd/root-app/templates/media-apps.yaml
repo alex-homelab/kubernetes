@@ -15,6 +15,13 @@ spec:
         controllers:
           media:
             enabled: true
+            type: statefulset
+            replicas: 0
+            containers:
+              dummy:
+                image:
+                  repository: nginx
+                  tag: latest
         service:
           truenas:
             controller: media
