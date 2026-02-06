@@ -19,6 +19,7 @@ spec:
           roles:
             manage-endpointslices:
               forceRename: manage-endpointslices
+              type: Role
               rules:
                 - apiGroups: ["discovery.k8s.io"]
                   resources: ["endpointslices"]
