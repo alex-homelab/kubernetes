@@ -12,9 +12,12 @@ spec:
     targetRevision: 4.6.2
     helm:
       valuesObject:
+        controller:
+          media:
+            enabled: true
         service:
           truenas:
-            controller: main
+            controller: media
             type: ExternalName
             externalName: truenas.lan
         route:
