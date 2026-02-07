@@ -139,7 +139,7 @@ spec:
     - secretKey: SPARKY_FITNESS_API_ENCRYPTION_KEY
       remoteRef:
         key: /sparkyfitness/API_ENCRYPTION_KEY
-    - secretKey: JWT_SECRET
+    - secretKey: BETTER_AUTH_SECRET
       remoteRef:
         key: /sparkyfitness/BETTER_AUTH_SECRET
     - secretKey: SPARKY_FITNESS_FRONTEND_URL
