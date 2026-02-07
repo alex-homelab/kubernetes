@@ -55,11 +55,6 @@ spec:
               login: true
               passwordSecret:
                 name: kestra-password
-            - name: obico
-              ensure: present
-              login: true
-              passwordSecret:
-                name: obico-password
             - name: umami
               ensure: present
               login: true
