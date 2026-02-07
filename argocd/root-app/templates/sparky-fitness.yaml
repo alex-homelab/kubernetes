@@ -62,7 +62,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: sparkyfitness
+                - name: sparky-fitness
                   port: 80
   destination:
     server: https://kubernetes.default.svc
@@ -139,7 +139,7 @@ spec:
     - secretKey: SPARKY_FITNESS_API_ENCRYPTION_KEY
       remoteRef:
         key: /sparkyfitness/API_ENCRYPTION_KEY
-    - secretKey: BETTER_AUTH_SECRET
+    - secretKey: JWT_SECRET
       remoteRef:
         key: /sparkyfitness/BETTER_AUTH_SECRET
     - secretKey: SPARKY_FITNESS_FRONTEND_URL
