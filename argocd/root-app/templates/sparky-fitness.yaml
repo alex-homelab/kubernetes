@@ -126,13 +126,13 @@ spec:
   data:
     - secretKey: SPARKY_FITNESS_DB_USER
       remoteRef:
-        key: /sparkyfitness/PG_USER
+        key: /sparkyfitness/PG_PRIVILEGED_USER
     - secretKey: SPARKY_FITNESS_APP_DB_USER
       remoteRef:
         key: /sparkyfitness/PG_USER
     - secretKey: SPARKY_FITNESS_DB_PASSWORD
       remoteRef:
-        key: /sparkyfitness/PG_PASSWORD
+        key: /sparkyfitness/PG_PRIVILEGED_PASSWORD
     - secretKey: SPARKY_FITNESS_APP_DB_PASSWORD
       remoteRef:
         key: /sparkyfitness/PG_PASSWORD
