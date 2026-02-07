@@ -1,0 +1,165 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sparky-fitness
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
+    helm:
+      valuesObject:
+        controllers:
+          sparkyfitness:
+            enabled: true
+            containers:
+              sparkyfitness-server:
+                nameOverride: sparkyfitness-server
+                image:
+                  repository: codewithcj/sparkyfitness_server
+                  tag: v0.16.1
+                env:
+                  - NODE_ENV: production
+                  - TZ: Europe/Tallinn
+                  - SPARKY_FITNESS_LOG_LEVEL: WARN
+                  - SPARKY_FITNESS_DB_HOST: postgres-rw.db.svc.cluster.local
+                  - SPARKY_FITNESS_DB_PORT: 5432
+                  - SPARKY_FITNESS_DB_NAME: sparky-fitness
+                  - SPARKY_FITNESS_DISABLE_SIGNUP: false
+                  - SPARKY_FITNESS_EMAIL_SECURE: true
+                envFrom:
+                  - secretRef: 
+                      name: sparkyfitness-env
+              sparkyfitness-frontend:
+                nameOverride: sparkyfitness-frontend
+                image:
+                  repository: codewithcj/sparkyfitness
+                  tag: v0.16.1
+                env:
+                  - SPARKY_FITNESS_SERVER_HOST: sparkyfitness-server
+                  - SPARKY_FITNESS_SERVER_PORT: 3010
+                  - SPARKY_FITNESS_FRONTEND_URL:
+                      valueFrom:
+                        secretKeyRef:
+                          name: sparkyfitness-env
+                          key: SPARKY_FITNESS_FRONTEND_URL
+        service:
+          frontend:
+            controller: sparkyfitness
+            ports:
+              frontend: 
+                port: 80
+        route:
+          sparkyfitness:
+            enabled: true
+            hostnames:
+              - fitness.vcov.org
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: sparkyfitness
+                  port: 80
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sparky-fitness
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sparky-fitness-db
+  namespace: db
+spec:
+  name: sparky-fitness
+  owner: sparky
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: sparky-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: sparky-password
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /sparkyfitness/PG_USER
+
+    - secretKey: password
+      remoteRef:
+        key: /sparkyfitness/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: sparkyfitness-env
+  namespace: sparky-fitness
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: sparkyfitness-env
+
+  data:
+    - secretKey: SPARKY_FITNESS_DB_USER
+      remoteRef:
+        key: /sparkyfitness/PG_USER
+    - secretKey: SPARKY_FITNESS_APP_DB_USER
+      remoteRef:
+        key: /sparkyfitness/PG_USER
+    - secretKey: SPARKY_FITNESS_DB_PASSWORD
+      remoteRef:
+        key: /sparkyfitness/PG_PASSWORD
+    - secretKey: SPARKY_FITNESS_APP_DB_PASSWORD
+      remoteRef:
+        key: /sparkyfitness/PG_PASSWORD
+    - secretKey: SPARKY_FITNESS_API_ENCRYPTION_KEY
+      remoteRef:
+        key: /sparkyfitness/API_ENCRYPTION_KEY
+    - secretKey: BETTER_AUTH_SECRET
+      remoteRef:
+        key: /sparkyfitness/BETTER_AUTH_SECRET
+    - secretKey: SPARKY_FITNESS_FRONTEND_URL
+      remoteRef:
+        key: /sparkyfitness/FRONTEND_URL
+    - secretKey: SPARKY_FITNESS_ADMIN_EMAIL
+      remoteRef:
+        key: /sparkyfitness/ADMIN_EMAIL
+    - secretKey: SPARKY_FITNESS_EMAIL_HOST
+      remoteRef:
+        key: /sparkyfitness/EMAIL_HOST
+    - secretKey: SPARKY_FITNESS_EMAIL_PORT
+      remoteRef:
+        key: /sparkyfitness/EMAIL_PORT
+    - secretKey: SPARKY_FITNESS_EMAIL_USER
+      remoteRef:
+        key: /sparkyfitness/EMAIL_USER
+    - secretKey: SPARKY_FITNESS_EMAIL_PASS
+      remoteRef:
+        key: /sparkyfitness/EMAIL_PASSWORD
+    - secretKey: SPARKY_FITNESS_EMAIL_FROM
+      remoteRef:
+        key: /sparkyfitness/EMAIL_FROM
