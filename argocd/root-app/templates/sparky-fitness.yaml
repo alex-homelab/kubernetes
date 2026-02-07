@@ -39,7 +39,7 @@ spec:
                   repository: codewithcj/sparkyfitness
                   tag: v0.16.1
                 env:
-                  SPARKY_FITNESS_SERVER_HOST: sparkyfitness-server
+                  SPARKY_FITNESS_SERVER_HOST: localhost
                   SPARKY_FITNESS_SERVER_PORT: 3010
                   SPARKY_FITNESS_FRONTEND_URL:
                     valueFrom:
