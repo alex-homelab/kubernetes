@@ -44,6 +44,12 @@ spec:
           - "--http-port=8080"
           - "--hostname-strict=false"
 
+        proxy:
+          enabled: true
+          mode: forwarded
+          http:
+            enabled: true
+
         extraEnv: |
           - name: JAVA_OPTS
             value: >-
@@ -51,8 +57,6 @@ spec:
           - name: JAVA_OPTS_APPEND
             value: >-
               -Djgroups.dns.query=keycloak-headless
-          - name: KC_PROXY
-            value: "edge"
           - name: KC_DB_USERNAME
             valueFrom:
               secretKeyRef:
