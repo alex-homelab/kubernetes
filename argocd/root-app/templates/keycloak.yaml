@@ -38,6 +38,12 @@ spec:
           hostnames:
             - sso.lan
         
+        command:
+          - "/opt/keycloak/bin/kc.sh"
+          - "start"
+          - "--http-port=8080"
+          - "--hostname-strict=false"
+
         extraEnv: |
           - name: JAVA_OPTS
             value: >-
