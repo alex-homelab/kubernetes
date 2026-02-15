@@ -48,17 +48,17 @@ spec:
               }
 
               service_registration "kubernetes" {}
-        
+
+          extraSecretEnvironmentVars:
+            - envName: AWS_ACCESS_KEY_ID
+              secretName: vault-env
+              secretKey: MINIO_ACCESS_KEY
+            - envName: AWS_SECRET_ACCESS_KEY
+              secretName: vault-env
+              secretKey: MINIO_SECRET_KEY
+              
         ui:
           enabled: true
-        
-        extraSecretEnvironmentVars:
-          - envName: AWS_ACCESS_KEY_ID
-            secretName: vault-env
-            secretKey: MINIO_ACCESS_KEY
-          - envName: AWS_SECRET_ACCESS_KEY
-            secretName: vault-env
-            secretKey: MINIO_SECRET_KEY
   destination:
     server: https://kubernetes.default.svc
     namespace: tooling
