@@ -48,7 +48,7 @@ spec:
           enabled: true
           mode: xforwarded
           http:
-            enabled: true
+            enabled: false
 
         extraEnv: |
           - name: JAVA_OPTS
