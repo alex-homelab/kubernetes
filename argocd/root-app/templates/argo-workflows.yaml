@@ -52,6 +52,13 @@ spec:
             roleRef:
               kind: ClusterRole
               name: argo-workflows-admin
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: sam-token
+              annotations:
+                kubernetes.io/service-account.name: sam
+            type: kubernetes.io/service-account-token
 
   destination:
     server: https://kubernetes.default.svc
