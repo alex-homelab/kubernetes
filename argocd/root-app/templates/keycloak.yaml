@@ -50,7 +50,7 @@ spec:
               -XX:MaxRAMPercentage=50.0
           - name: JAVA_OPTS_APPEND
             value: >-
-              -Djgroups.dns.query='{{ include "keycloak.fullname" . }}-headless'
+              -Djgroups.dns.query=keycloak-headless
           - name: KC_PROXY
             value: "passthrough"
           - name: KC_DB_USERNAME
