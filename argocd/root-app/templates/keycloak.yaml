@@ -13,7 +13,7 @@ spec:
     helm:
       valuesObject:
         image:
-          tag: 26.5
+          tag: "26.5"
 
         replicas: 2
 
