@@ -45,8 +45,6 @@ spec:
           - "--hostname-strict=false"
 
         extraEnv: |
-          - name: KC_HOSTNAME
-            value: sso.vcov.org
           - name: JAVA_OPTS
             value: >-
               -XX:MaxRAMPercentage=50.0
@@ -54,7 +52,7 @@ spec:
             value: >-
               -Djgroups.dns.query=keycloak-headless
           - name: KC_PROXY
-            value: "passthrough"
+            value: "edge"
           - name: KC_DB_USERNAME
             valueFrom:
               secretKeyRef:
