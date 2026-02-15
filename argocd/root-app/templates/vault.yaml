@@ -43,6 +43,7 @@ spec:
 
               storage "s3" {
                 endpoint = "minio-svc.minio.svc.cluster.local:9000"
+                s3_force_path_style = true
                 bucket = "vault"
                 region = "home"
               }
@@ -56,7 +57,7 @@ spec:
             - envName: AWS_SECRET_ACCESS_KEY
               secretName: vault-env
               secretKey: MINIO_SECRET_KEY
-              
+
         ui:
           enabled: true
   destination:
