@@ -12,7 +12,7 @@ spec:
     targetRevision: 18.10.0
     helm:
       valuesObject:
-        replicaCount: 2
+        replicas: 2
 
         postgresql:
           enabled: false
