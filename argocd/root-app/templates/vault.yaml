@@ -22,6 +22,7 @@ spec:
             enabled: true
             ingressClassName: traefik
             activeService: false
+            pathType: Prefix
             hosts:
               - host: vault.lan
 
