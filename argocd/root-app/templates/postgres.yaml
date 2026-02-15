@@ -65,6 +65,11 @@ spec:
               login: true
               passwordSecret:
                 name: sparky-password
+            - name: keycloak
+              ensure: present
+              login: true
+              passwordSecret:
+                name: keycloak-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
