@@ -21,17 +21,9 @@ spec:
           ingress:
             enabled: true
             ingressClassName: traefik
-            activeService: true
+            activeService: false
             hosts:
               - host: vault.lan
-                paths: []
-            extraPaths:
-              - path: /
-                backend:
-                  service:
-                    name: vault-ui
-                    port:
-                      number: 8200
 
           dataStorage:
             enabled: false
