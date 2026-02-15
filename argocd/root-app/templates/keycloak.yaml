@@ -42,15 +42,13 @@ spec:
           - "/opt/keycloak/bin/kc.sh"
           - "start"
           - "--http-port=8080"
-          - "--hostname-strict=false"
+          - "--hostname-strict=true"
 
         proxy:
           enabled: true
           mode: xforwarded
 
         extraEnv: |
-          - name: KC_HOSTNAME_STRICT_HTTPS
-            value: "true"
           - name: JAVA_OPTS
             value: >-
               -XX:MaxRAMPercentage=50.0
