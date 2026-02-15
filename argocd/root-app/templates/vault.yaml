@@ -17,27 +17,37 @@ spec:
         
         server:
           enabled: true
-          
-        ha:
-          enabled: true
-          replicas: 2
 
-          config: |
-            ui = true
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            activeService: true
+            hosts:
+              - host: vault.lan
 
-            listener "tcp" {
-              tls_disable = 1
-              address = "[::]:8200"
-              cluster_address = "[::]:8201"
-            }
+          dataStorage:
+            enabled: false
 
-            storage "s3" {
-              endpoint = "minio-svc.minio.svc.cluster.local:9000"
-              bucket = "vault"
-              region = "home"
-            }
+          ha:
+            enabled: true
+            replicas: 2
 
-            service_registration "kubernetes" {}
+            config: |
+              ui = true
+
+              listener "tcp" {
+                tls_disable = 1
+                address = "[::]:8200"
+                cluster_address = "[::]:8201"
+              }
+
+              storage "s3" {
+                endpoint = "minio-svc.minio.svc.cluster.local:9000"
+                bucket = "vault"
+                region = "home"
+              }
+
+              service_registration "kubernetes" {}
         
         ui:
           enabled: true
