@@ -42,7 +42,8 @@ spec:
           - "/opt/keycloak/bin/kc.sh"
           - "start"
           - "--http-port=8080"
-          - "--hostname-strict=true"
+          - "--hostname-strict=false"
+          - "--hostname-strict-https=true"
 
         proxy:
           enabled: true
