@@ -25,7 +25,7 @@ spec:
             hosts:
               - host: vault.lan
                 paths:
-                  - path: /
+                  - path: /*
                     backend:
                       service:
                         name: vault-ui
