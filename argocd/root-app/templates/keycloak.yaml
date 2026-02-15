@@ -12,6 +12,9 @@ spec:
     targetRevision: 18.10.0
     helm:
       valuesObject:
+        image:
+          tag: 26.5
+
         replicas: 2
 
         postgresql:
