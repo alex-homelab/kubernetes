@@ -7,65 +7,111 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: oci://ghcr.io/codecentric/helm-charts/keycloak
+    repoURL: oci://ghcr.io/codecentric/helm-charts/keycloakx
     chart: keycloak
-    targetRevision: 18.10.0
+    targetRevision: 7.1.8
     helm:
       valuesObject:
-        image:
-          tag: "26.5"
-
         replicas: 2
 
         postgresql:
           enabled: false
         
-        ingress:
+        dbchecker:
           enabled: true
-          ingressClassName: traefik
-          rules:
-            - host: sso.lan
-              paths:
-                - path: /
-                  pathType: Prefix
+        
+        database:
+          vendor: postgres
+          hostname: postgres-rw.db.svc.cluster.local
+          port: 5432
+          database: keycloak
+          username: keycloak
+          existingSecret: keycloak
+
+        httpRoute:
+          enabled: true
+          parentRefs:
+            - name: traefik-gateway
+              namespace: traefik
+              sectionName: https
+          hostnames:
+            - sso.lan
         
         extraEnv: |
-          - name: DB_VENDOR
-            value: postgres
-          - name: DB_ADDR
-            value: postgres-rw.db.svc.cluster.local
-          - name: DB_PORT
-            value: "5432"
-          - name: DB_DATABASE
-            value: keycloak
-          - name: JGROUPS_DISCOVERY_PROTOCOL
-            value: kubernetes.KUBE_PING
-          - name: KUBERNETES_NAMESPACE
+          - name: KC_PROXY
+            value: "passthrough"
+          - name: KEYCLOAK_ADMIN
             valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.namespace
-          - name: CACHE_OWNERS_COUNT
-            value: "2"
-          - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
-            value: "2"
-          - name: PROXY_ADDRESS_FORWARDING
-            value: "true"
-
-        extraEnvFrom: |
-          - secretRef:
-              name: 'keycloak-env'
+              secretKeyRef:
+                name: keycloak
+                key: KEYCLOAK_USER
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: keycloak
+                key: KEYCLOAK_PASSWORD
         
-        rbac:
-          create: true
-          rules:
-            - apiGroups:
-                - ""
-              resources:
-                - pods
-              verbs:
-                - get
-                - list
+        extraManifests:
+          - |
+            apiVersion: postgresql.cnpg.io/v1
+            kind: Database
+            metadata:
+              name: keycloak-db
+              namespace: db
+            spec:
+              name: keycloak
+              owner: keycloak
+              cluster:
+                name: postgres
+              extensions:
+                - name: bloom
+                  ensure: present
+          - |
+            apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: keycloak-password
+              namespace: db
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: keycloak-password
+
+              data:
+                - secretKey: username
+                  remoteRef:
+                    key: /keycloak/PG_USER
+
+                - secretKey: password
+                  remoteRef:
+                    key: /keycloak/PG_PASSWORD
+          - |
+            apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: keycloak-env
+              namespace: tooling
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: keycloak
+
+              data:
+                - secretKey: password
+                  remoteRef:
+                    key: /keycloak/PG_PASSWORD
+                - secretKey: KEYCLOAK_USER
+                  remoteRef:
+                    key: /keycloak/KEYCLOAK_USER
+                - secretKey: KEYCLOAK_PASSWORD
+                  remoteRef:
+                    key: /keycloak/KEYCLOAK_PASSWORD
   destination:
     server: https://kubernetes.default.svc
     namespace: tooling
@@ -75,66 +121,3 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
----
-apiVersion: postgresql.cnpg.io/v1
-kind: Database
-metadata:
-  name: keycloak-db
-  namespace: db
-spec:
-  name: keycloak
-  owner: keycloak
-  cluster:
-    name: postgres
-  extensions:
-    - name: bloom
-      ensure: present
----
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: keycloak-password
-  namespace: db
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: infisical
-
-  target:
-    name: keycloak-password
-
-  data:
-    - secretKey: username
-      remoteRef:
-        key: /keycloak/PG_USER
-
-    - secretKey: password
-      remoteRef:
-        key: /keycloak/PG_PASSWORD
----
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: keycloak-env
-  namespace: tooling
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: infisical
-
-  target:
-    name: keycloak-env
-
-  data:
-    - secretKey: DB_USER
-      remoteRef:
-        key: /keycloak/PG_USER
-    - secretKey: DB_PASSWORD
-      remoteRef:
-        key: /keycloak/PG_PASSWORD
-    - secretKey: KEYCLOAK_USER
-      remoteRef:
-        key: /keycloak/KEYCLOAK_USER
-    - secretKey: KEYCLOAK_PASSWORD
-      remoteRef:
-        key: /keycloak/KEYCLOAK_PASSWORD
