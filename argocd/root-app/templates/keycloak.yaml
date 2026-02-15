@@ -43,13 +43,14 @@ spec:
           - "start"
           - "--http-port=8080"
           - "--hostname-strict=false"
-          - "--hostname-strict-https=true"
 
         proxy:
           enabled: true
           mode: xforwarded
 
         extraEnv: |
+          - name: HOSTNAME_STRICT_HTTPS
+            value: "true"
           - name: JAVA_OPTS
             value: >-
               -XX:MaxRAMPercentage=50.0
