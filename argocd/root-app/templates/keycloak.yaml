@@ -47,10 +47,10 @@ spec:
         proxy:
           enabled: true
           mode: xforwarded
-          http:
-            enabled: false
 
         extraEnv: |
+          - name: KC_HOSTNAME_STRICT_HTTPS
+            value: "true"
           - name: JAVA_OPTS
             value: >-
               -XX:MaxRAMPercentage=50.0
