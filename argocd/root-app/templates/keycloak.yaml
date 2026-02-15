@@ -113,7 +113,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: keycloak-env
-  namespace: sparky-fitness
+  namespace: tooling
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
