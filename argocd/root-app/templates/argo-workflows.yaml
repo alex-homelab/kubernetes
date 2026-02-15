@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows
+spec:
+  source:
+    chart: argo-workflows
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 0.47.3
+    helm:
+      valuesObject:
+        crds:
+          full: true
+        workflow:
+          serviceAccount:
+            create: true
+            name: "argo-workflow"
+          rbac:
+            create: true
+        controller:
+          workflowNamespaces:
+            - tooling
+        server:
+          httproute:
+            enabled: true
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+                sectionName: websecure
+            hostnames:
+              - workflows.lan
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tooling
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
