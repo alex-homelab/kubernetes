@@ -21,7 +21,7 @@ spec:
           enabled: true
           ingressClassName: traefik
           rules:
-            - host: keycloak.vcov.org
+            - host: sso.lan
               paths:
                 - path: /
                   pathType: Prefix
