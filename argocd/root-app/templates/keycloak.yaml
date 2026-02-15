@@ -46,7 +46,7 @@ spec:
 
         proxy:
           enabled: true
-          mode: passthrough
+          mode: xforwarded
           http:
             enabled: true
 
