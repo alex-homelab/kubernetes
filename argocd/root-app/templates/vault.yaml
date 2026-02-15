@@ -24,12 +24,13 @@ spec:
             activeService: true
             hosts:
               - host: vault.lan
-                paths:
-                  - backend:
-                      service:
-                        name: vault-ui
-                        port:
-                          number: 8200
+            extraPaths:
+              - path: /
+                backend:
+                  service:
+                    name: vault-ui
+                    port:
+                      number: 8200
 
           dataStorage:
             enabled: false
