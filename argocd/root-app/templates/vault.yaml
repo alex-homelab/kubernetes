@@ -14,6 +14,9 @@ spec:
       valuesObject:
         global:
           enabled: false
+        
+        server:
+          enabled: true
           
         ha:
           enabled: true
