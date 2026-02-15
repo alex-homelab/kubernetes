@@ -24,6 +24,9 @@ spec:
           workflowNamespaces:
             - tooling
         server:
+          authModes:
+            - server
+            - client
           httproute:
             enabled: true
             parentRefs:
