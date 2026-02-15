@@ -26,8 +26,8 @@ spec:
           hostname: postgres-rw.db.svc.cluster.local
           port: 5432
           database: keycloak
-          username: keycloak
           existingSecret: keycloak
+          existingSecretKey: PG_PASSWORD
 
         httpRoute:
           enabled: true
@@ -50,9 +50,14 @@ spec:
               -XX:MaxRAMPercentage=50.0
           - name: JAVA_OPTS_APPEND
             value: >-
-              -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+              -Djgroups.dns.query='{{ include "keycloak.fullname" . }}-headless'
           - name: KC_PROXY
             value: "passthrough"
+          - name: KC_DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: keycloak
+                key: PG_USER
           - name: KEYCLOAK_ADMIN
             valueFrom:
               secretKeyRef:
@@ -116,7 +121,10 @@ spec:
                 name: keycloak
 
               data:
-                - secretKey: password
+                - secretKey: PG_USER
+                  remoteRef:
+                    key: /keycloak/PG_USER
+                - secretKey: PG_PASSWORD
                   remoteRef:
                     key: /keycloak/PG_PASSWORD
                 - secretKey: KEYCLOAK_USER
