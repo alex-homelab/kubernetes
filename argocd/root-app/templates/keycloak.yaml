@@ -29,14 +29,14 @@ spec:
           existingSecret: keycloak
           existingSecretKey: PG_PASSWORD
 
-        httpRoute:
+        ingress:
           enabled: true
-          parentRefs:
-            - name: traefik-gateway
-              namespace: traefik
-              sectionName: websecure
-          hostnames:
-            - sso.lan
+          ingressClassName: traefik
+          rules:
+            - host: sso.lan
+              paths:
+                - path: /
+                  pathType: Prefix
         
         command:
           - "/opt/keycloak/bin/kc.sh"
