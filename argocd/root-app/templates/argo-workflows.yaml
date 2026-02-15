@@ -34,6 +34,25 @@ spec:
                 sectionName: websecure
             hostnames:
               - workflows.lan
+        extraObjects:
+          - apiVersion: v1
+            kind: ServiceAccount
+            metadata:
+              name: sam
+              namespace: tooling
+          - apiVersion: rbac.authorization.k8s.io/v1
+            kind: RoleBinding
+            metadata:
+              name: sam-argo-workflows-admin
+              namespace: tooling
+            subjects:
+              - kind: ServiceAccount
+                name: sam
+                namespace: tooling
+            roleRef:
+              kind: ClusterRole
+              name: argo-workflows-admin
+
   destination:
     server: https://kubernetes.default.svc
     namespace: tooling
