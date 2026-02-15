@@ -45,6 +45,8 @@ spec:
           - "--hostname-strict=false"
 
         extraEnv: |
+          - name: KC_HOSTNAME
+            value: sso.vcov.org
           - name: JAVA_OPTS
             value: >-
               -XX:MaxRAMPercentage=50.0
