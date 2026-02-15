@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hashicorp/vault-helm.git
+    path: .
+    targetRevision: 0.32.0
+    helm:
+      valuesObject:
+        ha:
+          enabled: true
+          replicas: 2
+
+          config: |
+            ui = true
+
+            listener "tcp" {
+              tls_disable = 1
+              address = "[::]:8200"
+              cluster_address = "[::]:8201"
+            }
+
+            storage "s3" {
+              endpoint = "minio-svc.minio.svc.cluster.local:9000"
+              bucket = "vault"
+              region = "home"
+            }
+
+            service_registration "kubernetes" {}
+        
+        ui:
+          enabled: true
+        
+        extraSecretEnvironmentVars:
+          - envName: AWS_ACCESS_KEY_ID
+            secretName: vault-env
+            secretKey: MINIO_ACCESS_KEY
+          - envName: AWS_SECRET_ACCESS_KEY
+            secretName: vault-env
+            secretKey: MINIO_SECRET_KEY
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tooling
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: vault-env
+  namespace: tooling
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+target:
+  name: vault-env
+
+data:
+  - secretKey: MINIO_ACCESS_KEY
+    remoteRef:
+      key: /vault/MINIO_ACCESS_KEY
+  - secretKey: MINIO_SECRET_KEY
+    remoteRef:
+      key: /vault/MINIO_SECRET_KEY
