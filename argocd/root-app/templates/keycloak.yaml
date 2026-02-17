@@ -43,6 +43,7 @@ spec:
           - "start"
           - "--http-port=8080"
           - "--hostname-strict=false"
+          - "--feature-workflows=enabled"
 
         proxy:
           enabled: true
