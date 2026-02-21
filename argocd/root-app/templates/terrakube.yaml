@@ -118,6 +118,7 @@ spec:
   target:
     name: test-secret
 
-  dataFrom:
-    - extract:
+  data:
+    - secretKey: test-secret-key
+      remoteRef:
         key: /terrakube/TEST
