@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: burrito
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+
+  source:
+    repoURL: oci://ghcr.io/padok-team/charts/burrito
+    chart: burrito
+    targetRevision: 0.10.0
+    helm:
+      valuesObject:
+        config:
+          burrito:
+            controller:
+              timers:
+                driftDetection: 10m # run drift detection every 10 minutes
+                onError: 10s # wait 10 seconds before retrying on error
+                waitAction: 1m # wait 1 minute before retrying on locked layer
+                failureGracePeriod: 30s # set a grace period of 30 seconds before retrying on failure (increases exponentially with the amount of failed retries)
+            datastore:
+              storage:
+                s3:
+                  bucket: "burrito"
+                  usePathStyle: true
+            server:
+              basicAuth:
+                enabled: false
+              oidc:
+                enabled: false
+                issuerUrl: "https://sso.vcov.org/realms/master"
+                clientId: "burrito"
+              session:
+                secure: true
+        hermitcrab:
+          enabled: false
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            host: burrito.vcov.org
+        tenants:
+          - namespace:
+              create: false
+              name: "tooling"
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: burrito-system
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
