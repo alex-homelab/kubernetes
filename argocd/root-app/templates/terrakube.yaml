@@ -15,6 +15,18 @@ spec:
           useOpenLDAP: false
         dex:
           enabled: false
+          connectors:
+            - type: oidc
+              id: keycloak
+              name: Keycloak
+              config:
+                issuer: https://sso.vcov.org/realms/master
+                clientID: terrakube
+                clientSecret:
+                  name: terrakube-ui-secrets
+                  key: dex-client-secret
+                usernameClaim: preferred_username
+                groupsClaim: groups
         api:
           existingSecret: true
           defaultDatabase: false
@@ -51,7 +63,10 @@ spec:
           registry:
             enabled: false
           dex:
-            enabled: false
+            enabled: true
+            domain: "terrakube.vcov.org"
+            path: "/dex/"
+            pathType: "Prefix"
           executor:
             enabled: false
         storage:
