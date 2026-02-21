@@ -91,7 +91,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: api-config
+  name: terrakube-api-config
   namespace: terrakube
 spec:
   secretStoreRef:
@@ -102,5 +102,5 @@ spec:
     name: terrakube-api-secrets
 
   dataFrom:
-    - find:
-        path: /terrakube/API_CFG
+    - extract:
+        key: /terrakube/API_CFG
