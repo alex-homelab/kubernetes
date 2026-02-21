@@ -26,13 +26,29 @@ spec:
           enabled: false
           existingSecret: true
         ui:
-          enabled: false
+          enabled: true
           existingSecret: true
         ingress:
+          controller: "gatewayapi"
+          gatewayapi:
+            apiVersion: gateway.networking.k8s.io
+            enabled: true
+            gateways:
+              - name: traefik-gateway
+                namespace: traefik
+                sectionName: websecure
           ui:
-            enabled: false
+            enabled: true
+            domain: "terrakube.vcov.org"
+            path: "/"
+            pathType: "Prefix"
+            useTls: false
           api:
-            enabled: false
+            enabled: true
+            domain: "terrakube.vcov.org"
+            path: "/api/"
+            pathType: "Prefix"
+            useTls: false
           registry:
             enabled: false
           dex:
@@ -104,3 +120,21 @@ spec:
   dataFrom:
     - extract:
         key: /terrakube/API_CFG
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: terrakube-ui-config
+  namespace: terrakube
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-ui-secrets
+
+  data:
+    - secretKey: env-config.js
+      remoteRef:
+        key: /terrakube/UI_CFG
