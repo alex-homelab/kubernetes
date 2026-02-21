@@ -31,7 +31,6 @@ spec:
         ingress:
           controller: "gatewayapi"
           gatewayapi:
-            apiVersion: gateway.networking.k8s.io
             enabled: true
             gateways:
               - name: traefik-gateway
