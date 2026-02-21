@@ -104,21 +104,3 @@ spec:
   dataFrom:
     - extract:
         key: /terrakube/API_CFG
----
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: test-secret
-  namespace: terrakube
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: infisical
-
-  target:
-    name: test-secret
-
-  data:
-    - secretKey: test-secret-key
-      remoteRef:
-        key: /terrakube/TEST
