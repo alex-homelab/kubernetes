@@ -2,6 +2,14 @@ argo-cd:
   configs:
     params:
       server.insecure: true
+    # cm:
+    #   oidc.config: |
+    #     name: Keycloak
+    #     issuer: https://sso.vcov.org/realms/master
+    #     clientID: argo-cd
+    #     clientSecret:
+    #       name: argocd-oidc-secret
+    #       key: clientSecret
 
   global:
     domain: argo.lan
@@ -14,3 +22,5 @@ argo-cd:
       parentRefs:
         - name: traefik-gateway
           namespace: traefik
+          group: gateway.networking.k8s.io	
+          kind: Gateway

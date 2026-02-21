@@ -70,6 +70,11 @@ spec:
               login: true
               passwordSecret:
                 name: keycloak-password
+            - name: terrakube
+              ensure: present
+              login: true
+              passwordSecret:
+                name: terrakube-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db

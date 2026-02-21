@@ -1,0 +1,106 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: terrakube
+spec:
+  project: default
+
+  source:
+    repoURL: https://terrakube-io.github.io/terrakube-helm-chart
+    chart: terrakube
+    targetRevision: 4.5.5
+    helm:
+      valuesObject:
+        security:
+          useOpenLDAP: false
+        dex:
+          enabled: false
+        api:
+          existingSecret: true
+          defaultDatabase: false
+          defaultRedis: true
+        executor:
+          existingSecret: true
+          enabled: false
+        registry:
+          enabled: false
+          existingSecret: true
+        ui:
+          enabled: false
+          existingSecret: true
+        ingress:
+          ui:
+            enabled: false
+          api:
+            enabled: false
+          registry:
+            enabled: false
+          dex:
+            enabled: false
+          executor:
+            enabled: false
+        storage:
+          defaultStorage: false
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: terrakube
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: terrakube-db
+  namespace: db
+spec:
+  name: terrakube
+  owner: terrakube
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: terrakube-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-password
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /terrakube/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /terrakube/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: api-config
+  namespace: terrakube
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-api-secrets
+
+  dataFrom:
+    - find:
+        path: /terrakube/API_CFG
