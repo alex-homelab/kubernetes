@@ -46,7 +46,7 @@ spec:
           api:
             enabled: true
             domain: "terrakube.vcov.org"
-            path: "/api/"
+            path: "/api"
             pathType: "Prefix"
             useTls: false
           registry:
@@ -54,8 +54,9 @@ spec:
           dex:
             enabled: true
             domain: "terrakube.vcov.org"
-            path: "/dex/"
+            path: "/dex"
             pathType: "Prefix"
+            useTls: false
           executor:
             enabled: false
         storage:
