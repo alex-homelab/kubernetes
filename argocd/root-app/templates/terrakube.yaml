@@ -15,6 +15,8 @@ spec:
           useOpenLDAP: false
         dex:
           enabled: true
+          config:
+            issuer: https://terrakube.vcov.org/dex
           connectors:
             - type: oidc
               id: keycloak
