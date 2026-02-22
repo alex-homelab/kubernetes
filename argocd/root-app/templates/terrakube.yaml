@@ -15,20 +15,7 @@ spec:
           useOpenLDAP: false
         dex:
           enabled: true
-          config:
-            issuer: https://terrakube.vcov.org/dex
-          connectors:
-            - type: oidc
-              id: keycloak
-              name: Keycloak
-              config:
-                issuer: https://sso.vcov.org/realms/master
-                clientID: terrakube
-                # clientSecret:
-                #   name: terrakube-ui-secrets
-                #   key: dex-client-secret
-                usernameClaim: preferred_username
-                groupsClaim: groups
+          existingSecret: true
         api:
           existingSecret: true
           defaultDatabase: false
@@ -154,3 +141,21 @@ spec:
     - secretKey: env-config.js
       remoteRef:
         key: /terrakube/UI_CFG
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: terrakube-dex-config
+  namespace: terrakube
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-dex
+
+  data:
+    - secretKey: config.yaml
+      remoteRef:
+        key: /terrakube/DEX_CFG
