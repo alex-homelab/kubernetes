@@ -14,7 +14,7 @@ spec:
         security:
           useOpenLDAP: false
         dex:
-          enabled: false
+          enabled: true
           connectors:
             - type: oidc
               id: keycloak
@@ -22,9 +22,9 @@ spec:
               config:
                 issuer: https://sso.vcov.org/realms/master
                 clientID: terrakube
-                clientSecret:
-                  name: terrakube-ui-secrets
-                  key: dex-client-secret
+                # clientSecret:
+                #   name: terrakube-ui-secrets
+                #   key: dex-client-secret
                 usernameClaim: preferred_username
                 groupsClaim: groups
         api:
