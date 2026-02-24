@@ -23,10 +23,8 @@ spec:
         executor:
           enabled: true
           existingSecret: true
-          # secrets:
-          #   - terrakube-executor-secrets
         registry:
-          enabled: false
+          enabled: true
           existingSecret: true
         ui:
           enabled: true
@@ -179,3 +177,20 @@ spec:
   dataFrom:
     - extract:
         key: /terrakube/EXECUTOR_CFG
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: terrakube-registry-config
+  namespace: terrakube
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-registry-secrets
+
+  dataFrom:
+    - extract:
+        key: /terrakube/REGISTRY_CFG
