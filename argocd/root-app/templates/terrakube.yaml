@@ -21,8 +21,10 @@ spec:
           defaultDatabase: false
           defaultRedis: true
         executor:
+          enabled: true
           existingSecret: true
-          enabled: false
+          # secrets:
+          #   - terrakube-executor-secrets
         registry:
           enabled: false
           existingSecret: true
@@ -160,3 +162,20 @@ spec:
     - secretKey: config.yaml
       remoteRef:
         key: /terrakube/DEX_CFG
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: terrakube-executor-config
+  namespace: terrakube
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: terrakube-executor-secrets
+
+  dataFrom:
+    - extract:
+        key: /terrakube/EXECUTOR_CFG
