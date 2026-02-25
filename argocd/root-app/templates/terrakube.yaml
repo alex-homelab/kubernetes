@@ -29,6 +29,7 @@ spec:
         ui:
           enabled: true
           existingSecret: true
+          version: "2.30.0-beta.5"
         ingress:
           controller: "gatewayapi"
           gatewayapi:
