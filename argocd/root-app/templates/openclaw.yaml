@@ -54,8 +54,16 @@ spec:
                 probes:
                   liveness:
                     enabled: true
+                    custom:
+                      httpGet:
+                        path: /healthz
+                        port: 18789
                   readiness:
                     enabled: true
+                    custom:
+                      httpGet:
+                        path: /readyz
+                        port: 18789
 
                 env:
                   TZ: Europe/Tallinn
