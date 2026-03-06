@@ -44,9 +44,6 @@ spec:
                   allowPrivilegeEscalation: false
                   readOnlyRootFilesystem: true
                   runAsNonRoot: true
-                volumeMounts:
-                  - name: askpass
-                    mountPath: /work
 
             containers:
               app:
@@ -96,6 +93,14 @@ spec:
           askpass:
             enabled: true
             type: emptyDir
+            advancedMounts:
+              openclaw:
+                git-askpass-init:
+                  - path: /work
+                    readOnly: false
+                app:
+                  - path: /opt/git-askpass
+                    readOnly: true
           data:
             enabled: true
             type: persistentVolumeClaim
