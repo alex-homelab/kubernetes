@@ -69,13 +69,6 @@ spec:
                 envFrom:
                   - secretRef:
                       name: openclaw-secrets
-                
-                volumeMounts:
-                  - name: askpass
-                    mountPath: /opt/git-askpass
-                    readOnly: true
-                  - name: data
-                    mountPath: /data
 
                 securityContext:
                   allowPrivilegeEscalation: false
@@ -109,8 +102,11 @@ spec:
             accessMode: ReadWriteOnce
             size: 10Gi
             storageClass: longhorn
-            globalMounts:
-              - path: /data
+            advancedMounts:
+              openclaw:
+                app:
+                  - path: /data
+                    readOnly: false
 
         serviceAccount:
           create: true
