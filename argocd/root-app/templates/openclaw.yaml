@@ -37,13 +37,12 @@ spec:
                     esac
                     EOF
                     chmod 0700 /work/git-askpass.sh
-                envFrom:
-                  - secretRef:
-                      name: openclaw-secrets
+                # envFrom:
+                #   - secretRef:
+                #       name: openclaw-secrets
                 securityContext:
                   allowPrivilegeEscalation: false
                   readOnlyRootFilesystem: true
-                  runAsNonRoot: true
 
             containers:
               app:
