@@ -54,16 +54,26 @@ spec:
                 probes:
                   liveness:
                     enabled: true
-                    custom:
+                    custom: true
+                    spec:
                       httpGet:
                         path: /healthz
                         port: 18789
+                        initialDelaySeconds: 3
+                        periodSeconds: 10
+                        timeoutSeconds: 1
+                        failureThreshold: 3
                   readiness:
                     enabled: true
-                    custom:
+                    custom: true
+                    spec:
                       httpGet:
                         path: /readyz
                         port: 18789
+                        initialDelaySeconds: 3
+                        periodSeconds: 10
+                        timeoutSeconds: 1
+                        failureThreshold: 3
 
                 env:
                   TZ: Europe/Tallinn
