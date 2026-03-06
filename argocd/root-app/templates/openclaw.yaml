@@ -53,9 +53,9 @@ spec:
 
                 probes:
                   liveness:
-                    enabled: false
+                    enabled: true
                   readiness:
-                    enabled: false
+                    enabled: true
 
                 env:
                   TZ: Europe/Tallinn
@@ -85,7 +85,7 @@ spec:
             controller: openclaw
             ports:
               http:
-                port: 3000
+                port: 18789
 
         persistence:
           askpass:
