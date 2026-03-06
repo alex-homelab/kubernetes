@@ -127,18 +127,6 @@ spec:
                 app:
                   - path: /home/node
                     readOnly: false
-          data:
-            enabled: true
-            type: persistentVolumeClaim
-            accessMode: ReadWriteOnce
-            size: 10Gi
-            storageClass: longhorn
-            advancedMounts:
-              openclaw:
-                app:
-                  - path: /data
-                    readOnly: false
-
         serviceAccount:
           default:
             enabled: true
