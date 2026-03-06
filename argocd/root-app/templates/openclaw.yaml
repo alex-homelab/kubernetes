@@ -109,8 +109,8 @@ spec:
                     readOnly: false
 
         serviceAccount:
-          create: true
-          name: openclaw
+          default:
+            enabled: true
 
   destination:
     server: https://kubernetes.default.svc
