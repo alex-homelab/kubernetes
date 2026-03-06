@@ -117,6 +117,16 @@ spec:
                 app:
                   - path: /opt/git-askpass
                     readOnly: true
+          workspace:
+            enabled: true
+            type: nfs
+            path: /mnt/NVME/openclaw
+            server: 192.168.1.10
+            advancedMounts:
+              openclaw:
+                app:
+                  - path: /home/node
+                    readOnly: false
           data:
             enabled: true
             type: persistentVolumeClaim
