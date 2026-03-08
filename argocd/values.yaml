@@ -5,9 +5,9 @@ argo-cd:
     cm:
       oidc.config: |
         name: Keycloak
-        issuer: $OIDC_ISSUER
-        clientID: $OIDC_CLIENT_ID
-        clientSecret: $OIDC_CLIENT_SECRET
+        issuer: $oidc.keycloak.issuer
+        clientID: $oidc.keycloak.clientID
+        clientSecret: $oidc.keycloak.clientSecret
         requestedScopes: ["openid", "profile", "email", "groups"]
 
   global:
@@ -39,8 +39,16 @@ argo-cd:
           name: infisical
 
         target:
-          name: argocd-secret-new
+          name: argocd-secret
+          creationPolicy: "Merge"
 
-        dataFrom:
-          - find:
-              path: /argocd
+        data:
+          - secretKey: oidc.keycloak.issuer
+            remoteRef:
+              key: /argocd/OIDC_ISSUER
+          - secretKey: oidc.keycloak.clientID
+            remoteRef:
+              key: /argocd/OIDC_CLIENT_ID
+          - secretKey: oidc.keycloak.clientSecret
+            remoteRef:
+              key: /argocd/OIDC_CLIENT_SECRET
