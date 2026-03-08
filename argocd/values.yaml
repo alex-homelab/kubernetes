@@ -42,5 +42,5 @@ argo-cd:
           name: argocd-secret-new
 
         dataFrom:
-          - extract:
-              key: /argocd/
+          - find:
+              path: /argocd
