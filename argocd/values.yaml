@@ -3,6 +3,8 @@ argo-cd:
     params:
       server.insecure: true
     cm:
+      dexserver.disable.tls: "true"
+      server.dex.server.plaintext: "true"
       oidc.config: |
         name: Keycloak
         issuer: $oidc.keycloak.issuer
