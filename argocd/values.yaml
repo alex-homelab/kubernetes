@@ -10,7 +10,7 @@ argo-cd:
         clientSecret: $oidc.keycloak.clientSecret
         requestedScopes: ["openid", "profile", "email", "groups"]
       policy.csv: |
-        g, Admin, role:admin
+        g, /ArgoCD/Admin, role:admin
 
   global:
     domain: argo.lan
