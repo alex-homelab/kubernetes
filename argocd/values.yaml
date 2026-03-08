@@ -9,10 +9,10 @@ argo-cd:
         clientID: $oidc.keycloak.clientID
         enablePKCEAuthentication: true
         refreshTokenThreshold: 2m
-        requestedScopes: ["openid", "profile", "email"]
+        requestedScopes: ["openid", "profile", "email", "groups"]
     rbac:
       policy.csv: |
-        g, ArgoCDAdmins, role:admin
+        g, admin, role:admin
 
   global:
     domain: argo.vcov.org
@@ -22,6 +22,7 @@ argo-cd:
       enabled: true
       hostnames:
         - argo.lan
+        - argo.vcov.org
       parentRefs:
         - name: traefik-gateway
           namespace: traefik
