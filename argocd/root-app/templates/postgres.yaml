@@ -75,6 +75,11 @@ spec:
               login: true
               passwordSecret:
                 name: terrakube-password
+            - name: n8n
+              ensure: present
+              login: true
+              passwordSecret:
+                name: n8n-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db

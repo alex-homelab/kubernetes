@@ -20,11 +20,41 @@ spec:
           #   n8n:
           #     encryption_key: "<your-secure-encryption-key>"
           extraEnv:
+            - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+            - N8N_PROXY_HOPS: 1
+            - NODE_ENV: production
+            - TZ: Europe/Tallinn
+            - DB_TYPE: postgresdb
             - name: N8N_HOST
               valueFrom:
                 secretKeyRef:
                   name: n8n
                   key: N8N_HOST
+            - name: N8N_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: N8N_WEBHOOK_URL
+            - name: DB_POSTGRESDB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: DB_POSTGRESDB_HOST
+            - name: DB_POSTGRESDB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: DB_POSTGRESDB_PORT
+            - name: DB_POSTGRESDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: DB_POSTGRESDB_USER
+            - name: DB_POSTGRESDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: DB_POSTGRESDB_PASSWORD
           resources:
             limits:
               memory: 2048Mi
@@ -67,7 +97,7 @@ spec:
           - apiVersion: external-secrets.io/v1
             kind: ExternalSecret
             metadata:
-              name: terrakube-api-config
+              name: n8n-secrets
               namespace: n8n
             spec:
               secretStoreRef:
@@ -81,6 +111,22 @@ spec:
                 - secretKey: N8N_HOST
                   remoteRef:
                     key: /n8n/N8N_HOST
+                - secretKey: N8N_WEBHOOK_URL
+                  remoteRef:
+                    key: /n8n/N8N_WEBHOOK_URL
+                - secretKey: DB_POSTGRESDB_HOST
+                  remoteRef:
+                    key: /n8n/PG_HOST
+                - secretKey: DB_POSTGRESDB_PORT
+                  remoteRef:
+                    key: /n8n/PG_PORT
+                - secretKey: DB_POSTGRESDB_USER
+                  remoteRef:
+                    key: /n8n/PG_USER
+                - secretKey: DB_POSTGRESDB_PASSWORD
+                  remoteRef:
+                    key: /n8n/PG_PASSWORD
+                
   destination:
     server: https://kubernetes.default.svc
     namespace: n8n
