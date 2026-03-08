@@ -8,7 +8,7 @@ argo-cd:
         issuer: $oidc.keycloak.issuer
         clientID: $oidc.keycloak.clientID
         clientSecret: $oidc.keycloak.clientSecret
-        requestedScopes: ["openid", "profile", "email", "groups"]
+        requestedScopes: ["openid", "profile", "email"]
       policy.csv: |
         g, /ArgoCD/Admin, role:admin
 
