@@ -7,7 +7,8 @@ argo-cd:
         name: Keycloak
         issuer: $oidc.keycloak.issuer
         clientID: $oidc.keycloak.clientID
-        clientSecret: $oidc.keycloak.clientSecret
+        enablePKCEAuthentication: true
+        refreshTokenThreshold: 2m
         requestedScopes: ["openid", "profile", "email"]
       policy.csv: |
         g, /ArgoCD/Admin, role:admin
@@ -51,6 +52,3 @@ argo-cd:
           - secretKey: oidc.keycloak.clientID
             remoteRef:
               key: /argocd/OIDC_CLIENT_ID
-          - secretKey: oidc.keycloak.clientSecret
-            remoteRef:
-              key: /argocd/OIDC_CLIENT_SECRET
