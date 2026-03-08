@@ -61,19 +61,19 @@ spec:
             requests:
               memory: 512Mi
         extraManifests:
-          # - apiVersion: postgresql.cnpg.io/v1
-          #   kind: Database
-          #   metadata:
-          #     name: n8n-db
-          #     namespace: db
-          #   spec:
-          #     name: n8n
-          #     owner: n8n
-          #     cluster:
-          #       name: postgres
-          #     extensions:
-          #       - name: bloom
-          #         ensure: present
+          - apiVersion: postgresql.cnpg.io/v1
+            kind: Database
+            metadata:
+              name: n8n-db
+              namespace: db
+            spec:
+              name: n8n
+              owner: n8n
+              cluster:
+                name: postgres
+              extensions:
+                - name: bloom
+                  ensure: present
           - apiVersion: external-secrets.io/v1
             kind: ExternalSecret
             metadata:
