@@ -43,4 +43,5 @@ argo-cd:
 
         dataFrom:
           - find:
-              path: argocd
+              name:
+                regexp: argocd.*
