@@ -10,6 +10,7 @@ argo-cd:
         enablePKCEAuthentication: true
         refreshTokenThreshold: 2m
         requestedScopes: ["openid", "profile", "email"]
+    rbac:
       policy.csv: |
         g, ArgoCDAdmins, role:admin
 
