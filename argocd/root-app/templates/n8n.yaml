@@ -1,0 +1,93 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n
+spec:
+  project: default
+
+  source:
+    repoURL: oci://8gears.container-registry.com/library/n8n
+    chart: n8n
+    targetRevision: 2.0.1
+    helm:
+      valuesObject:
+        fullnameOverride: n8n
+        main:
+          config:
+            n8n:
+              hide_usage_page: true
+          # secret:
+          #   n8n:
+          #     encryption_key: "<your-secure-encryption-key>"
+          extraEnv:
+            - name: N8N_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: N8N_HOST
+          resources:
+            limits:
+              memory: 2048Mi
+            requests:
+              memory: 512Mi
+        extraManifests:
+          # - apiVersion: postgresql.cnpg.io/v1
+          #   kind: Database
+          #   metadata:
+          #     name: n8n-db
+          #     namespace: db
+          #   spec:
+          #     name: n8n
+          #     owner: n8n
+          #     cluster:
+          #       name: postgres
+          #     extensions:
+          #       - name: bloom
+          #         ensure: present
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: n8n-password
+              namespace: db
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: n8n-password
+
+              data:
+                - secretKey: username
+                  remoteRef:
+                    key: /n8n/PG_USER
+                - secretKey: password
+                  remoteRef:
+                    key: /n8n/PG_PASSWORD
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: terrakube-api-config
+              namespace: n8n
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: n8n
+
+              data:
+                - secretKey: N8N_HOST
+                  remoteRef:
+                    key: /n8n/N8N_HOST
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: n8n
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
