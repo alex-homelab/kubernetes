@@ -11,7 +11,7 @@ argo-cd:
         refreshTokenThreshold: 2m
         requestedScopes: ["openid", "profile", "email"]
       policy.csv: |
-        g, /ArgoCD/Admin, role:admin
+        g, ArgoCDAdmins, role:admin
 
   global:
     domain: argo.vcov.org
