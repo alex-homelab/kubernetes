@@ -2,14 +2,13 @@ argo-cd:
   configs:
     params:
       server.insecure: true
-    # cm:
-    #   oidc.config: |
-    #     name: Keycloak
-    #     issuer: https://sso.vcov.org/realms/master
-    #     clientID: argo-cd
-    #     clientSecret:
-    #       name: argocd-oidc-secret
-    #       key: clientSecret
+    cm:
+      oidc.config: |
+        name: Keycloak
+        issuer: $OIDC_ISSUER
+        clientID: $OIDC_CLIENT_ID
+        clientSecret: $OIDC_CLIENT_SECRET
+        requestedScopes: ["openid", "profile", "email", "groups"]
 
   global:
     domain: argo.lan
@@ -24,3 +23,24 @@ argo-cd:
           namespace: traefik
           group: gateway.networking.k8s.io	
           kind: Gateway
+  
+  secret:
+    createSecret: false
+  
+  extraObjects:
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: argocd-secret
+        namespace: argocd
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: infisical
+
+        target:
+          name: argocd-secret
+
+        dataFrom:
+          - find:
+              path: argocd
