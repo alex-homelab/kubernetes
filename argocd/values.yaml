@@ -42,6 +42,5 @@ argo-cd:
           name: argocd-secret-new
 
         dataFrom:
-          - find:
-              name:
-                regexp: argocd.*
+          - extract:
+              key: /argocd/
