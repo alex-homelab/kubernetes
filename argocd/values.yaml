@@ -3,8 +3,6 @@ argo-cd:
     params:
       server.insecure: true
     cm:
-      dexserver.disable.tls: "true"
-      server.dex.server.plaintext: "true"
       oidc.config: |
         name: Keycloak
         issuer: $oidc.keycloak.issuer
@@ -16,7 +14,7 @@ argo-cd:
         g, /ArgoCD/Admin, role:admin
 
   global:
-    domain: argo.lan
+    domain: argo.vcov.org
 
   server:
     httproute:
