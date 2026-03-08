@@ -39,7 +39,7 @@ argo-cd:
           name: infisical
 
         target:
-          name: argocd-secret
+          name: argocd-secret-new
 
         dataFrom:
           - find:
