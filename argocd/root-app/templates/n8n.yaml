@@ -20,11 +20,16 @@ spec:
           #   n8n:
           #     encryption_key: "<your-secure-encryption-key>"
           extraEnv:
-            - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
-            - N8N_PROXY_HOPS: "1"
-            - NODE_ENV: production
-            - TZ: Europe/Tallinn
-            - DB_TYPE: postgresdb
+            - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS:
+                value: false
+            - N8N_PROXY_HOPS:
+                value: 1
+            - NODE_ENV:
+                value: production
+            - TZ:
+                value: Europe/Tallinn
+            - DB_TYPE:
+                value: postgresdb
             - name: N8N_HOST
               valueFrom:
                 secretKeyRef:
