@@ -21,9 +21,9 @@ spec:
           #     encryption_key: "<your-secure-encryption-key>"
           extraEnv:
             - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
-              value: false
+              value: "false"
             - name: N8N_PROXY_HOPS
-              value: 1
+              value: "1"
             - name: NODE_ENV
               value: production
             - name: TZ
