@@ -180,8 +180,10 @@ spec:
                 manifest:
                   apiVersion: v1
                   kind: ConfigMap
-                creationPolicy: "Merge"
-
+                template:
+                  engineVersion: v2
+                  data:
+                    N8N_HOST: {{ .N8N_HOST }}
               data:
                 - secretKey: N8N_HOST
                   remoteRef:
