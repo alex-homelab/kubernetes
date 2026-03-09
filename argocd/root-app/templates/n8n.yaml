@@ -52,6 +52,11 @@ spec:
                 secretKeyRef:
                   name: n8n
                   key: DB_POSTGRESDB_PORT
+            - name: DB_POSTGRESDB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: DB_POSTGRESDB_DATABASE
             - name: DB_POSTGRESDB_USER
               valueFrom:
                 secretKeyRef:
@@ -127,6 +132,9 @@ spec:
                 - secretKey: DB_POSTGRESDB_PORT
                   remoteRef:
                     key: /n8n/PG_PORT
+                - secretKey: DB_POSTGRESDB_DATABASE
+                  remoteRef:
+                    key: /n8n/PG_DB
                 - secretKey: DB_POSTGRESDB_USER
                   remoteRef:
                     key: /n8n/PG_USER
