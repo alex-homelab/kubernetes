@@ -42,6 +42,11 @@ spec:
                 secretKeyRef:
                   name: n8n
                   key: N8N_WEBHOOK_URL
+            - name: N8N_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: N8N_ENCRYPTION_KEY
             - name: DB_POSTGRESDB_HOST
               valueFrom:
                 secretKeyRef:
@@ -126,6 +131,9 @@ spec:
                 - secretKey: N8N_WEBHOOK_URL
                   remoteRef:
                     key: /n8n/N8N_WEBHOOK_URL
+                - secretKey: N8N_ENCRYPTION_KEY
+                  remoteRef:
+                    key: /n8n/N8N_ENCRYPTION_KEY
                 - secretKey: DB_POSTGRESDB_HOST
                   remoteRef:
                     key: /n8n/PG_HOST
