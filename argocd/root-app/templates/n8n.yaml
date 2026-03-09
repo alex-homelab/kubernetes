@@ -19,6 +19,14 @@ spec:
         worker:
           enabled: true
           extraEnv:
+            - name: NODE_ENV
+              value: production
+            - name: TZ
+              value: Europe/Tallinn
+            - name: DB_TYPE
+              value: postgresdb
+            - name: N8N_NATIVE_PYTHON_RUNNER
+              value: "true"
             - name: N8N_ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
