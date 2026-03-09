@@ -14,6 +14,8 @@ spec:
         fullnameOverride: n8n
         image:
           tag: 2.11.2
+        worker:
+          enabled: true
         main:
           config:
             n8n:
@@ -32,6 +34,8 @@ spec:
               value: Europe/Tallinn
             - name: DB_TYPE
               value: postgresdb
+            - name: N8N_RUNNERS_ENABLED
+              value: "true"
             - name: N8N_HOST
               valueFrom:
                 secretKeyRef:
