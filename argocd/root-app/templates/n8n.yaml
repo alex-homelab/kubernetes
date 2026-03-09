@@ -31,15 +31,15 @@ spec:
         timezone: "Europe/Tallinn"
 
         main:
-          extraSecretNamesForEnvFrom:
-            - n8n
+          # extraSecretNamesForEnvFrom:
+          #   - n8n
           resources:
             requests:
               cpu: 100m
               memory: 128Mi
             limits:
               cpu: 512m
-              memory: 512Mi
+              memory: 1Gi
 
         worker:
           mode: regular
@@ -111,9 +111,9 @@ spec:
     - secretKey: N8N_EDITOR_BASE_URL
       remoteRef:
         key: /n8n/N8N_HOST
-    - secretKey: N8N_WEBHOOK_URL
-      remoteRef:
-        key: /n8n/N8N_WEBHOOK_URL
+    # - secretKey: N8N_WEBHOOK_URL
+    #   remoteRef:
+    #     key: /n8n/N8N_WEBHOOK_URL
     - secretKey: N8N_ENCRYPTION_KEY
       remoteRef:
         key: /n8n/N8N_ENCRYPTION_KEY
