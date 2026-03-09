@@ -42,47 +42,12 @@ spec:
               memory: 512Mi
 
         worker:
-          mode: queue
-
-          autoscaling:
-            enabled: true
-
-          waitMainNodeReady:
-            enabled: true
-          
-          extraSecretNamesForEnvFrom:
-            - n8n
-
-          resources:
-            requests:
-              cpu: 1000m
-              memory: 250Mi
-            limits:
-              cpu: 2000m
-              memory: 2Gi
-
+          mode: regular
         redis:
-          enabled: true
+          enabled: false
 
         webhook:
-          mode: queue
-
-          autoscaling:
-            enabled: true
-
-          waitMainNodeReady:
-            enabled: true
-          
-          extraSecretNamesForEnvFrom:
-            - n8n
-
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: 512m
-              memory: 512Mi        
+          mode: regular
   destination:
     server: https://kubernetes.default.svc
     namespace: n8n
@@ -146,9 +111,9 @@ spec:
     - secretKey: N8N_EDITOR_BASE_URL
       remoteRef:
         key: /n8n/N8N_HOST
-    # - secretKey: WEBHOOK_URL
-    #   remoteRef:
-    #     key: /n8n/N8N_WEBHOOK_URL
+    - secretKey: N8N_WEBHOOK_URL
+      remoteRef:
+        key: /n8n/N8N_WEBHOOK_URL
     - secretKey: N8N_ENCRYPTION_KEY
       remoteRef:
         key: /n8n/N8N_ENCRYPTION_KEY
