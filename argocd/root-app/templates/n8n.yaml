@@ -14,14 +14,16 @@ spec:
         fullnameOverride: n8n
         image:
           tag: 2.11.2
-        # worker:
-        #   enabled: true
-        #   extraEnv:
-        #     - name: N8N_ENCRYPTION_KEY
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: n8n
-        #           key: N8N_ENCRYPTION_KEY
+        valkey:
+          enabled: true
+        worker:
+          enabled: true
+          extraEnv:
+            - name: N8N_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: n8n
+                  key: N8N_ENCRYPTION_KEY
         main:
           config:
             n8n:
