@@ -6,7 +6,7 @@ spec:
   project: default
 
   source:
-    repoURL: oci://8gears.container-registry.com/library/n8n
+    repoURL: https://community-charts.github.io/helm-charts
     chart: n8n
     targetRevision: 2.0.1
     helm:
@@ -14,181 +14,75 @@ spec:
         fullnameOverride: n8n
         image:
           tag: 2.11.2
-        valkey:
-          enabled: true
-          replicaCount: 1
-          auth:
-            enabled: false
-          dataStorage:
-            enabled: false
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 100m
+        log:
+          level: warn
+
+        db:
+          type: postgresdb
+        
+        existingEncryptionKeySecret: n8n
+
+        externalPostgresql:
+          host: "postgres-rw.db"
+          username: "n8n"
+          database: "n8n"
+          existingSecret: n8n
+        
+        timezone: "Europe/Tallinn"
+
         main:
-          config:
-            n8n:
-              hide_usage_page: true
-          # secret:
-          #   n8n:
-          #     encryption_key: "<your-secure-encryption-key>"
-          extraEnv: &extraEnv
-            - name: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
-              value: "false"
-            - name: N8N_PROXY_HOPS
-              value: "1"
-            - name: NODE_ENV
-              value: production
-            - name: TZ
-              value: Europe/Tallinn
-            - name: DB_TYPE
-              value: postgresdb
-            - name: N8N_NATIVE_PYTHON_RUNNER
-              value: "true"
-            - name: N8N_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: N8N_HOST
-            - name: N8N_WEBHOOK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: N8N_WEBHOOK_URL
-            - name: N8N_ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: N8N_ENCRYPTION_KEY
-            - name: DB_POSTGRESDB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: DB_POSTGRESDB_HOST
-            - name: DB_POSTGRESDB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: DB_POSTGRESDB_PORT
-            - name: DB_POSTGRESDB_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: DB_POSTGRESDB_DATABASE
-            - name: DB_POSTGRESDB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: DB_POSTGRESDB_USER
-            - name: DB_POSTGRESDB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: n8n
-                  key: DB_POSTGRESDB_PASSWORD
+          extraSecretNamesForEnvFrom:
+            - n8n
           resources:
-            limits:
-              memory: 2048Mi
             requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 512m
               memory: 512Mi
+
         worker:
+          mode: queue
+
+          autoscaling:
+            enabled: true
+
+          waitMainNodeReady:
+            enabled: true
+          
+          extraSecretNamesForEnvFrom:
+            - n8n
+
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 250Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+
+        redis:
           enabled: true
-          extraEnv: *extraEnv
-        extraManifests:
-          - apiVersion: postgresql.cnpg.io/v1
-            kind: Database
-            metadata:
-              name: n8n-db
-              namespace: db
-            spec:
-              name: n8n
-              owner: n8n
-              cluster:
-                name: postgres
-              extensions:
-                - name: bloom
-                  ensure: present
-          - apiVersion: external-secrets.io/v1
-            kind: ExternalSecret
-            metadata:
-              name: n8n-password
-              namespace: db
-            spec:
-              secretStoreRef:
-                kind: ClusterSecretStore
-                name: infisical
 
-              target:
-                name: n8n-password
+        webhook:
+          mode: queue
 
-              data:
-                - secretKey: username
-                  remoteRef:
-                    key: /n8n/PG_USER
-                - secretKey: password
-                  remoteRef:
-                    key: /n8n/PG_PASSWORD
-          - apiVersion: external-secrets.io/v1
-            kind: ExternalSecret
-            metadata:
-              name: n8n-secrets
-              namespace: n8n
-            spec:
-              secretStoreRef:
-                kind: ClusterSecretStore
-                name: infisical
+          autoscaling:
+            enabled: true
 
-              target:
-                name: n8n
+          waitMainNodeReady:
+            enabled: true
+          
+          extraSecretNamesForEnvFrom:
+            - n8n
 
-              data:
-                - secretKey: N8N_HOST
-                  remoteRef:
-                    key: /n8n/N8N_HOST
-                - secretKey: N8N_WEBHOOK_URL
-                  remoteRef:
-                    key: /n8n/N8N_WEBHOOK_URL
-                - secretKey: N8N_ENCRYPTION_KEY
-                  remoteRef:
-                    key: /n8n/N8N_ENCRYPTION_KEY
-                - secretKey: DB_POSTGRESDB_HOST
-                  remoteRef:
-                    key: /n8n/PG_HOST
-                - secretKey: DB_POSTGRESDB_PORT
-                  remoteRef:
-                    key: /n8n/PG_PORT
-                - secretKey: DB_POSTGRESDB_DATABASE
-                  remoteRef:
-                    key: /n8n/PG_DB
-                - secretKey: DB_POSTGRESDB_USER
-                  remoteRef:
-                    key: /n8n/PG_USER
-                - secretKey: DB_POSTGRESDB_PASSWORD
-                  remoteRef:
-                    key: /n8n/PG_PASSWORD
-          - apiVersion: external-secrets.io/v1
-            kind: ExternalSecret
-            metadata:
-              name: n8n-configmap
-              namespace: n8n
-            spec:
-              secretStoreRef:
-                kind: ClusterSecretStore
-                name: infisical
-
-              target:
-                name: n8n-app-config
-                manifest:
-                  apiVersion: v1
-                  kind: ConfigMap
-                template:
-                  engineVersion: v2
-                  data:
-                    N8N_HOST: {{ .N8N_HOST }}
-              data:
-                - secretKey: N8N_HOST
-                  remoteRef:
-                    key: /n8n/N8N_HOST
-                
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 512m
+              memory: 512Mi        
   destination:
     server: https://kubernetes.default.svc
     namespace: n8n
@@ -199,3 +93,65 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: n8n-db
+  namespace: db
+spec:
+  name: n8n
+  owner: n8n
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: n8n-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: n8n-password
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /n8n/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /n8n/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: n8n-secrets
+  namespace: n8n
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: n8n
+
+  data:
+    - secretKey: N8N_EDITOR_BASE_URL
+      remoteRef:
+        key: /n8n/N8N_HOST
+    - secretKey: WEBHOOK_URL
+      remoteRef:
+        key: /n8n/N8N_WEBHOOK_URL
+    - secretKey: N8N_ENCRYPTION_KEY
+      remoteRef:
+        key: /n8n/N8N_ENCRYPTION_KEY
+    - secretKey: postgres-password
+      remoteRef:
+        key: /n8n/PG_PASSWORD
