@@ -165,6 +165,27 @@ spec:
                 - secretKey: DB_POSTGRESDB_PASSWORD
                   remoteRef:
                     key: /n8n/PG_PASSWORD
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: n8n-configmap
+              namespace: n8n
+            spec:
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: infisical
+
+              target:
+                name: n8n-app-config
+                manifest:
+                  apiVersion: v1
+                  kind: ConfigMap
+                creationPolicy: "Merge"
+
+              data:
+                - secretKey: N8N_HOST
+                  remoteRef:
+                    key: /n8n/N8N_HOST
                 
   destination:
     server: https://kubernetes.default.svc
