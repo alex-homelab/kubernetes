@@ -146,9 +146,9 @@ spec:
     - secretKey: N8N_EDITOR_BASE_URL
       remoteRef:
         key: /n8n/N8N_HOST
-    - secretKey: WEBHOOK_URL
-      remoteRef:
-        key: /n8n/N8N_WEBHOOK_URL
+    # - secretKey: WEBHOOK_URL
+    #   remoteRef:
+    #     key: /n8n/N8N_WEBHOOK_URL
     - secretKey: N8N_ENCRYPTION_KEY
       remoteRef:
         key: /n8n/N8N_ENCRYPTION_KEY
