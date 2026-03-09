@@ -12,6 +12,8 @@ spec:
     helm:
       valuesObject:
         fullnameOverride: n8n
+        image:
+          tag: 2.11.2
         main:
           config:
             n8n:
