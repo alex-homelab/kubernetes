@@ -31,8 +31,8 @@ spec:
         timezone: "Europe/Tallinn"
 
         main:
-          # extraSecretNamesForEnvFrom:
-          #   - n8n
+          extraSecretNamesForEnvFrom:
+            - n8n
           resources:
             requests:
               cpu: 100m
