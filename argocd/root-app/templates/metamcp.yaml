@@ -23,12 +23,27 @@ spec:
         postgres:
           enabled: false
 
+        env:
+          APP_URL: "__set_via_secret__"
+          DATABASE_URL: "__set_via_secret__"
+
         auth:
           betterAuthSecret: ""
 
         extraEnvFrom:
           - secretRef:
               name: metamcp
+        extraEnv:
+          - name: APP_URL
+            valueFrom:
+              secretKeyRef:
+                name: metamcp
+                key: APP_URL
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: metamcp
+                key: DATABASE_URL
   destination:
     server: https://kubernetes.default.svc
     namespace: metamcp
