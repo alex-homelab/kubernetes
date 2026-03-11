@@ -26,6 +26,10 @@ spec:
         env:
           APP_URL: "https://mcp.vcov.org"
           DATABASE_URL: "__set_via_secret__"
+          POSTGRES_HOST: "postgres-rw.db.svc.cluster.local"
+          PGHOST: "postgres-rw.db.svc.cluster.local"
+          POSTGRES_PORT: "5432"
+          PGPORT: "5432"
 
         auth:
           betterAuthSecret: ""
