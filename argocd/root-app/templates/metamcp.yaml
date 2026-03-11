@@ -20,6 +20,9 @@ spec:
         gatewayAPI:
           enabled: false
 
+        postgres:
+          enabled: false
+
         auth:
           betterAuthSecret: ""
 
@@ -35,6 +38,41 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: metamcp-db
+  namespace: db
+spec:
+  name: metamcp
+  owner: metamcp
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: metamcp-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: metamcp-password
+
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /metamcp/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /metamcp/PG_PASSWORD
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -56,3 +94,6 @@ spec:
     - secretKey: APP_URL
       remoteRef:
         key: /metamcp/APP_URL
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: /metamcp/DATABASE_URL

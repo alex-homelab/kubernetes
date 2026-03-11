@@ -80,6 +80,11 @@ spec:
               login: true
               passwordSecret:
                 name: n8n-password
+            - name: metamcp
+              ensure: present
+              login: true
+              passwordSecret:
+                name: metamcp-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
