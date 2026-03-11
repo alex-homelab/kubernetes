@@ -24,7 +24,7 @@ spec:
           enabled: false
 
         env:
-          APP_URL: "__set_via_secret__"
+          APP_URL: "https://mcp.vcov.org"
           DATABASE_URL: "__set_via_secret__"
 
         auth:
@@ -34,11 +34,6 @@ spec:
           - secretRef:
               name: metamcp
         extraEnv:
-          - name: APP_URL
-            valueFrom:
-              secretKeyRef:
-                name: metamcp
-                key: APP_URL
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
