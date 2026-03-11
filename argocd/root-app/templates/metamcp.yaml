@@ -111,3 +111,24 @@ spec:
     - secretKey: DATABASE_URL
       remoteRef:
         key: /metamcp/DATABASE_URL
+    - secretKey: OIDC_CLIENT_ID
+      remoteRef:
+        key: /metamcp/OIDC_CLIENT_ID
+    - secretKey: OIDC_CLIENT_SECRET
+      remoteRef:
+        key: /metamcp/OIDC_CLIENT_SECRET
+    - secretKey: OIDC_DISCOVERY_URL
+      remoteRef:
+        key: /metamcp/OIDC_DISCOVERY_URL
+    - secretKey: OIDC_AUTHORIZATION_URL
+      remoteRef:
+        key: /metamcp/OIDC_AUTHORIZATION_URL
+    - secretKey: OIDC_PROVIDER_ID
+      remoteRef:
+        key: /metamcp/OIDC_PROVIDER_ID
+    - secretKey: OIDC_SCOPES
+      remoteRef:
+        key: /metamcp/OIDC_SCOPES
+    - secretKey: OIDC_PKCE
+      remoteRef:
+        key: /metamcp/OIDC_PKCE
