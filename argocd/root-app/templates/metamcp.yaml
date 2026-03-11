@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metamcp
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://icoretech.github.io/helm
+    chart: metamcp
+    targetRevision: 0.3.2
+    helm:
+      releaseName: metamcp
+      valuesObject:
+        fullnameOverride: metamcp
+
+        ingress:
+          enabled: false
+        gatewayAPI:
+          enabled: false
+
+        auth:
+          betterAuthSecret: ""
+
+        extraEnvFrom:
+          - secretRef:
+              name: metamcp
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metamcp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: metamcp
+  namespace: metamcp
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: metamcp
+
+  data:
+    - secretKey: BETTER_AUTH_SECRET
+      remoteRef:
+        key: /metamcp/BETTER_AUTH_SECRET
+    - secretKey: APP_URL
+      remoteRef:
+        key: /metamcp/APP_URL
