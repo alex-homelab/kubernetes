@@ -30,6 +30,9 @@ spec:
           image:
             tag: 1.0.0-RC-2
             pullPolicy: IfNotPresent
+          extraEnv:
+            - name: PLUGINS_ENABLED
+              value: "true"
           ingress:
             enabled: false
           metrics:
