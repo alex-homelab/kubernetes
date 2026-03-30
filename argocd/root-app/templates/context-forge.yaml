@@ -37,8 +37,8 @@ spec:
               enabled: false
           # Secret is provided by ExternalSecret with the same name
           # expected by the chart: <release>-mcp-stack-gateway-secret.
-          # Set to null to disable chart-owned secret creation.
-          secret: null
+          # Set to false to disable chart-owned secret creation.
+          secret: false
 
         migration:
           enabled: false
