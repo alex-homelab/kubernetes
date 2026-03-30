@@ -35,10 +35,11 @@ spec:
           metrics:
             serviceMonitor:
               enabled: false
-          # Secret is provided by ExternalSecret with the same name
-          # expected by the chart: <release>-mcp-stack-gateway-secret.
-          # Set to false to disable chart-owned secret creation.
-          secret: false
+          # Keep chart default gateway secret and overlay sensitive keys
+          # from Infisical via extraEnvFrom (last source wins).
+          extraEnvFrom:
+            - secretRef:
+                name: context-forge-gateway-secret
 
         migration:
           enabled: false
@@ -145,7 +146,7 @@ spec:
     name: infisical
 
   target:
-    name: context-forge-mcp-stack-gateway-secret
+    name: context-forge-gateway-secret
 
   data:
     - secretKey: JWT_SECRET_KEY
