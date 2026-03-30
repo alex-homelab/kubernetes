@@ -85,6 +85,11 @@ spec:
               login: true
               passwordSecret:
                 name: metamcp-password
+            - name: contextforge
+              ensure: present
+              login: true
+              passwordSecret:
+                name: context-forge-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
