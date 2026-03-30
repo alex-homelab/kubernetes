@@ -30,9 +30,6 @@ spec:
           image:
             tag: 1.0.0-RC-2
             pullPolicy: IfNotPresent
-          extraEnv:
-            - name: PLUGINS_ENABLED
-              value: "true"
           ingress:
             enabled: false
           metrics:
@@ -150,6 +147,9 @@ spec:
 
   target:
     name: context-forge-gateway-secret
+    template:
+      data:
+        PLUGINS_ENABLED: "true"
 
   data:
     - secretKey: JWT_SECRET_KEY
