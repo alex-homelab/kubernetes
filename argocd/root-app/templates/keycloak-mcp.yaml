@@ -26,7 +26,7 @@ spec:
                   - /bin/sh
                   - -c
                   - |
-                    exec npx -y mcp-proxy --port 8080 --server sse --endpoint /sse -- npx -y @octodet/keycloak-mcp
+                    exec npx -y mcp-proxy --port 8080 --server sse --endpoint /sse -- npx -y keycloak-mcp-server
 
                 env:
                   KEYCLOAK_URL: https://sso.vcov.org/auth
