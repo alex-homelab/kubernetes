@@ -1,0 +1,98 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak-mcp
+spec:
+  project: default
+
+  source:
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
+    helm:
+      releaseName: keycloak-mcp
+      valuesObject:
+        controllers:
+          keycloak-mcp:
+            strategy: RollingUpdate
+            containers:
+              app:
+                image:
+                  repository: node
+                  tag: "22-alpine"
+                  pullPolicy: IfNotPresent
+
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    exec npx -y mcp-proxy --port 8080 --server sse --endpoint /sse -- npx -y @octodet/keycloak-mcp
+
+                env:
+                  KEYCLOAK_URL: https://sso.vcov.org/auth
+                  KEYCLOAK_REALM: tooling
+
+                envFrom:
+                  - secretRef:
+                      name: keycloak-mcp-secrets
+
+                probes:
+                  liveness:
+                    enabled: false
+                  readiness:
+                    enabled: false
+                  startup:
+                    enabled: false
+
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    cpu: 500m
+                    memory: 512Mi
+
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  readOnlyRootFilesystem: false
+                  capabilities:
+                    drop:
+                      - ALL
+
+        service:
+          app:
+            controller: keycloak-mcp
+            ports:
+              http:
+                port: 8080
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: keycloak-mcp
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: keycloak-mcp-secrets
+  namespace: keycloak-mcp
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: keycloak-mcp-secrets
+  data:
+    - secretKey: KEYCLOAK_ADMIN
+      remoteRef:
+        key: /keycloak/KEYCLOAK_USER
+    - secretKey: KEYCLOAK_ADMIN_PASSWORD
+      remoteRef:
+        key: /keycloak/KEYCLOAK_PASSWORD

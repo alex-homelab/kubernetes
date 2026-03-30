@@ -185,6 +185,12 @@ spec:
     - secretKey: SSO_KEYCLOAK_CLIENT_SECRET
       remoteRef:
         key: /context-forge/SSO_KEYCLOAK_CLIENT_SECRET
+    - secretKey: SSO_KEYCLOAK_ROLE_MAPPINGS
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_ROLE_MAPPINGS
+    - secretKey: SSO_KEYCLOAK_DEFAULT_ROLE
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_DEFAULT_ROLE
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
