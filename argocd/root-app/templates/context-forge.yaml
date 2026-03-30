@@ -148,6 +148,7 @@ spec:
   target:
     name: context-forge-gateway-secret
     template:
+      mergePolicy: Merge
       data:
         PLUGINS_ENABLED: "true"
 
