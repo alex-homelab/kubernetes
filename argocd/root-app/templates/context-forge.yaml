@@ -164,6 +164,27 @@ spec:
     - secretKey: DEFAULT_USER_PASSWORD
       remoteRef:
         key: /context-forge/DEFAULT_USER_PASSWORD
+    - secretKey: APP_DOMAIN
+      remoteRef:
+        key: /context-forge/APP_DOMAIN
+    - secretKey: SSO_ENABLED
+      remoteRef:
+        key: /context-forge/SSO_ENABLED
+    - secretKey: SSO_KEYCLOAK_ENABLED
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_ENABLED
+    - secretKey: SSO_KEYCLOAK_BASE_URL
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_BASE_URL
+    - secretKey: SSO_KEYCLOAK_REALM
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_REALM
+    - secretKey: SSO_KEYCLOAK_CLIENT_ID
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_CLIENT_ID
+    - secretKey: SSO_KEYCLOAK_CLIENT_SECRET
+      remoteRef:
+        key: /context-forge/SSO_KEYCLOAK_CLIENT_SECRET
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
