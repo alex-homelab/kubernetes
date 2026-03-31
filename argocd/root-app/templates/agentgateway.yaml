@@ -1,52 +1,58 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: agentgateway-crds
-  annotations:
-    argocd.argoproj.io/sync-wave: "-1"
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io/background
-spec:
-  project: default
-  source:
-    repoURL: cr.agentgateway.dev/charts
-    chart: agentgateway-crds
-    targetRevision: v1.0.1
-    helm:
-      releaseName: agentgateway-crds
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: agentgateway-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - ServerSideApply=true
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: agentgateway
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
   finalizers:
   - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
-    repoURL: cr.agentgateway.dev/charts
-    chart: agentgateway
-    targetRevision: v1.0.1
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
     helm:
       releaseName: agentgateway
       valuesObject:
-        controller:
-          replicaCount: 1
+        controllers:
+          agentgateway:
+            strategy: RollingUpdate
+            containers:
+              app:
+                image:
+                  repository: ghcr.io/agentgateway/agentgateway
+                  tag: latest
+                  pullPolicy: IfNotPresent
+                env:
+                  ADMIN_ADDR: "0.0.0.0:15000"
+                probes:
+                  liveness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /ready
+                        port: 15021
+                      initialDelaySeconds: 5
+                      periodSeconds: 10
+                  readiness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /ready
+                        port: 15021
+                      initialDelaySeconds: 3
+                      periodSeconds: 10
+
+        service:
+          app:
+            controller: agentgateway
+            ports:
+              http:
+                port: 15000
   destination:
     server: https://kubernetes.default.svc
-    namespace: agentgateway-system
+    namespace: agentgateway
   syncPolicy:
     automated:
       prune: true
