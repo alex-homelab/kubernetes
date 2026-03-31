@@ -24,25 +24,6 @@ spec:
                   pullPolicy: IfNotPresent
                 env:
                   ADMIN_ADDR: "0.0.0.0:15000"
-                probes:
-                  liveness:
-                    enabled: true
-                    custom: true
-                    spec:
-                      httpGet:
-                        path: /ready
-                        port: 15021
-                      initialDelaySeconds: 5
-                      periodSeconds: 10
-                  readiness:
-                    enabled: true
-                    custom: true
-                    spec:
-                      httpGet:
-                        path: /ready
-                        port: 15021
-                      initialDelaySeconds: 3
-                      periodSeconds: 10
 
         service:
           app:
