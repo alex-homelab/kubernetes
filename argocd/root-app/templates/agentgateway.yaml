@@ -24,6 +24,37 @@ spec:
                   pullPolicy: IfNotPresent
                 env:
                   ADMIN_ADDR: "0.0.0.0:15000"
+                  LOCAL_XDS_PATH: "/config/config.yaml"
+
+        configMaps:
+          agw-config:
+            enabled: true
+            data:
+              config.yaml: |
+                # yaml-language-server: $schema=https://agentgateway.dev/schema/config
+                binds:
+                  - port: 3000
+                    listeners:
+                      - protocol: HTTP
+                        routes:
+                          - name: direct-response
+                            matches:
+                              - path:
+                                  pathPrefix: /
+                            policies:
+                              directResponse:
+                                body: "agentgateway standalone is running"
+                                status: 200
+
+        persistence:
+          config:
+            enabled: true
+            type: configMap
+            identifier: agw-config
+            globalMounts:
+              - path: /config/config.yaml
+                subPath: config.yaml
+                readOnly: true
 
         service:
           app:
