@@ -29,6 +29,8 @@ spec:
                     set -eu
                     mkdir -p /config
                     cp /bootstrap/config.yaml /config/config.yaml
+                    chmod 0777 /config
+                    chmod 0666 /config/config.yaml
             containers:
               app:
                 image:
