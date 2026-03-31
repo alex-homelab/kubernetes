@@ -16,6 +16,19 @@ spec:
         controllers:
           agentgateway:
             strategy: RollingUpdate
+            initContainers:
+              init-config:
+                image:
+                  repository: busybox
+                  tag: "1.36"
+                  pullPolicy: IfNotPresent
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    set -eu
+                    mkdir -p /config
+                    cp /bootstrap/config.yaml /config/config.yaml
             containers:
               app:
                 image:
@@ -47,14 +60,25 @@ spec:
                                 status: 200
 
         persistence:
-          config:
+          config-bootstrap:
             enabled: true
             type: configMap
             identifier: agw-config
-            globalMounts:
-              - path: /config/config.yaml
-                subPath: config.yaml
-                readOnly: true
+            advancedMounts:
+              agentgateway:
+                init-config:
+                  - path: /bootstrap/config.yaml
+                    subPath: config.yaml
+                    readOnly: true
+          config:
+            enabled: true
+            type: emptyDir
+            advancedMounts:
+              agentgateway:
+                init-config:
+                  - path: /config
+                app:
+                  - path: /config
 
         service:
           app:
