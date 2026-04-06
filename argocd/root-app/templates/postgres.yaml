@@ -90,6 +90,11 @@ spec:
               login: true
               passwordSecret:
                 name: context-forge-password
+            - name: paperclipai
+              ensure: present
+              login: true
+              passwordSecret:
+                name: paperclipai-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
