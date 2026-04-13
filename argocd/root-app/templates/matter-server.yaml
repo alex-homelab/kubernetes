@@ -57,6 +57,8 @@ spec:
                 args:
                   - --storage-path
                   - /data
+                  - --primary-interface
+                  - ens18
                   - --paa-root-cert-dir
                   - /data/credentials
                   - --port
