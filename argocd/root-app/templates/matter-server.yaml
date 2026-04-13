@@ -20,8 +20,8 @@ spec:
             initContainers:
               restore-backup:
                 image:
-                  repository: amazon/aws-cli
-                  tag: latest
+                  repository: alpine
+                  tag: "3.21"
                 envFrom:
                   - secretRef:
                       name: matter-server-r2-backup
@@ -30,7 +30,7 @@ spec:
                   - -c
                   - |
                     set -e
-                    dnf -y install tar gzip >/dev/null 2>&1 || true
+                    apk add --no-cache aws-cli tar gzip >/dev/null
                     mkdir -p /data
                     aws --endpoint-url="$AWS_ENDPOINT" --region "${AWS_REGION:-auto}" s3 mb "s3://$BUCKET" || true
                     if [ ! -f /data/chip.json ]; then
@@ -59,8 +59,8 @@ spec:
                   - "5580"
               backup:
                 image:
-                  repository: amazon/aws-cli
-                  tag: latest
+                  repository: alpine
+                  tag: "3.21"
                 envFrom:
                   - secretRef:
                       name: matter-server-r2-backup
@@ -68,7 +68,7 @@ spec:
                   - sh
                   - -c
                   - |
-                    dnf -y install tar gzip >/dev/null 2>&1 || true
+                    apk add --no-cache aws-cli tar gzip >/dev/null
                     while true; do
                       sleep 600
                       if [ -d /data ]; then
