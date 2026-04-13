@@ -20,7 +20,7 @@ spec:
             initContainers:
               restore-backup:
                 image:
-                  repository: amazon/aws-cli
+                  repository: bitnami/aws-cli
                   tag: latest
                 envFrom:
                   - secretRef:
@@ -58,7 +58,7 @@ spec:
                   - "5580"
               backup:
                 image:
-                  repository: amazon/aws-cli
+                  repository: bitnami/aws-cli
                   tag: latest
                 envFrom:
                   - secretRef:
