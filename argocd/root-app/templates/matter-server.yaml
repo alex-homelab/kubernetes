@@ -17,6 +17,32 @@ spec:
         controllers:
           matter-server:
             strategy: RollingUpdate
+            initContainers:
+              restore-backup:
+                image:
+                  repository: amazon/aws-cli
+                  tag: latest
+                envFrom:
+                  - secretRef:
+                      name: matter-server-r2-backup
+                command:
+                  - sh
+                  - -c
+                  - |
+                    set -e
+                    mkdir -p /data
+                    aws --endpoint-url="$AWS_ENDPOINT" s3 mb "s3://$BUCKET" || true
+                    if [ ! -f /data/chip.json ]; then
+                      echo "Restoring Matter Server backup from R2..."
+                      aws --endpoint-url="$AWS_ENDPOINT" \
+                        s3 cp "s3://$BUCKET/matter-server-data.tgz" /tmp/matter-server-data.tgz || echo "No backup found"
+                      if [ -f /tmp/matter-server-data.tgz ]; then
+                        tar -xzf /tmp/matter-server-data.tgz -C /data
+                        echo "Backup restored"
+                      fi
+                    else
+                      echo "Existing data found, skipping restore"
+                    fi
             containers:
               app:
                 image:
@@ -30,6 +56,26 @@ spec:
                   - /data/credentials
                   - --port
                   - "5580"
+              backup:
+                image:
+                  repository: amazon/aws-cli
+                  tag: latest
+                envFrom:
+                  - secretRef:
+                      name: matter-server-r2-backup
+                command:
+                  - sh
+                  - -c
+                  - |
+                    while true; do
+                      sleep 600
+                      if [ -d /data ]; then
+                        aws --endpoint-url="$AWS_ENDPOINT" s3 mb "s3://$BUCKET" || true
+                        tar -czf /tmp/matter-server-data.tgz -C /data .
+                        aws --endpoint-url="$AWS_ENDPOINT" \
+                          s3 cp /tmp/matter-server-data.tgz "s3://$BUCKET/matter-server-data.tgz"
+                      fi
+                    done
 
         service:
           app:
@@ -41,10 +87,7 @@ spec:
         persistence:
           data:
             enabled: true
-            type: persistentVolumeClaim
-            accessMode: ReadWriteOnce
-            size: 2Gi
-            storageClass: local-path
+            type: emptyDir
             globalMounts:
               - path: /data
 
@@ -58,3 +101,30 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: matter-server-r2-backup
+  namespace: smathome
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: matter-server-r2-backup
+
+  data:
+    - secretKey: AWS_ENDPOINT
+      remoteRef:
+        key: /matter-server/R2_ENDPOINT
+    - secretKey: BUCKET
+      remoteRef:
+        key: /matter-server/R2_BUCKET
+    - secretKey: AWS_ACCESS_KEY_ID
+      remoteRef:
+        key: /matter-server/R2_ACCESS_KEY
+    - secretKey: AWS_SECRET_ACCESS_KEY
+      remoteRef:
+        key: /matter-server/R2_SECRET_KEY
