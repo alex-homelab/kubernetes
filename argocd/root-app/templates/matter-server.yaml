@@ -128,3 +128,9 @@ spec:
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
         key: /matter-server/R2_SECRET_KEY
+    - secretKey: AWS_REGION
+      remoteRef:
+        key: /matter-server/R2_REGION
+    - secretKey: AWS_DEFAULT_REGION
+      remoteRef:
+        key: /matter-server/R2_REGION
