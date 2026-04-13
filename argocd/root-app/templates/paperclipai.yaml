@@ -44,6 +44,11 @@ spec:
                       secretKeyRef:
                         name: paperclipai
                         key: PAPERCLIP_PUBLIC_URL
+                  PAPERCLIP_API_URL:
+                    valueFrom:
+                      secretKeyRef:
+                        name: paperclipai
+                        key: PAPERCLIP_API_URL
         service:
           app:
             controller: paperclipai
@@ -130,3 +135,6 @@ spec:
     - secretKey: PAPERCLIP_PUBLIC_URL
       remoteRef:
         key: /paperclipai/PAPERCLIP_PUBLIC_URL
+    - secretKey: PAPERCLIP_API_URL
+      remoteRef:
+        key: /paperclipai/PAPERCLIP_API_URL
