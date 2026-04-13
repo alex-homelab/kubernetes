@@ -95,7 +95,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: smathome
+    namespace: smarthome
 
   syncPolicy:
     automated:
@@ -108,7 +108,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: matter-server-r2-backup
-  namespace: smathome
+  namespace: smarthome
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
