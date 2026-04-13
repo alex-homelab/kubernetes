@@ -20,7 +20,7 @@ spec:
             initContainers:
               restore-backup:
                 image:
-                  repository: bitnami/aws-cli
+                  repository: amazon/aws-cli
                   tag: latest
                 envFrom:
                   - secretRef:
@@ -30,6 +30,7 @@ spec:
                   - -c
                   - |
                     set -e
+                    dnf -y install tar gzip >/dev/null 2>&1 || true
                     mkdir -p /data
                     aws --endpoint-url="$AWS_ENDPOINT" --region "${AWS_REGION:-auto}" s3 mb "s3://$BUCKET" || true
                     if [ ! -f /data/chip.json ]; then
@@ -58,7 +59,7 @@ spec:
                   - "5580"
               backup:
                 image:
-                  repository: bitnami/aws-cli
+                  repository: amazon/aws-cli
                   tag: latest
                 envFrom:
                   - secretRef:
@@ -67,6 +68,7 @@ spec:
                   - sh
                   - -c
                   - |
+                    dnf -y install tar gzip >/dev/null 2>&1 || true
                     while true; do
                       sleep 600
                       if [ -d /data ]; then
