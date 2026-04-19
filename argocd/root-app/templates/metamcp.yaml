@@ -25,6 +25,10 @@ spec:
 
                 env:
                   KUBECONFIG: /etc/kubeconfig/config
+                  POSTGRES_HOST: postgres-rw.db.svc.cluster.local
+                  PGHOST: postgres-rw.db.svc.cluster.local
+                  POSTGRES_PORT: "5432"
+                  PGPORT: "5432"
                   DATABASE_URL:
                     valueFrom:
                       secretKeyRef:
