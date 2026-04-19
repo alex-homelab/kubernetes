@@ -135,3 +135,6 @@ spec:
     - secretKey: KUBECONFIG_CONTEXT
       remoteRef:
         key: /metamcp/KUBECONFIG_CONTEXT
+    - secretKey: KUBECONFIG
+      remoteRef:
+        key: /metamcp/KUBECONFIG
