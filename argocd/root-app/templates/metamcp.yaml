@@ -86,6 +86,7 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - Replace=true
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
