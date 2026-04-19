@@ -43,6 +43,36 @@ spec:
               secretKeyRef:
                 name: metamcp
                 key: DATABASE_URL
+      postRenderer:
+        kustomize:
+          patches:
+            - target:
+                kind: Deployment
+                name: metamcp
+              patch: |
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: metamcp
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - name: metamcp
+                          env:
+                            - name: KUBECONFIG
+                              value: /etc/kubeconfig/config
+                          volumeMounts:
+                            - name: kubeconfig
+                              mountPath: /etc/kubeconfig
+                              readOnly: true
+                      volumes:
+                        - name: kubeconfig
+                          secret:
+                            secretName: metamcp
+                            items:
+                              - key: KUBECONFIG
+                                path: config
   destination:
     server: https://kubernetes.default.svc
     namespace: metamcp
