@@ -101,6 +101,7 @@ spec:
   target:
     name: metamcp
     template:
+      mergePolicy: Merge
       data:
         KUBECONFIG_CONTEXT: home
 
