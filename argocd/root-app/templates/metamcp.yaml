@@ -7,72 +7,76 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://icoretech.github.io/helm
-    chart: metamcp
-    targetRevision: 0.3.2
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
     helm:
       releaseName: metamcp
       valuesObject:
-        fullnameOverride: metamcp
+        controllers:
+          metamcp:
+            strategy: RollingUpdate
+            containers:
+              app:
+                image:
+                  repository: ghcr.io/metatool-ai/metamcp
+                  tag: 2.4.22
+                  pullPolicy: IfNotPresent
 
-        ingress:
-          enabled: false
-        gatewayAPI:
-          enabled: false
+                env:
+                  KUBECONFIG: /etc/kubeconfig/config
+                  DATABASE_URL:
+                    valueFrom:
+                      secretKeyRef:
+                        name: metamcp
+                        key: DATABASE_URL
 
-        postgres:
-          enabled: false
+                envFrom:
+                  - secretRef:
+                      name: metamcp
 
-        env:
-          APP_URL: "https://mcp.vcov.org"
-          DATABASE_URL: "__set_via_secret__"
-          POSTGRES_HOST: "postgres-rw.db.svc.cluster.local"
-          PGHOST: "postgres-rw.db.svc.cluster.local"
-          POSTGRES_PORT: "5432"
-          PGPORT: "5432"
-
-        auth:
-          betterAuthSecret: ""
-
-        extraEnvFrom:
-          - secretRef:
-              name: metamcp
-        extraEnv:
-          - name: DATABASE_URL
-            valueFrom:
-              secretKeyRef:
-                name: metamcp
-                key: DATABASE_URL
-      postRenderer:
-        kustomize:
-          patches:
-            - target:
-                kind: Deployment
-                name: metamcp
-              patch: |
-                apiVersion: apps/v1
-                kind: Deployment
-                metadata:
-                  name: metamcp
-                spec:
-                  template:
+                probes:
+                  liveness:
+                    enabled: true
+                    custom: true
                     spec:
-                      containers:
-                        - name: metamcp
-                          env:
-                            - name: KUBECONFIG
-                              value: /etc/kubeconfig/config
-                          volumeMounts:
-                            - name: kubeconfig
-                              mountPath: /etc/kubeconfig
-                              readOnly: true
-                      volumes:
-                        - name: kubeconfig
-                          secret:
-                            secretName: metamcp
-                            items:
-                              - key: KUBECONFIG
-                                path: config
+                      httpGet:
+                        path: /health
+                        port: 12008
+                      initialDelaySeconds: 10
+                      periodSeconds: 10
+                  readiness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /health
+                        port: 12008
+                      initialDelaySeconds: 5
+                      periodSeconds: 5
+
+        service:
+          app:
+            controller: metamcp
+            ports:
+              http:
+                port: 12008
+              backend:
+                port: 12009
+
+        persistence:
+          kubeconfig:
+            enabled: true
+            type: secret
+            name: metamcp
+            items:
+              - key: KUBECONFIG
+                path: config
+            advancedMounts:
+              metamcp:
+                app:
+                  - path: /etc/kubeconfig
+                    readOnly: true
   destination:
     server: https://kubernetes.default.svc
     namespace: metamcp
