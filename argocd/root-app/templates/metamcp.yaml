@@ -100,10 +100,6 @@ spec:
 
   target:
     name: metamcp
-    template:
-      mergePolicy: Merge
-      data:
-        KUBECONFIG_CONTEXT: home
 
   data:
     - secretKey: BETTER_AUTH_SECRET
@@ -136,3 +132,6 @@ spec:
     - secretKey: OIDC_PKCE
       remoteRef:
         key: /metamcp/OIDC_PKCE
+    - secretKey: KUBECONFIG_CONTEXT
+      remoteRef:
+        key: /metamcp/KUBECONFIG_CONTEXT
