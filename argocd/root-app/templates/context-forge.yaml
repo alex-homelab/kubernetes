@@ -30,6 +30,8 @@ spec:
           image:
             tag: latest
             pullPolicy: IfNotPresent
+          config:
+            REQUIRE_STRONG_SECRETS: "false"
           ingress:
             enabled: false
           metrics:
