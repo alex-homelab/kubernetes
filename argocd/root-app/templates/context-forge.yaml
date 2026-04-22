@@ -28,7 +28,7 @@ spec:
           hpa:
             enabled: false
           image:
-            tag: 1.0.0-RC-3
+            tag: latest
             pullPolicy: IfNotPresent
           ingress:
             enabled: false
