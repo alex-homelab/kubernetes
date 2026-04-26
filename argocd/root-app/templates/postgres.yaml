@@ -41,6 +41,25 @@ spec:
     cnpg.io/cluster: postgres
     cnpg.io/instanceRole: primary
 ---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: litellm-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: litellm-password
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /litellm/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /litellm/PG_PASSWORD
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -111,6 +130,11 @@ spec:
               login: true
               passwordSecret:
                 name: paperclipai-password
+            - name: litellm
+              ensure: present
+              login: true
+              passwordSecret:
+                name: litellm-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
