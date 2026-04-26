@@ -40,7 +40,6 @@ spec:
   selector:
     cnpg.io/cluster: postgres
     cnpg.io/instanceRole: primary
-    - ServerSideApply=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
