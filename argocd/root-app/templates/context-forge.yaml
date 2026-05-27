@@ -37,11 +37,11 @@ spec:
           metrics:
             serviceMonitor:
               enabled: false
+          secret:
+            TOKEN_EXPIRY: "1440"
           extraEnv:
             - name: CSRF_ENABLED
               value: false
-            - name: TOKEN_EXPIRY
-              value: "1440"
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
