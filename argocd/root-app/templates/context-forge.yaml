@@ -34,6 +34,7 @@ spec:
             REQUIRE_STRONG_SECRETS: "false"
           secret:
             TOKEN_EXPIRY: "1440"
+            CSRF_ENABLED: false
           ingress:
             enabled: false
           metrics:
