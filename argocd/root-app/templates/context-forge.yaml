@@ -32,6 +32,8 @@ spec:
             pullPolicy: IfNotPresent
           config:
             REQUIRE_STRONG_SECRETS: "false"
+          secret:
+            TOKEN_EXPIRY: "1440"
           ingress:
             enabled: false
           metrics:
