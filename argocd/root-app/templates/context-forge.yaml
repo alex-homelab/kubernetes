@@ -32,14 +32,14 @@ spec:
             pullPolicy: IfNotPresent
           config:
             REQUIRE_STRONG_SECRETS: "false"
-          secret:
-            TOKEN_EXPIRY: "1440"
-            CSRF_ENABLED: false
           ingress:
             enabled: false
           metrics:
             serviceMonitor:
               enabled: false
+          extraEnv:
+            CSRF_ENABLED: false
+            TOKEN_EXPIRY: "1440"
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
