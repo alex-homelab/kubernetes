@@ -244,4 +244,4 @@ spec:
   data:
     - secretKey: password
       remoteRef:
-        key: /mcp-gateway-registry/MONGODB_PASSWORD
+        key: /mcp-gateway-registry/DOCUMENTDB_PASSWORD
