@@ -49,6 +49,8 @@ spec:
 
         keycloak:
           create: false
+          ingress:
+            enabled: false
 
         keycloak-configure:
           enabled: true
