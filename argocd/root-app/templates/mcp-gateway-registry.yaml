@@ -110,6 +110,9 @@ spec:
 
   target:
     name: oauth-provider-secret
+    template:
+      data:
+        KEYCLOAK_URL: http://keycloak:8080
 
   data:
     - secretKey: AUTH_PROVIDER
@@ -118,9 +121,6 @@ spec:
     - secretKey: KEYCLOAK_ENABLED
       remoteRef:
         key: /mcp-gateway-registry/KEYCLOAK_ENABLED
-    - secretKey: KEYCLOAK_URL
-      remoteRef:
-        key: /mcp-gateway-registry/KEYCLOAK_URL
     - secretKey: KEYCLOAK_EXTERNAL_URL
       remoteRef:
         key: /mcp-gateway-registry/KEYCLOAK_EXTERNAL_URL
@@ -146,6 +146,9 @@ spec:
 
   target:
     name: keycloak-configure-secret
+    template:
+      data:
+        KEYCLOAK_URL: http://keycloak:8080
 
   data:
     - secretKey: KEYCLOAK_ADMIN
@@ -154,9 +157,6 @@ spec:
     - secretKey: KEYCLOAK_ADMIN_URL
       remoteRef:
         key: /mcp-gateway-registry/KEYCLOAK_ADMIN_URL
-    - secretKey: KEYCLOAK_URL
-      remoteRef:
-        key: /mcp-gateway-registry/KEYCLOAK_URL
     - secretKey: REALM
       remoteRef:
         key: /mcp-gateway-registry/KEYCLOAK_REALM
