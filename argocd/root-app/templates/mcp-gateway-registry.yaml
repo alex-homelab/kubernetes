@@ -21,7 +21,7 @@ spec:
       releaseName: mcp-gateway-registry
       valuesObject:
         global:
-          domain: mcpgw.vcov.org
+          domain: mcp2.vcov.org
           existingSharedSecret: shared-secret
           existingOauthProviderSecret: oauth-provider-secret
           existingMongoCredentialsSecret: mongo-credentials
