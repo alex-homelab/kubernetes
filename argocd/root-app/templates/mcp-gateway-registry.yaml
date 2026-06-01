@@ -38,10 +38,14 @@ spec:
         auth-server:
           app:
             replicas: 1
+          ingress:
+            enabled: false
 
         mcpgw:
           app:
             replicas: 1
+          ingress:
+            enabled: false
 
         keycloak:
           create: false
