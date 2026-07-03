@@ -89,6 +89,7 @@ spec:
     template:
       mergePolicy: Merge
       data:
+        REGISTRY_URL: https://mcp2.vcov.org/registry
         SESSION_COOKIE_DOMAIN: ""
 
   data:
