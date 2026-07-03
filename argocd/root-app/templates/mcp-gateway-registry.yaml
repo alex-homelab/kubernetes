@@ -10,7 +10,7 @@ kind: Application
 metadata:
   name: mcp-gateway-registry
   finalizers:
-  - resources-finalizer.argocd.argoproj.io/background
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
@@ -72,7 +72,7 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -112,7 +112,7 @@ spec:
     name: oauth-provider-secret
     template:
       data:
-        KEYCLOAK_URL: http://keycloak:8080
+        KEYCLOAK_URL: http://keycloak-headless.tooling.svc.cluster.local:8080
 
   data:
     - secretKey: AUTH_PROVIDER
@@ -148,7 +148,7 @@ spec:
     name: keycloak-configure-secret
     template:
       data:
-        KEYCLOAK_URL: http://keycloak:8080
+        KEYCLOAK_URL: http://keycloak-headless.tooling.svc.cluster.local:8080
 
   data:
     - secretKey: KEYCLOAK_ADMIN
