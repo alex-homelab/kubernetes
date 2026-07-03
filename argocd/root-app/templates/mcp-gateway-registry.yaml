@@ -87,6 +87,7 @@ spec:
   target:
     name: shared-secret
     template:
+      mergePolicy: Merge
       data:
         SESSION_COOKIE_DOMAIN: ""
 
@@ -114,6 +115,7 @@ spec:
   target:
     name: oauth-provider-secret
     template:
+      mergePolicy: Merge
       data:
         KEYCLOAK_EXTERNAL_URL: https://sso.vcov.org/auth
         KEYCLOAK_URL: http://keycloak-headless.tooling.svc.cluster.local:8080/auth
@@ -148,6 +150,7 @@ spec:
   target:
     name: keycloak-configure-secret
     template:
+      mergePolicy: Merge
       data:
         KEYCLOAK_ADMIN_URL: https://sso.vcov.org/auth
         KEYCLOAK_URL: http://keycloak-headless.tooling.svc.cluster.local:8080/auth
