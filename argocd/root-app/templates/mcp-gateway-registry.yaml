@@ -89,6 +89,7 @@ spec:
     template:
       mergePolicy: Merge
       data:
+        AUTH_SERVER_EXTERNAL_URL: https://mcp2.vcov.org
         REGISTRY_URL: https://mcp2.vcov.org/registry
         SESSION_COOKIE_DOMAIN: ""
 
