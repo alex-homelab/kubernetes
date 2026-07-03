@@ -142,6 +142,34 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
+  name: mcp-gateway-registry-keycloak-client
+  namespace: mcp-gateway-registry
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: keycloak-client-secret
+    creationPolicy: Merge
+
+  data:
+    - secretKey: KEYCLOAK_CLIENT_ID
+      remoteRef:
+        key: /mcp-gateway-registry/KEYCLOAK_CLIENT_ID
+    - secretKey: KEYCLOAK_CLIENT_SECRET
+      remoteRef:
+        key: /mcp-gateway-registry/KEYCLOAK_CLIENT_SECRET
+    - secretKey: KEYCLOAK_M2M_CLIENT_ID
+      remoteRef:
+        key: /mcp-gateway-registry/KEYCLOAK_M2M_CLIENT_ID
+    - secretKey: KEYCLOAK_M2M_CLIENT_SECRET
+      remoteRef:
+        key: /mcp-gateway-registry/KEYCLOAK_M2M_CLIENT_SECRET
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
   name: mcp-gateway-registry-keycloak-config
   namespace: mcp-gateway-registry
 spec:
