@@ -31,6 +31,8 @@ spec:
             tag: v1.0.4
             pullPolicy: IfNotPresent
           config:
+            AUTH_REQUIRED: "false"
+            MCP_REQUIRE_AUTH: "false"
             REQUIRE_STRONG_SECRETS: "false"
           ingress:
             enabled: false
