@@ -112,6 +112,9 @@ spec:
     - secretKey: OBOT_SERVER_ENCRYPTION_KEY
       remoteRef:
         key: /obot/OBOT_SERVER_ENCRYPTION_KEY
+    - secretKey: OBOT_SERVER_ENCRYPTION_CONFIG_FILE
+      remoteRef:
+        key: /obot/OBOT_SERVER_ENCRYPTION_CONFIG_FILE
     - secretKey: OBOT_SERVER_ENABLE_AUTHENTICATION
       remoteRef:
         key: /obot/OBOT_SERVER_ENABLE_AUTHENTICATION
