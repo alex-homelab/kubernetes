@@ -103,6 +103,9 @@ spec:
     - secretKey: OBOT_SERVER_DSN
       remoteRef:
         key: /obot/OBOT_SERVER_DSN
+    - secretKey: OBOT_SERVER_HOSTNAME
+      remoteRef:
+        key: /obot/OBOT_SERVER_HOSTNAME
     - secretKey: OBOT_BOOTSTRAP_TOKEN
       remoteRef:
         key: /obot/OBOT_BOOTSTRAP_TOKEN
