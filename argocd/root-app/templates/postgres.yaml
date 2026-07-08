@@ -130,6 +130,11 @@ spec:
               login: true
               passwordSecret:
                 name: paperclipai-password
+            - name: obot
+              ensure: present
+              login: true
+              passwordSecret:
+                name: obot-password
             - name: litellm
               ensure: present
               login: true
