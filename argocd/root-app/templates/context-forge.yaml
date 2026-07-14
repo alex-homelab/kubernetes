@@ -160,6 +160,7 @@ spec:
       mergePolicy: Merge
       data:
         PLUGINS_ENABLED: "true"
+        SSO_API_TOKEN_AUTH_ENABLED: "true"
 
   data:
     - secretKey: JWT_SECRET_KEY
