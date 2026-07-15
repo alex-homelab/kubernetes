@@ -128,6 +128,9 @@ spec:
     - secretKey: OBOT_SERVER_ENABLE_MESSAGE_POLICIES
       remoteRef:
         key: /obot/OBOT_SERVER_ENABLE_MESSAGE_POLICIES
+    - secretKey: OBOT_SERVER_KEYGEN_LICENSE_KEY
+      remoteRef:
+        key: /obot/OBOT_SERVER_KEYGEN_LICENSE_KEY
     - secretKey: OBOT_SERVER_ENABLE_REGISTRY_AUTH
       remoteRef:
         key: /obot/OBOT_SERVER_ENABLE_REGISTRY_AUTH
