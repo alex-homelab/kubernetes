@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/IBM/mcp-context-forge.git
-    targetRevision: v1.0.5
+    targetRevision: v1.0.6
     path: charts/mcp-stack
     helm:
       releaseName: context-forge
@@ -28,7 +28,7 @@ spec:
           hpa:
             enabled: false
           image:
-            tag: v1.0.5
+            tag: v1.0.6
             pullPolicy: IfNotPresent
           config:
             AUTH_REQUIRED: "false"
