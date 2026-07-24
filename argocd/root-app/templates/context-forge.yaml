@@ -48,6 +48,14 @@ spec:
               value: "true"
             - name: METRICS_AGGREGATION_AUTO_START
               value: "true"
+            - name: OBSERVABILITY_ENABLED
+              value: "true"
+            - name: OBSERVABILITY_TRACE_HTTP_REQUESTS
+              value: "true"
+            - name: OBSERVABILITY_EVENTS_ENABLED
+              value: "true"
+            - name: OBSERVABILITY_METRICS_ENABLED
+              value: "true"
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
