@@ -46,6 +46,8 @@ spec:
               value: "false"
             - name: STRUCTURED_LOGGING_DATABASE_ENABLED
               value: "true"
+            - name: METRICS_AGGREGATION_AUTO_START
+              value: "true"
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
