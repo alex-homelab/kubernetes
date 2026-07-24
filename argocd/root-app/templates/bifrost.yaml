@@ -99,3 +99,19 @@ spec:
     - secretKey: ENCRYPTION_KEY
       remoteRef:
         key: /bifrost/ENCRYPTION_KEY
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: bifrost-password
+  namespace: bifrost
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: bifrost-password
+  data:
+    - secretKey: password
+      remoteRef:
+        key: /bifrost/PG_PASSWORD
