@@ -1,0 +1,101 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bifrost
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://maximhq.github.io/bifrost/helm-charts
+    chart: bifrost
+    targetRevision: 2.1.31
+    helm:
+      releaseName: bifrost
+      valuesObject:
+        replicaCount: 1
+        image:
+          tag: v1.5.12
+        ingress:
+          enabled: false
+        storage:
+          mode: postgres
+          persistence:
+            enabled: false
+          configStore:
+            enabled: true
+          logsStore:
+            enabled: true
+        postgresql:
+          enabled: false
+          external:
+            enabled: true
+            host: postgres-rw.db.svc.cluster.local
+            port: 5432
+            user: bifrost
+            database: bifrost
+            sslMode: disable
+            existingSecret: bifrost-password
+            passwordKey: password
+        bifrost:
+          encryptionKeySecret:
+            name: bifrost
+            key: ENCRYPTION_KEY
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: bifrost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: bifrost-db
+  namespace: db
+spec:
+  name: bifrost
+  owner: bifrost
+  cluster:
+    name: postgres
+  extensions:
+    - name: bloom
+      ensure: present
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: bifrost-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: bifrost-password
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /bifrost/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /bifrost/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: bifrost
+  namespace: bifrost
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: bifrost
+  data:
+    - secretKey: ENCRYPTION_KEY
+      remoteRef:
+        key: /bifrost/ENCRYPTION_KEY

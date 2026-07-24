@@ -140,6 +140,11 @@ spec:
               login: true
               passwordSecret:
                 name: litellm-password
+            - name: bifrost
+              ensure: present
+              login: true
+              passwordSecret:
+                name: bifrost-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
