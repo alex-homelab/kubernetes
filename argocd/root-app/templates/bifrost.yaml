@@ -15,7 +15,7 @@ spec:
       valuesObject:
         replicaCount: 1
         image:
-          tag: v1.5.12
+          tag: v1.6.5
         ingress:
           enabled: false
         storage:
