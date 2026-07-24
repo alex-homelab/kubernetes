@@ -44,6 +44,8 @@ spec:
           extraEnv:
             - name: CSRF_ENABLED
               value: "false"
+            - name: STRUCTURED_LOGGING_DATABASE_ENABLED
+              value: "true"
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
