@@ -15,7 +15,7 @@ spec:
       valuesObject:
         replicaCount: 1
         image:
-          repository: git.vcov.org/sam/bifrost-custom-image
+          repository: git.vcov.org/sam/bitfrost
           tag: v1.6.5-tools
         ingress:
           enabled: false
