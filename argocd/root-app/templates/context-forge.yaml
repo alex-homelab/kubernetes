@@ -24,6 +24,36 @@ spec:
           enabled: false
 
         mcpContextForge:
+          pluginConfig:
+            enabled: true
+            plugins: |
+              plugin_dirs:
+                - "plugins/native"
+                - "plugins/custom"
+                - "/etc/mcpgateway/plugins"
+
+              plugin_settings:
+                parallel_execution_within_band: true
+                plugin_timeout: 120
+                fail_on_plugin_error: false
+                enable_plugin_api: true
+                plugin_health_check_interval: 120
+                include_user_info: false
+
+              plugins:
+                - name: "ToolsTelemetryExporter"
+                  kind: "plugins.tools_telemetry_exporter.telemetry_exporter.ToolsTelemetryExporterPlugin"
+                  description: "Export comprehensive tool invocation telemetry to OpenTelemetry"
+                  version: "0.1.0"
+                  author: "Bar Haim"
+                  hooks: ["tool_pre_invoke", "tool_post_invoke"]
+                  tags: ["telemetry", "observability", "opentelemetry", "monitoring"]
+                  mode: "permissive"
+                  priority: 200
+                  conditions: []
+                  config:
+                    export_full_payload: false
+                    max_payload_bytes_size: 10000
           replicaCount: 1
           hpa:
             enabled: false
