@@ -1,0 +1,137 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: phoenix
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Arize-ai/phoenix.git
+    targetRevision: arize-phoenix-v19.6.0
+    path: helm
+    helm:
+      releaseName: phoenix
+      valuesObject:
+        ingress:
+          enabled: false
+
+        service:
+          type: ClusterIP
+
+        postgresql:
+          enabled: false
+
+        persistence:
+          enabled: false
+
+        auth:
+          createSecret: false
+          name: phoenix-secret
+          enableAuth: true
+          useSecureCookies: true
+
+        database:
+          defaultRetentionPolicyDays: 30
+          postgres:
+            host: postgres-rw.db.svc.cluster.local
+            port: 5432
+            user: phoenix
+            db: phoenix
+
+        server:
+          telemetryEnabled: false
+          rootUrl: ""
+
+        logging:
+          mode: structured
+
+        additionalEnv:
+          - name: PHOENIX_ROOT_URL
+            valueFrom:
+              secretKeyRef:
+                name: phoenix-secret
+                key: PHOENIX_ROOT_URL
+          - name: PHOENIX_ALLOWED_ORIGINS
+            valueFrom:
+              secretKeyRef:
+                name: phoenix-secret
+                key: PHOENIX_ALLOWED_ORIGINS
+          - name: PHOENIX_CSRF_TRUSTED_ORIGINS
+            valueFrom:
+              secretKeyRef:
+                name: phoenix-secret
+                key: PHOENIX_CSRF_TRUSTED_ORIGINS
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: phoenix
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: phoenix-db
+  namespace: db
+spec:
+  name: phoenix
+  owner: phoenix
+  cluster:
+    name: postgres
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: phoenix-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: phoenix-password
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /phoenix/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /phoenix/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: phoenix
+  namespace: phoenix
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: phoenix-secret
+  data:
+    - secretKey: PHOENIX_SECRET
+      remoteRef:
+        key: /phoenix/PHOENIX_SECRET
+    - secretKey: PHOENIX_ADMIN_SECRET
+      remoteRef:
+        key: /phoenix/PHOENIX_ADMIN_SECRET
+    - secretKey: PHOENIX_POSTGRES_PASSWORD
+      remoteRef:
+        key: /phoenix/PG_PASSWORD
+    - secretKey: PHOENIX_DEFAULT_ADMIN_INITIAL_PASSWORD
+      remoteRef:
+        key: /phoenix/PHOENIX_DEFAULT_ADMIN_INITIAL_PASSWORD
+    - secretKey: PHOENIX_ROOT_URL
+      remoteRef:
+        key: /phoenix/PHOENIX_ROOT_URL
+    - secretKey: PHOENIX_ALLOWED_ORIGINS
+      remoteRef:
+        key: /phoenix/PHOENIX_ALLOWED_ORIGINS
+    - secretKey: PHOENIX_CSRF_TRUSTED_ORIGINS
+      remoteRef:
+        key: /phoenix/PHOENIX_CSRF_TRUSTED_ORIGINS
