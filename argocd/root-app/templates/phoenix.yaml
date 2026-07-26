@@ -121,6 +121,7 @@ spec:
   target:
     name: phoenix-secret
     template:
+      mergePolicy: Merge
       data:
         PHOENIX_SMTP_PASSWORD: ""
   data:
