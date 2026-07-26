@@ -34,12 +34,6 @@ spec:
             AUTH_REQUIRED: "false"
             MCP_REQUIRE_AUTH: "false"
             REQUIRE_STRONG_SECRETS: "false"
-            OTEL_ENABLE_OBSERVABILITY: "true"
-            OTEL_TRACES_EXPORTER: "otlp"
-            OTEL_SERVICE_NAME: "context-forge"
-            OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
-            OTEL_EXPORTER_OTLP_INSECURE: "true"
-            OTEL_EXPORTER_OTLP_ENDPOINT: "http://phoenix-svc.phoenix.svc.cluster.local:4317"
           ingress:
             enabled: false
           metrics:
@@ -50,6 +44,18 @@ spec:
           extraEnv:
             - name: CSRF_ENABLED
               value: "false"
+            - name: OTEL_ENABLE_OBSERVABILITY
+              value: "true"
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_SERVICE_NAME
+              value: "context-forge"
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "grpc"
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "true"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://phoenix-svc.phoenix.svc.cluster.local:4317"
             - name: STRUCTURED_LOGGING_DATABASE_ENABLED
               value: "true"
             - name: METRICS_AGGREGATION_AUTO_START
