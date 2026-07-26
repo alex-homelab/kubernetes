@@ -56,6 +56,16 @@ spec:
               value: "true"
             - name: OBSERVABILITY_METRICS_ENABLED
               value: "true"
+            - name: OBSERVABILITY_TRACE_RETENTION_DAYS
+              value: "7"
+            - name: OBSERVABILITY_MAX_TRACES
+              value: "100000"
+            - name: OBSERVABILITY_SAMPLE_RATE
+              value: "1.0"
+            - name: OBSERVABILITY_INCLUDE_PATHS
+              value: '["^/rpc/?$","^/sse$","^/message$","^/mcp(?:/|$)","^/servers/[^/]+/mcp/?$","^/servers/[^/]+/sse$","^/servers/[^/]+/message$","^/a2a(?:/|$)"]'
+            - name: OBSERVABILITY_EXCLUDE_PATHS
+              value: '["/health","/healthz","/ready","/metrics","/static/.*"]'
           # Keep chart default gateway secret and overlay sensitive keys
           # from Infisical via extraEnvFrom (last source wins).
           extraEnvFrom:
