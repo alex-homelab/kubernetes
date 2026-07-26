@@ -84,8 +84,8 @@ spec:
               value: "http/protobuf"
             - name: OTEL_EXPORTER_OTLP_INSECURE
               value: "true"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://phoenix-svc.phoenix.svc.cluster.local:6006"
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://phoenix-svc.phoenix.svc.cluster.local:6006/v1/traces"
             - name: STRUCTURED_LOGGING_DATABASE_ENABLED
               value: "true"
             - name: METRICS_AGGREGATION_AUTO_START
