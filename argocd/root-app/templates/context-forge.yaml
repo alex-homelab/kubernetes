@@ -80,6 +80,8 @@ spec:
               value: "otlp"
             - name: OTEL_SERVICE_NAME
               value: "context-forge"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "openinference.project.name=context-forge"
             - name: OTEL_EXPORTER_OTLP_PROTOCOL
               value: "http/protobuf"
             - name: OTEL_EXPORTER_OTLP_INSECURE
