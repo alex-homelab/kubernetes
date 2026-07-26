@@ -120,6 +120,9 @@ spec:
     name: infisical
   target:
     name: phoenix-secret
+    template:
+      data:
+        PHOENIX_SMTP_PASSWORD: ""
   data:
     - secretKey: PHOENIX_SECRET
       remoteRef:
