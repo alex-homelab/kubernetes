@@ -34,6 +34,12 @@ spec:
             AUTH_REQUIRED: "false"
             MCP_REQUIRE_AUTH: "false"
             REQUIRE_STRONG_SECRETS: "false"
+            OTEL_ENABLE_OBSERVABILITY: "true"
+            OTEL_TRACES_EXPORTER: "otlp"
+            OTEL_SERVICE_NAME: "context-forge"
+            OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+            OTEL_EXPORTER_OTLP_INSECURE: "true"
+            OTEL_EXPORTER_OTLP_ENDPOINT: "http://phoenix-svc.phoenix.svc.cluster.local:4317"
           ingress:
             enabled: false
           metrics:
