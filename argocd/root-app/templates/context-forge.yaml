@@ -263,6 +263,9 @@ spec:
     - secretKey: SSO_KEYCLOAK_CLIENT_SECRET
       remoteRef:
         key: /context-forge/SSO_KEYCLOAK_CLIENT_SECRET
+    - secretKey: OTEL_EXPORTER_OTLP_HEADERS
+      remoteRef:
+        key: /context-forge/OTEL_EXPORTER_OTLP_HEADERS
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
