@@ -150,6 +150,11 @@ spec:
               login: true
               passwordSecret:
                 name: phoenix-password
+            - name: instatic
+              ensure: present
+              login: true
+              passwordSecret:
+                name: instatic-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db

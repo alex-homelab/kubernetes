@@ -1,0 +1,176 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: instatic
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
+    helm:
+      releaseName: instatic
+      valuesObject:
+        defaultPodOptions:
+          securityContext:
+            fsGroup: 1000
+
+        controllers:
+          instatic:
+            strategy: RollingUpdate
+            initContainers:
+              init-storage:
+                image:
+                  repository: alpine
+                  tag: "3.22"
+                  pullPolicy: IfNotPresent
+                command:
+                  - sh
+                  - -c
+                  - |
+                    set -e
+                    mkdir -p /app/storage/data /app/storage/uploads
+                    chown -R 1000:1000 /app/storage
+            containers:
+              app:
+                image:
+                  repository: ghcr.io/corebunch/instatic
+                  tag: 0.0.13
+                  pullPolicy: IfNotPresent
+                env:
+                  PORT: "3001"
+                  STATIC_DIR: /app/dist
+                  UPLOADS_DIR: /app/storage/uploads
+                  DATABASE_URL:
+                    valueFrom:
+                      secretKeyRef:
+                        name: instatic
+                        key: DATABASE_URL
+                  INSTATIC_SECRET_KEY:
+                    valueFrom:
+                      secretKeyRef:
+                        name: instatic
+                        key: INSTATIC_SECRET_KEY
+                  PUBLIC_ORIGIN:
+                    valueFrom:
+                      secretKeyRef:
+                        name: instatic
+                        key: PUBLIC_ORIGIN
+                probes:
+                  liveness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /health
+                        port: 3001
+                      initialDelaySeconds: 30
+                      periodSeconds: 30
+                      timeoutSeconds: 5
+                  readiness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /health
+                        port: 3001
+                      initialDelaySeconds: 10
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                  startup:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /health
+                        port: 3001
+                      failureThreshold: 30
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    memory: 1Gi
+
+        service:
+          app:
+            controller: instatic
+            ports:
+              http:
+                port: 3001
+
+        persistence:
+          storage:
+            enabled: true
+            type: persistentVolumeClaim
+            accessMode: ReadWriteOnce
+            size: 20Gi
+            storageClass: local-path
+            globalMounts:
+              - path: /app/storage
+                readOnly: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: instatic
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: instatic-db
+  namespace: db
+spec:
+  name: instatic
+  owner: instatic
+  cluster:
+    name: postgres
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: instatic-password
+  namespace: db
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: instatic-password
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /instatic/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /instatic/PG_PASSWORD
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: instatic
+  namespace: instatic
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: instatic
+  data:
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: /instatic/DATABASE_URL
+    - secretKey: INSTATIC_SECRET_KEY
+      remoteRef:
+        key: /instatic/INSTATIC_SECRET_KEY
+    - secretKey: PUBLIC_ORIGIN
+      remoteRef:
+        key: /instatic/PUBLIC_ORIGIN
