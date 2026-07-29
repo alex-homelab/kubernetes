@@ -59,6 +59,8 @@ spec:
               secretKeyRef:
                 name: phoenix-secret
                 key: PHOENIX_ROOT_URL
+          - name: PHOENIX_OAUTH2_ALLOWED_REDIRECT_HOSTS
+            value: bf.vcov.org
           - name: PHOENIX_ALLOWED_ORIGINS
             valueFrom:
               secretKeyRef:
