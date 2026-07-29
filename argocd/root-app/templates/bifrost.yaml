@@ -16,7 +16,7 @@ spec:
         replicaCount: 1
         image:
           repository: git.vcov.org/Homelab/bitfrost
-          tag: sha-69c628036bcd
+          tag: sha-edf4243a30c1
         ingress:
           enabled: false
         storage:
