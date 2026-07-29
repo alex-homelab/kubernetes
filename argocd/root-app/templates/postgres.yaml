@@ -85,11 +85,6 @@ spec:
           enableSuperuserAccess: true
         
           roles:
-            - name: kestra
-              ensure: present
-              login: true
-              passwordSecret:
-                name: kestra-password
             - name: umami
               ensure: present
               login: true
@@ -115,21 +110,11 @@ spec:
               login: true
               passwordSecret:
                 name: n8n-password
-            - name: metamcp
-              ensure: present
-              login: true
-              passwordSecret:
-                name: metamcp-password
             - name: contextforge
               ensure: present
               login: true
               passwordSecret:
                 name: context-forge-password
-            - name: paperclipai
-              ensure: present
-              login: true
-              passwordSecret:
-                name: paperclipai-password
             - name: obot
               ensure: present
               login: true
