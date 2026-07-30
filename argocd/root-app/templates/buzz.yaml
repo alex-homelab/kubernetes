@@ -23,6 +23,15 @@ spec:
         secrets:
           existingSecret: buzz-relay-secret
 
+        relay:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+
         persistence:
           git:
             enabled: false
@@ -138,6 +147,47 @@ spec:
     name: infisical
   target:
     name: buzz-relay-secret
+    template:
+      engineVersion: v2
+      mergePolicy: Merge
+      data:
+        DATABASE_URL: postgres://{{ .PG_USER }}:{{ .PG_PASSWORD }}@postgres-rw.db.svc.cluster.local:5432/buzz?sslmode=disable
+        REDIS_URL: redis://:{{ .REDIS_PASSWORD }}@buzz-redis:6379
+        redis-password: '{{ .REDIS_PASSWORD }}'
+  data:
+    - secretKey: PG_USER
+      remoteRef:
+        key: /buzz/PG_USER
+    - secretKey: PG_PASSWORD
+      remoteRef:
+        key: /buzz/PG_PASSWORD
+    - secretKey: REDIS_PASSWORD
+      remoteRef:
+        key: /buzz/REDIS_PASSWORD
+    - secretKey: BUZZ_RELAY_PRIVATE_KEY
+      remoteRef:
+        key: /buzz/BUZZ_RELAY_PRIVATE_KEY
+    - secretKey: BUZZ_GIT_HOOK_HMAC_SECRET
+      remoteRef:
+        key: /buzz/BUZZ_GIT_HOOK_HMAC_SECRET
+    - secretKey: BUZZ_S3_ACCESS_KEY
+      remoteRef:
+        key: /buzz/BUZZ_S3_ACCESS_KEY
+    - secretKey: BUZZ_S3_SECRET_KEY
+      remoteRef:
+        key: /buzz/BUZZ_S3_SECRET_KEY
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: buzz-redis
+  namespace: buzz
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: buzz-relay
     template:
       engineVersion: v2
       mergePolicy: Merge
