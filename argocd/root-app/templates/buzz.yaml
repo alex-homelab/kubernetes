@@ -147,21 +147,14 @@ spec:
     name: infisical
   target:
     name: buzz-relay-secret
-    template:
-      engineVersion: v2
-      mergePolicy: Merge
-      data:
-        DATABASE_URL: postgres://{{ .PG_USER }}:{{ .PG_PASSWORD }}@postgres-rw.db.svc.cluster.local:5432/buzz?sslmode=disable
-        REDIS_URL: redis://:{{ .REDIS_PASSWORD }}@buzz-redis:6379
-        redis-password: '{{ .REDIS_PASSWORD }}'
   data:
-    - secretKey: PG_USER
+    - secretKey: DATABASE_URL
       remoteRef:
-        key: /buzz/PG_USER
-    - secretKey: PG_PASSWORD
+        key: /buzz/DATABASE_URL
+    - secretKey: REDIS_URL
       remoteRef:
-        key: /buzz/PG_PASSWORD
-    - secretKey: REDIS_PASSWORD
+        key: /buzz/REDIS_URL
+    - secretKey: redis-password
       remoteRef:
         key: /buzz/REDIS_PASSWORD
     - secretKey: BUZZ_RELAY_PRIVATE_KEY
@@ -188,21 +181,14 @@ spec:
     name: infisical
   target:
     name: buzz-relay
-    template:
-      engineVersion: v2
-      mergePolicy: Merge
-      data:
-        DATABASE_URL: postgres://{{ .PG_USER }}:{{ .PG_PASSWORD }}@postgres-rw.db.svc.cluster.local:5432/buzz?sslmode=disable
-        REDIS_URL: redis://:{{ .REDIS_PASSWORD }}@buzz-redis:6379
-        redis-password: '{{ .REDIS_PASSWORD }}'
   data:
-    - secretKey: PG_USER
+    - secretKey: DATABASE_URL
       remoteRef:
-        key: /buzz/PG_USER
-    - secretKey: PG_PASSWORD
+        key: /buzz/DATABASE_URL
+    - secretKey: REDIS_URL
       remoteRef:
-        key: /buzz/PG_PASSWORD
-    - secretKey: REDIS_PASSWORD
+        key: /buzz/REDIS_URL
+    - secretKey: redis-password
       remoteRef:
         key: /buzz/REDIS_PASSWORD
     - secretKey: BUZZ_RELAY_PRIVATE_KEY
