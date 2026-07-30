@@ -34,6 +34,8 @@ spec:
           extraEnv:
             - name: BUZZ_S3_REGION
               value: home
+            - name: BUZZ_GIT_CONFORMANCE_PROBE
+              value: "off"
 
         persistence:
           git:
