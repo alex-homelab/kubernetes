@@ -140,6 +140,11 @@ spec:
               login: true
               passwordSecret:
                 name: instatic-password
+            - name: buzz
+              ensure: present
+              login: true
+              passwordSecret:
+                name: buzz-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
