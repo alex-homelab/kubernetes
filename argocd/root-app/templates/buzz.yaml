@@ -33,6 +33,9 @@ spec:
 
         redis:
           enabled: true
+          auth:
+            existingSecret: buzz-relay-secret
+            existingSecretPasswordKey: redis-password
           persistence:
             enabled: false
 
