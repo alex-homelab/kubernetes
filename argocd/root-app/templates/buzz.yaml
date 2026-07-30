@@ -84,12 +84,12 @@ spec:
             args:
               - |
                 set -e
-                export MC_CONFIG_DIR=/tmp/.mc
-                until mc alias set local http://minio.minio.svc.cluster.local:9000 "$S3_ACCESS_KEY" "$S3_SECRET_KEY" >/dev/null 2>&1; do
+                mkdir -p /tmp/.mc
+                until mc --config-dir /tmp/.mc alias set local http://minio.minio.svc.cluster.local:9000 "$S3_ACCESS_KEY" "$S3_SECRET_KEY" >/dev/null 2>&1; do
                   echo "waiting for minio..."
                   sleep 2
                 done
-                mc mb --ignore-existing local/buzz-media
+                mc --config-dir /tmp/.mc mb --ignore-existing local/buzz-media
             resources:
               requests:
                 cpu: 25m
