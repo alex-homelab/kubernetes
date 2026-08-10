@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/IBM/mcp-context-forge.git
-    targetRevision: v1.0.6
+    targetRevision: v1.0.7
     path: charts/mcp-stack
     helm:
       releaseName: context-forge
@@ -58,7 +58,7 @@ spec:
           hpa:
             enabled: false
           image:
-            tag: v1.0.6
+            tag: v1.0.7
             pullPolicy: IfNotPresent
           config:
             AUTH_REQUIRED: "false"
@@ -85,6 +85,8 @@ spec:
             - name: OTEL_EXPORTER_OTLP_PROTOCOL
               value: "http/protobuf"
             - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "true"
+            - name: OTEL_CAPTURE_IDENTITY_ATTRIBUTES
               value: "true"
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
               value: "http://phoenix-svc.phoenix.svc.cluster.local:6006/v1/traces"
