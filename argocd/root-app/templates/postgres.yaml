@@ -115,11 +115,6 @@ spec:
               login: true
               passwordSecret:
                 name: context-forge-password
-            - name: obot
-              ensure: present
-              login: true
-              passwordSecret:
-                name: obot-password
             - name: litellm
               ensure: present
               login: true
