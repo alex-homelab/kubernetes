@@ -31,6 +31,9 @@ spec:
             SELF_HOSTED: "true"
             ONBOARDING_STATE: "open"
             AI_DEBUG_MODE: "false"
+            RAILS_ASSUME_SSL: "true"
+            WEBAUTHN_RP_ID: sure.vcov.org
+            WEBAUTHN_ALLOWED_ORIGINS: https://sure.vcov.org
 
         cloudnative-pg:
           enabled: false
