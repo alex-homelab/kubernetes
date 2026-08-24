@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sure
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sure
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://we-promise.github.io/sure
+    chart: sure
+    targetRevision: 0.7.4-alpha.7
+    helm:
+      releaseName: sure
+      valuesObject:
+        image:
+          pullPolicy: IfNotPresent
+
+        rails:
+          existingSecret: sure
+          encryptionEnv:
+            enabled: true
+          settings:
+            SELF_HOSTED: "true"
+            ONBOARDING_STATE: "open"
+            AI_DEBUG_MODE: "false"
+
+        cloudnative-pg:
+          enabled: false
+
+        cnpg:
+          enabled: false
+          cluster:
+            enabled: true
+            name: sure-db
+            instances: 1
+            storage:
+              size: 10Gi
+              storageClassName: longhorn
+            appUser: sure
+            appDatabase: sure
+            existingSecret: sure-db-app
+
+        redisOperator:
+          enabled: false
+          managed:
+            enabled: false
+
+        redisSimple:
+          enabled: true
+          auth:
+            enabled: true
+            existingSecret: sure
+            passwordKey: redis-password
+          persistence:
+            enabled: true
+            storageClass: longhorn
+            size: 2Gi
+
+        migrations:
+          strategy: job
+
+        web:
+          replicas: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+
+        worker:
+          replicas: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+
+        service:
+          type: ClusterIP
+          port: 80
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sure
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: sure
+  namespace: sure
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: sure
+  data:
+    - secretKey: SECRET_KEY_BASE
+      remoteRef:
+        key: /sure/SECRET_KEY_BASE
+    - secretKey: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      remoteRef:
+        key: /sure/ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    - secretKey: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      remoteRef:
+        key: /sure/ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    - secretKey: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      remoteRef:
+        key: /sure/ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+    - secretKey: redis-password
+      remoteRef:
+        key: /sure/redis-password
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: sure-db-app
+  namespace: sure
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: sure-db-app
+  data:
+    - secretKey: username
+      remoteRef:
+        key: /sure/PG_USER
+    - secretKey: password
+      remoteRef:
+        key: /sure/PG_PASSWORD
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sure
+  namespace: sure
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - sure.vcov.org
+    - sure.lan
+  rules:
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+      backendRefs:
+      - name: sure
+        port: 80
