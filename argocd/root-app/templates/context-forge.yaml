@@ -61,8 +61,6 @@ spec:
             tag: v1.0.8
             pullPolicy: IfNotPresent
           config:
-            AUTH_REQUIRED: "false"
-            MCP_REQUIRE_AUTH: "false"
             REQUIRE_STRONG_SECRETS: "false"
           ingress:
             enabled: false
@@ -227,6 +225,8 @@ spec:
     template:
       mergePolicy: Merge
       data:
+        AUTH_REQUIRED: "true"
+        MCP_REQUIRE_AUTH: "true"
         PLUGINS_ENABLED: "true"
         SSO_API_TOKEN_AUTH_ENABLED: "true"
 
