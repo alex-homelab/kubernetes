@@ -54,7 +54,7 @@ spec:
                   config:
                     export_full_payload: false
                     max_payload_bytes_size: 10000
-          replicaCount: 1
+          replicaCount: 3
           hpa:
             enabled: false
           image:
