@@ -61,7 +61,15 @@ spec:
             tag: v1.0.8
             pullPolicy: IfNotPresent
           config:
-            REQUIRE_STRONG_SECRETS: "false"
+            ALLOWED_ORIGINS: '["https://mcpgw.vcov.org"]'
+            APP_DOMAIN: "https://mcpgw.vcov.org"
+            GUNICORN_MAX_REQUESTS: "2000"
+            GUNICORN_MAX_REQUESTS_JITTER: "200"
+            MCPGATEWAY_SESSION_AFFINITY_ENABLED: "true"
+            METRICS_CUSTOM_LABELS: "release: kube-prom"
+            METRICS_NAMESPACE: "monitoring"
+            SSRF_ALLOW_PRIVATE_NETWORKS: "true"
+            USE_STATEFUL_SESSIONS: "true"
           ingress:
             enabled: false
           metrics:
