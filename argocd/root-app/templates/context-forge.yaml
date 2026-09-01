@@ -357,6 +357,51 @@ spec:
     - secretKey: SSO_KEYCLOAK_CLIENT_SECRET
       remoteRef:
         key: /context-forge/SSO_KEYCLOAK_CLIENT_SECRET
+    - secretKey: SSO_GENERIC_ENABLED
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_ENABLED
+    - secretKey: SSO_GENERIC_PROVIDER_ID
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_PROVIDER_ID
+    - secretKey: SSO_GENERIC_DISPLAY_NAME
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_DISPLAY_NAME
+    - secretKey: SSO_GENERIC_CLIENT_ID
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_CLIENT_ID
+    - secretKey: SSO_GENERIC_CLIENT_SECRET
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_CLIENT_SECRET
+    - secretKey: SSO_GENERIC_AUTHORIZATION_URL
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_AUTHORIZATION_URL
+    - secretKey: SSO_GENERIC_TOKEN_URL
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_TOKEN_URL
+    - secretKey: SSO_GENERIC_USERINFO_URL
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_USERINFO_URL
+    - secretKey: SSO_GENERIC_ISSUER
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_ISSUER
+    - secretKey: SSO_GENERIC_JWKS_URI
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_JWKS_URI
+    - secretKey: SSO_GENERIC_SCOPE
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_SCOPE
+    - secretKey: SSO_GENERIC_GROUPS_CLAIM
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_GROUPS_CLAIM
+    - secretKey: SSO_GENERIC_ADMIN_GROUPS
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_ADMIN_GROUPS
+    - secretKey: SSO_GENERIC_ROLE_MAPPINGS
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_ROLE_MAPPINGS
+    - secretKey: SSO_GENERIC_DEFAULT_ROLE
+      remoteRef:
+        key: /context-forge/SSO_GENERIC_DEFAULT_ROLE
     - secretKey: OTEL_EXPORTER_OTLP_HEADERS
       remoteRef:
         key: /context-forge/OTEL_EXPORTER_OTLP_HEADERS
