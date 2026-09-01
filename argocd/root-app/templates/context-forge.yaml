@@ -154,7 +154,9 @@ spec:
       jqPathExpressions:
         - '.spec.template.spec.initContainers[] | select(.name == "patch-okta-jwks-discovery")'
         - '.spec.template.spec.volumes[] | select(.name == "context-forge-utils-patch")'
+        - '.spec.template.spec.volumes[] | select(.name == "context-forge-transport-patch")'
         - '.spec.template.spec.containers[] | select(.name == "mcp-context-forge").volumeMounts[] | select(.name == "context-forge-utils-patch")'
+        - '.spec.template.spec.containers[] | select(.name == "mcp-context-forge").volumeMounts[] | select(.name == "context-forge-transport-patch")'
   syncPolicy:
     automated:
       prune: true
