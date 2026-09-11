@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: portkey
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portkey
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 4.6.2
+    helm:
+      releaseName: portkey
+      valuesObject:
+        controllers:
+          portkey:
+            strategy: RollingUpdate
+            containers:
+              app:
+                image:
+                  repository: portkeyai/gateway
+                  tag: 1.15.2
+                  pullPolicy: IfNotPresent
+                env:
+                  PORT: "8787"
+                  PORTKEY_CLIENT_AUTH: "false"
+                probes:
+                  liveness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /v1/health
+                        port: 8787
+                      initialDelaySeconds: 10
+                      periodSeconds: 30
+                      timeoutSeconds: 5
+                  readiness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /v1/health
+                        port: 8787
+                      initialDelaySeconds: 5
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                  startup:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /v1/health
+                        port: 8787
+                      failureThreshold: 30
+                      periodSeconds: 5
+                      timeoutSeconds: 5
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 128Mi
+                  limits:
+                    memory: 512Mi
+
+        service:
+          app:
+            controller: portkey
+            ports:
+              http:
+                port: 8787
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: portkey
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
