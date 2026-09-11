@@ -348,6 +348,9 @@ spec:
     - secretKey: DEFAULT_USER_PASSWORD
       remoteRef:
         key: /context-forge/DEFAULT_USER_PASSWORD
+    - secretKey: BASIC_AUTH_PASSWORD
+      remoteRef:
+        key: /context-forge/DEFAULT_USER_PASSWORD
     - secretKey: APP_DOMAIN
       remoteRef:
         key: /context-forge/APP_DOMAIN
