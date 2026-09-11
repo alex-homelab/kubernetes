@@ -140,6 +140,11 @@ spec:
               login: true
               passwordSecret:
                 name: buzz-password
+            - name: deploystack
+              ensure: present
+              login: true
+              passwordSecret:
+                name: deploystack-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db
