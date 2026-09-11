@@ -136,31 +136,6 @@ spec:
               http:
                 port: 80
 
-        route:
-          app:
-            enabled: true
-            parentRefs:
-              - name: traefik-gateway
-                namespace: traefik
-            hostnames:
-              - deploystack.vcov.org
-              - deploystack.lan
-            rules:
-              - matches:
-                - path:
-                    type: PathPrefix
-                    value: /api
-                backendRefs:
-                - name: deploystack-backend
-                  port: 3000
-              - matches:
-                - path:
-                    type: PathPrefix
-                    value: /
-                backendRefs:
-                - name: deploystack-frontend
-                  port: 80
-
         persistence:
           backend-data:
             enabled: true
