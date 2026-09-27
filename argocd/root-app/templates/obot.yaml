@@ -40,6 +40,7 @@ spec:
           OBOT_SERVER_ENABLE_AUTHENTICATION: false
           OBOT_ENABLE_AGENTS: "true"
           OBOT_SERVER_ENCRYPTION_PROVIDER: custom
+          OBOT_SERVER_ENCRYPTION_CONFIG_FILE: /config/encryption.yaml
           OBOT_SERVER_MCPRUNTIME_BACKEND: kubernetes
           OBOT_SERVER_MCPNAMESPACE: obot-mcp
         mcpNamespace:
