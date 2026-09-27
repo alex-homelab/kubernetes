@@ -120,11 +120,11 @@ spec:
               login: true
               passwordSecret:
                 name: litellm-password
-            - name: bifrost
+            - name: obot
               ensure: present
               login: true
               passwordSecret:
-                name: bifrost-password
+                name: obot-password
             - name: phoenix
               ensure: present
               login: true
