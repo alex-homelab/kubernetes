@@ -24,11 +24,24 @@ spec:
         httpRoute:
           enabled: true
           parentRefs:
-            - name: traefik-gateway
+            - group: gateway.networking.k8s.io
+              kind: Gateway
+              name: traefik-gateway
               namespace: traefik
               sectionName: websecure
           hostnames:
             - cluster.vcov.org
+          rules:
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /
+              backendRefs:
+                - group: ""
+                  kind: Service
+                  name: headlamp
+                  port: 80
+                  weight: 1
         resources:
           requests:
             cpu: 50m
