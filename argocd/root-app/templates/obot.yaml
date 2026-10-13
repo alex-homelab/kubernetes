@@ -37,7 +37,9 @@ spec:
           existingSecret: obot
         config:
           OBOT_SERVER_HOSTNAME: https://obot.vcov.org
-          OBOT_SERVER_ENABLE_AUTHENTICATION: false
+          OBOT_SERVER_ENABLE_AUTHENTICATION: true
+          OBOT_SERVER_ENABLE_HOSTED_AGENTS: true
+          OBOT_SERVER_HOSTED_AGENTS_STORAGE_CLASS_NAME: local-path
           OBOT_ENABLE_AGENTS: "true"
           OBOT_SERVER_ENCRYPTION_PROVIDER: custom
           OBOT_SERVER_ENCRYPTION_CONFIG_FILE: /config/encryption.yaml
@@ -120,3 +122,21 @@ spec:
     - secretKey: OBOT_SERVER_TUNNEL_PEER_TOKEN
       remoteRef:
         key: /obot/OBOT_SERVER_TUNNEL_PEER_TOKEN
+    - secretKey: OBOT_ARTIFACT_STORAGE_PROVIDER
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_STORAGE_PROVIDER
+    - secretKey: OBOT_ARTIFACT_STORAGE_BUCKET
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_STORAGE_BUCKET
+    - secretKey: OBOT_ARTIFACT_S3_ENDPOINT
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_S3_ENDPOINT
+    - secretKey: OBOT_ARTIFACT_S3_REGION
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_S3_REGION
+    - secretKey: OBOT_ARTIFACT_S3_ACCESS_KEY_ID
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_S3_ACCESS_KEY_ID
+    - secretKey: OBOT_ARTIFACT_S3_SECRET_ACCESS_KEY
+      remoteRef:
+        key: /obot/OBOT_ARTIFACT_S3_SECRET_ACCESS_KEY
