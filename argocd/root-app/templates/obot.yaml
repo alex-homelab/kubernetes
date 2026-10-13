@@ -15,16 +15,17 @@ spec:
   project: default
   source:
     repoURL: https://github.com/obot-platform/obot.git
-    targetRevision: v0.26.1
+    targetRevision: v0.26.3
     path: chart
     helm:
       releaseName: obot
       valuesObject:
         replicaCount: 1
+        updateStrategy: Recreate
         fullnameOverride: obot
         image:
           repository: ghcr.io/obot-platform/obot
-          tag: v0.26.1
+          tag: v0.26.3
           pullPolicy: IfNotPresent
         service:
           type: ClusterIP
