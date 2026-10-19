@@ -93,6 +93,7 @@ spec:
         service:
           nas:
             controller: endpoint-config
+            externalName: nas
             ports:
               jellyfin: 
                 port: 8097
