@@ -60,7 +60,7 @@ spec:
                       name: nas
                       namespace: nas-services
                       labels:
-                        kubernetes.io/service-name: nas-services
+                        kubernetes.io/service-name: nas
                     addressType: IPv4
                     ports:
                       - name: jellyfin
