@@ -35,6 +35,15 @@ spec:
           existingSecret: obot
         tunnelPeer:
           existingSecret: obot
+        extraVolumes:
+          - name: hosts
+            configMap:
+              name: obot-hosts
+        extraVolumeMounts:
+          - name: hosts
+            mountPath: /etc/hosts
+            subPath: hosts
+            readOnly: true
         config:
           OBOT_SERVER_HOSTNAME: https://obot.vcov.org
           OBOT_SERVER_ENABLE_AUTHENTICATION: true
@@ -64,6 +73,21 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: obot-hosts
+  namespace: obot
+data:
+  hosts: |
+    127.0.0.1 localhost
+    ::1 localhost ip6-localhost ip6-loopback
+    fe00::0 ip6-localnet
+    fe00::0 ip6-mcastprefix
+    fe00::1 ip6-allnodes
+    fe00::2 ip6-allrouters
+    192.168.1.160 api.openai.com
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
