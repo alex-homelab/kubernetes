@@ -1,0 +1,25 @@
+public-resources:
+  quant-ux:
+    name: Quant-UX
+    protocol: http
+    full-domain: ux.olgashu.com
+    auth:
+      sso-enabled: true
+    rules:
+    - action: pass
+      match: country
+      value: EE
+      priority: 98
+    - action: deny
+      match: cidr
+      value: 0.0.0.0/0
+      priority: 99
+    - action: deny
+      match: cidr
+      value: ::/0
+      priority: 100
+    targets:
+    - site: home-k8s
+      hostname: quant-ux-proxy.quant-ux.svc.cluster.local
+      method: http
+      port: 8088
