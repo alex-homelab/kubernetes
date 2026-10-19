@@ -57,10 +57,10 @@ spec:
                     apiVersion: discovery.k8s.io/v1
                     kind: EndpointSlice
                     metadata:
-                      name: truenas
+                      name: nas-services
                       namespace: media
                       labels:
-                        kubernetes.io/service-name: media
+                        kubernetes.io/service-name: nas
                     addressType: IPv4
                     ports:
                       - name: jellyfin
@@ -81,21 +81,6 @@ spec:
                       - name: seerr
                         protocol: TCP
                         port: 5056
-                    endpoints:
-                      - conditions:
-                          ready: true
-                        addresses:
-                        - 192.168.1.10
-                    ---
-                    apiVersion: discovery.k8s.io/v1
-                    kind: EndpointSlice
-                    metadata:
-                      name: openai
-                      namespace: media
-                      labels:
-                        kubernetes.io/service-name: openai
-                    addressType: IPv4
-                    ports:
                       - name: nanollm
                         protocol: TCP
                         port: 3333
@@ -106,7 +91,7 @@ spec:
                         - 192.168.1.10
                     EOF
         service:
-          truenas:
+          nas:
             controller: endpoint-config
             ports:
               jellyfin: 
@@ -121,9 +106,6 @@ spec:
                 port: 8181
               seerr:
                 port: 5056
-          openai:
-            controller: endpoint-config
-            ports:
               nanollm: 
                 port: 3333
         route:
@@ -137,7 +119,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 8097
           sonarr:
             enabled: true
@@ -149,7 +131,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 8989
           radarr:
             enabled: true
@@ -161,7 +143,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 7878
           prowlarr:
             enabled: true
@@ -173,7 +155,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 9696
           qb:
             enabled: true
@@ -185,7 +167,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 8181
           seerr:
             enabled: true
@@ -197,7 +179,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: media
+                - name: nas
                   port: 5056
           openai:
             enabled: true
@@ -209,7 +191,7 @@ spec:
                 namespace: traefik
             rules: 
             -  backendRefs:
-                - name: openai
+                - name: nas
                   port: 3333
   destination:
     server: https://kubernetes.default.svc
