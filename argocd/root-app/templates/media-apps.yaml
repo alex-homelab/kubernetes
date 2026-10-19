@@ -65,22 +65,40 @@ spec:
                     ports:
                       - name: jellyfin
                         protocol: TCP
-                        port: 30013
+                        port: 8097
                       - name: sonarr
                         protocol: TCP
-                        port: 30113
+                        port: 8989
                       - name: radarr
                         protocol: TCP
-                        port: 30025
+                        port: 7878
                       - name: prowlarr
                         protocol: TCP
-                        port: 30050
+                        port: 9696
                       - name: qb
                         protocol: TCP
-                        port: 30024
-                      - name: jellyseerr
+                        port: 8181
+                      - name: seerr
                         protocol: TCP
-                        port: 30042
+                        port: 5056
+                    endpoints:
+                      - conditions:
+                          ready: true
+                        addresses:
+                        - 192.168.1.10
+                    ---
+                    apiVersion: discovery.k8s.io/v1
+                    kind: EndpointSlice
+                    metadata:
+                      name: openai
+                      namespace: media
+                      labels:
+                        kubernetes.io/service-name: openai
+                    addressType: IPv4
+                    ports:
+                      - name: nanollm
+                        protocol: TCP
+                        port: 3333
                     endpoints:
                       - conditions:
                           ready: true
@@ -92,17 +110,22 @@ spec:
             controller: endpoint-config
             ports:
               jellyfin: 
-                port: 30013
+                port: 8097
               sonarr: 
-                port: 30113
+                port: 8989
               radarr:
-                port: 30025
+                port: 7878
               prowlarr:
-                port: 30050
+                port: 9696
               qb:
-                port: 30024
-              jellyseerr:
-                port: 30042
+                port: 8181
+              seerr:
+                port: 5056
+          openai:
+            controller: endpoint-config
+            ports:
+              nanollm: 
+                port: 3333
         route:
           jellyfin:
             enabled: true
@@ -115,7 +138,7 @@ spec:
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30013
+                  port: 8097
           sonarr:
             enabled: true
             hostnames:
@@ -127,7 +150,7 @@ spec:
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30113
+                  port: 8989
           radarr:
             enabled: true
             hostnames:
@@ -139,7 +162,7 @@ spec:
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30025
+                  port: 7878
           prowlarr:
             enabled: true
             hostnames:
@@ -151,7 +174,7 @@ spec:
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30050
+                  port: 9696
           qb:
             enabled: true
             hostnames:
@@ -163,19 +186,31 @@ spec:
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30024
-          jellyseerr:
+                  port: 8181
+          seerr:
             enabled: true
             hostnames:
-              - jellyseerr.vcov.org
-              - jellyseerr.lan
+              - seerr.vcov.org
+              - seerr.lan
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
             rules: 
             -  backendRefs:
                 - name: media
-                  port: 30042
+                  port: 5056
+          openai:
+            enabled: true
+            hostnames:
+              - api.openai.com
+              - openai.lan
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+            rules: 
+            -  backendRefs:
+                - name: openai
+                  port: 3333
   destination:
     server: https://kubernetes.default.svc
     namespace: media
