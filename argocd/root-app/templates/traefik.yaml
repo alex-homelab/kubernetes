@@ -76,6 +76,9 @@ spec:
                 - kind: Secret
                   name: local-selfsigned-tls  # the Secret we created before the installation
                   group: ""
+                - kind: Secret
+                  name: openai-proxy-tls
+                  group: ""
 
         logs:
           general:
