@@ -173,4 +173,6 @@ spec:
   dnsNames:
   - api.openai.com
   privateKey:
+    algorithm: ECDSA
+    size: 256
     rotationPolicy: Always
