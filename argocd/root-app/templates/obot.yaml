@@ -36,10 +36,17 @@ spec:
         tunnelPeer:
           existingSecret: obot
         extraVolumes:
+          - name: custom-ca
+            configMap:
+              name: obot-ca
           - name: hosts
             configMap:
               name: obot-hosts
         extraVolumeMounts:
+          - name: custom-ca
+            mountPath: /etc/ssl/certs/infisical-ca.pem
+            subPath: ca.crt
+            readOnly: true
           - name: hosts
             mountPath: /etc/hosts
             subPath: hosts
@@ -73,6 +80,28 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: obot-ca
+  namespace: obot
+data:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIICFTCCAbqgAwIBAgIUbETX7I7SdUddWCCOjMNuUngJSSwwCgYIKoZIzj0EAwIw
+    aDELMAkGA1UEBhMCRUUxEDAOBgNVBAoTB0hvbWVsYWIxCzAJBgNVBAsTAklUMREw
+    DwYDVQQIEwhIYXJqdW1hYTEVMBMGA1UEAxMMSW5maXNpY2FsIENBMRAwDgYDVQQH
+    EwdUYWxsaW5uMB4XDTI2MTAyMDA4Mzc1NVoXDTM2MTAyMDAwMDAwMFowaDELMAkG
+    A1UEBhMCRUUxEDAOBgNVBAoTB0hvbWVsYWIxCzAJBgNVBAsTAklUMREwDwYDVQQI
+    EwhIYXJqdW1hYTEVMBMGA1UEAxMMSW5maXNpY2FsIENBMRAwDgYDVQQHEwdUYWxs
+    aW5uMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEW30AwMvECMVeZ5VhgNwgp1M9
+    OyUHhJuTos0ILRzc/ngq5gKGWQWP5I+ISqiVOdO7hv8B6W2qPlEgs6l1KWGHTqNC
+    MEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYEFKzW
+    5bokIk+V2+vr8jnvQuOB4QzqMAoGCCqGSM49BAMCA0kAMEYCIQCTtBk+/e3aV0vD
+    iv84Pcf9f1TMhEMOfWgspAHdWhyVmgIhALQmMwWU94B71dctPACX9bkc9tb6eG7/
+    6oH85xZgOBIR
+    -----END CERTIFICATE-----
 ---
 apiVersion: v1
 kind: ConfigMap
