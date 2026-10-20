@@ -76,6 +76,15 @@ spec:
                 - kind: Secret
                   name: local-selfsigned-tls  # the Secret we created before the installation
                   group: ""
+
+            openai:
+              port: 443
+              protocol: HTTPS
+              hostname: api.openai.com
+              namespacePolicy:
+                from: All
+              mode: Terminate
+              certificateRefs:
                 - kind: Secret
                   name: openai-proxy-tls
                   group: ""
