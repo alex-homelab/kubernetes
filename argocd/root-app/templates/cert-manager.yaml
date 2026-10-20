@@ -31,3 +31,42 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: infisical-acme-eab
+  namespace: cert-manager
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: infisical-acme-eab
+  data:
+  - secretKey: hmac-key
+    remoteRef:
+      key: /cert-manager/ACME_EAB_HMAC_KEY
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: infisical-acme
+spec:
+  acme:
+    server: https://eu.infisical.com/api/v1/cert-manager/acme/applications/2ccffe2d-1dd6-4516-9aaa-2a1fa890f014/profiles/6ecfe689-a936-4ffa-99c9-3bcc38304faa/directory
+    externalAccountBinding:
+      keyID: 62bc2875-5b30-47ea-8a5c-8f41cdcc3d52
+      keySecretRef:
+        name: infisical-acme-eab
+        key: hmac-key
+    privateKeySecretRef:
+      name: infisical-acme-account-key
+    solvers:
+    - http01:
+        gatewayHTTPRoute:
+          parentRefs:
+          - name: traefik-gateway
+            namespace: traefik
+            kind: Gateway
+            sectionName: web
