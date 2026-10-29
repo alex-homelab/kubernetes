@@ -93,6 +93,9 @@ data:
       access_log off;
       proxy_temp_path /tmp/proxy;
       client_body_temp_path /tmp/client;
+      fastcgi_temp_path /tmp/fastcgi;
+      uwsgi_temp_path /tmp/uwsgi;
+      scgi_temp_path /tmp/scgi;
       # Variable certificate paths allow renewal without restarting ArgoCD.
       map $ssl_server_name $tls_dir { default /etc/oidc-tls; }
       server {
