@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  keycloak.override: |
+    # Preserve the public issuer name while using the internal HTTPS service.
+    rewrite stop name exact sso.vcov.org keycloak-internal-proxy.tooling.svc.cluster.local answer auto
