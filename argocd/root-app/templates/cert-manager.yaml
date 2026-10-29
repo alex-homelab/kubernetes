@@ -13,6 +13,10 @@ spec:
     helm:
       releaseName: cert-manager
       valuesObject:
+        # DNS-01 self-checks must see public records, not the homelab DNS view.
+        extraArgs:
+          - --dns01-recursive-nameservers-only
+          - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
         crds:
           enabled: true
           keep: true
