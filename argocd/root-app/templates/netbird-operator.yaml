@@ -1,0 +1,71 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: netbird-operator
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: oci://ghcr.io/netbirdio/helm-charts/netbird-operator
+    targetRevision: 0.9.0
+    path: .
+    helm:
+      releaseName: netbird-operator
+      valuesObject:
+        cluster:
+          name: home
+        netbirdAPI:
+          keyFromSecret:
+            name: netbird-mgmt-api-key
+            key: NB_API_KEY
+        webhook:
+          enableCertManager: true
+          # Optional sidecar injection must not block pod creation during outages.
+          failurePolicy: Ignore
+        operator:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+        ingress:
+          enabled: false
+        gatewayAPI:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: netbird
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: netbird
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: netbird-mgmt-api-key
+  namespace: netbird
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: netbird-mgmt-api-key
+  data:
+    - secretKey: NB_API_KEY
+      remoteRef:
+        key: /netbird-operator/NB_API_KEY
