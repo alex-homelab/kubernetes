@@ -41,25 +41,6 @@ spec:
     cnpg.io/cluster: postgres
     cnpg.io/instanceRole: primary
 ---
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: litellm-password
-  namespace: db
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: infisical
-  target:
-    name: litellm-password
-  data:
-    - secretKey: username
-      remoteRef:
-        key: /litellm/PG_USER
-    - secretKey: password
-      remoteRef:
-        key: /litellm/PG_PASSWORD
----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -83,28 +64,13 @@ spec:
             storageClass: local-path
 
           enableSuperuserAccess: true
-        
+
           roles:
-            - name: umami
-              ensure: present
-              login: true
-              passwordSecret:
-                name: umami-password
-            - name: sparky
-              ensure: present
-              login: true
-              passwordSecret:
-                name: sparky-password
             - name: keycloak
               ensure: present
               login: true
               passwordSecret:
                 name: keycloak-password
-            - name: terrakube
-              ensure: present
-              login: true
-              passwordSecret:
-                name: terrakube-password
             - name: n8n
               ensure: present
               login: true
@@ -115,11 +81,6 @@ spec:
               login: true
               passwordSecret:
                 name: context-forge-password
-            - name: litellm
-              ensure: present
-              login: true
-              passwordSecret:
-                name: litellm-password
             - name: obot
               ensure: present
               login: true
@@ -130,16 +91,6 @@ spec:
               login: true
               passwordSecret:
                 name: phoenix-password
-            - name: instatic
-              ensure: present
-              login: true
-              passwordSecret:
-                name: instatic-password
-            - name: buzz
-              ensure: present
-              login: true
-              passwordSecret:
-                name: buzz-password
             - name: deploystack
               ensure: present
               login: true
