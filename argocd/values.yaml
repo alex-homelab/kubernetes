@@ -6,7 +6,6 @@ argo-cd:
       oidc.config: |
         name: Keycloak
         issuer: $oidc.keycloak.issuer
-        rootCA: $argocd-oidc-tls:ca.crt
         clientID: $oidc.keycloak.clientID
         enablePKCEAuthentication: true
         refreshTokenThreshold: 2m
@@ -19,83 +18,6 @@ argo-cd:
     domain: argo.vcov.org
 
   server:
-    # Override this hostname only inside argocd-server's pod. The browser
-    # continues to use the public NetBird endpoint and the same OIDC issuer.
-    initContainers:
-      - name: oidc-hosts
-        image: nginx:stable-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
-        command: ["/bin/sh", "-ec"]
-        args:
-          - |
-            cat /etc/hosts > /oidc-hosts/hosts
-            printf '\n127.0.0.1 sso.vcov.org\n' >> /oidc-hosts/hosts
-        securityContext:
-          runAsUser: 101
-          runAsGroup: 101
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: [ALL]
-        volumeMounts:
-          - name: oidc-hosts
-            mountPath: /oidc-hosts
-    extraContainers:
-      - name: oidc-proxy
-        image: nginx:stable-alpine@sha256:0e52bd054126cdc040b1276c0af347aeb02a41b9cfe305d6094767ac30e97949
-        command: ["nginx", "-g", "daemon off;", "-c", "/etc/oidc-proxy/nginx.conf"]
-        securityContext:
-          runAsUser: 101
-          runAsGroup: 101
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop: [ALL]
-            add: [NET_BIND_SERVICE]
-          seccompProfile:
-            type: RuntimeDefault
-        resources:
-          requests:
-            cpu: 10m
-            memory: 32Mi
-          limits:
-            memory: 128Mi
-        readinessProbe:
-          exec:
-            command: ["wget", "-qO-", "http://127.0.0.1:8085/healthz"]
-          initialDelaySeconds: 1
-          periodSeconds: 5
-        livenessProbe:
-          exec:
-            command: ["wget", "-qO-", "http://127.0.0.1:8085/healthz"]
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        volumeMounts:
-          - name: oidc-proxy-config
-            mountPath: /etc/oidc-proxy
-            readOnly: true
-          - name: oidc-tls
-            mountPath: /etc/oidc-tls
-            readOnly: true
-          - name: oidc-proxy-tmp
-            mountPath: /tmp
-    volumeMounts:
-      - name: oidc-hosts
-        mountPath: /etc/hosts
-        subPath: hosts
-        readOnly: true
-    volumes:
-      - name: oidc-hosts
-        emptyDir: {}
-      - name: oidc-proxy-config
-        configMap:
-          name: argocd-oidc-proxy
-      - name: oidc-tls
-        secret:
-          secretName: argocd-oidc-tls
-      - name: oidc-proxy-tmp
-        emptyDir: {}
     httproute:
       enabled: true
       hostnames:
