@@ -70,3 +70,20 @@ spec:
             namespace: traefik
             kind: Gateway
             sectionName: web
+
+{{- range $service := list "cert-manager" "cert-manager-cainjector" "cert-manager-webhook" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: cert-manager
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

@@ -71,3 +71,20 @@ spec:
     - secretKey: PGADMIN_DEFAULT_PASSWORD
       remoteRef:
         key: /pgadmin/PGADMIN_DEFAULT_PASSWORD
+
+{{- range $service := list "pgadmin-pgadmin4" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: db
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

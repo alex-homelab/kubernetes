@@ -19,3 +19,20 @@ spec:
       selfHeal: true
     syncOptions:
       - ServerSideApply=true
+
+{{- range $service := list "argo-cd-argocd-applicationset-controller" "argo-cd-argocd-dex-server" "argo-cd-argocd-redis" "argo-cd-argocd-repo-server" "argo-cd-argocd-server" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: argocd
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

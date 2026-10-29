@@ -254,3 +254,20 @@ spec:
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
         key: /karakeep/R2_SECRET_KEY
+
+{{- range $service := list "karakeep" "karakeep-chrome" "karakeep-meilisearch" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: karakeep
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

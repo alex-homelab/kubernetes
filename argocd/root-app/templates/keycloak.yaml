@@ -147,3 +147,20 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+
+{{- range $service := list "keycloak-http" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: tooling
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

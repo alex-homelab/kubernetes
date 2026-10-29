@@ -55,3 +55,20 @@ spec:
     - secretKey: PANGOLIN_ENDPOINT
       remoteRef:
         key: /pangolin/PANGOLIN_ENDPOINT
+
+{{- range $service := list "newt-newt-main" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: pangolin
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

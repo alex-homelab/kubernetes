@@ -169,3 +169,20 @@ spec:
       backendRefs:
       - name: sure
         port: 80
+
+{{- range $service := list "sure" "sure-db-r" "sure-db-ro" "sure-db-rw" "sure-redis" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: sure
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

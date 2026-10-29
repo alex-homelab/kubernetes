@@ -188,3 +188,20 @@ spec:
     algorithm: ECDSA
     size: 256
     rotationPolicy: Always
+
+{{- range $service := list "traefik" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: traefik
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

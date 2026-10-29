@@ -202,3 +202,20 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+
+{{- range $service := list "nas-services" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: nas-services
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

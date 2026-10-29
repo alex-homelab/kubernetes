@@ -180,3 +180,20 @@ spec:
 #               mc admin replicate add local/linkwarden r2/linkwarden-data-backup || true
 
 #               echo "Replication configured"
+
+{{- range $service := list "minio" "minio-console" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: minio
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

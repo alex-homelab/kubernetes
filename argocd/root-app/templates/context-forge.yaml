@@ -426,3 +426,20 @@ spec:
     - secretKey: REDIS_PASSWORD
       remoteRef:
         key: /context-forge/REDIS_PASSWORD
+
+{{- range $service := list "context-forge-mcp-stack-mcp-fast-time-server" "context-forge-mcp-stack-mcpgateway" "context-forge-mcp-stack-redis" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: context-forge
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

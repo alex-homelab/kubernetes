@@ -96,3 +96,20 @@ spec:
     - secretKey: KEYCLOAK_ADMIN_PASSWORD
       remoteRef:
         key: /keycloak/KEYCLOAK_PASSWORD
+
+{{- range $service := list "keycloak-mcp" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: keycloak-mcp
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

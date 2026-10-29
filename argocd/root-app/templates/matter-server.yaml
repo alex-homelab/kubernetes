@@ -142,3 +142,20 @@ spec:
     - secretKey: AWS_DEFAULT_REGION
       remoteRef:
         key: /matter-server/R2_REGION
+
+{{- range $service := list "homeassistant" "matter-server" "mosquitto-mqtt" "mosquitto-ws" "zigbee2mqtt" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: smarthome
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

@@ -193,3 +193,20 @@ spec:
     - secretKey: OBOT_ARTIFACT_S3_SECRET_ACCESS_KEY
       remoteRef:
         key: /obot/OBOT_ARTIFACT_S3_SECRET_ACCESS_KEY
+
+{{- range $service := list "obot" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: obot
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

@@ -69,3 +69,44 @@ spec:
     - secretKey: NB_API_KEY
       remoteRef:
         key: /netbird-operator/NB_API_KEY
+
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkRouter
+metadata:
+  name: home-k8s
+  namespace: netbird
+spec:
+  dnsZoneRef:
+    name: k8s
+  workloadOverride:
+    replicas: 2
+    podTemplate:
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: networkrouter
+                      app.kubernetes.io/instance: home-k8s
+                  topologyKey: kubernetes.io/hostname
+
+{{- range $service := list "netbird-operator-metrics" "netbird-operator-webhook-service" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: netbird
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}

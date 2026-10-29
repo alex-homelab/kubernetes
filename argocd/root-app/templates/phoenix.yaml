@@ -148,3 +148,20 @@ spec:
     - secretKey: PHOENIX_CSRF_TRUSTED_ORIGINS
       remoteRef:
         key: /phoenix/PHOENIX_CSRF_TRUSTED_ORIGINS
+
+{{- range $service := list "phoenix-svc" }}
+---
+apiVersion: netbird.io/v1alpha1
+kind: NetworkResource
+metadata:
+  name: {{ $service }}
+  namespace: phoenix
+spec:
+  networkRouterRef:
+    name: home-k8s
+    namespace: netbird
+  serviceRef:
+    name: {{ $service }}
+  groups:
+    - name: k8s-services
+{{- end }}
