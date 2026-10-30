@@ -81,21 +81,6 @@ spec:
               login: true
               passwordSecret:
                 name: context-forge-password
-            - name: obot
-              ensure: present
-              login: true
-              passwordSecret:
-                name: obot-password
-            - name: phoenix
-              ensure: present
-              login: true
-              passwordSecret:
-                name: phoenix-password
-            - name: deploystack
-              ensure: present
-              login: true
-              passwordSecret:
-                name: deploystack-password
   destination:
     server: https://kubernetes.default.svc
     namespace: db

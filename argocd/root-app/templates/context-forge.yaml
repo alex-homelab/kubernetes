@@ -81,9 +81,9 @@ spec:
             - name: CSRF_ENABLED
               value: "false"
             - name: OTEL_ENABLE_OBSERVABILITY
-              value: "true"
+              value: "false"
             - name: OTEL_TRACES_EXPORTER
-              value: "otlp"
+              value: "none"
             - name: OTEL_SERVICE_NAME
               value: "context-forge"
             - name: OTEL_RESOURCE_ATTRIBUTES
@@ -94,8 +94,6 @@ spec:
               value: "true"
             - name: OTEL_CAPTURE_IDENTITY_ATTRIBUTES
               value: "true"
-            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-              value: "http://phoenix-svc.phoenix.svc.cluster.local:6006/v1/traces"
             - name: STRUCTURED_LOGGING_DATABASE_ENABLED
               value: "true"
             - name: METRICS_AGGREGATION_AUTO_START
