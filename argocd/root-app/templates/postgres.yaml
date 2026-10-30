@@ -58,6 +58,10 @@ spec:
         nameOverride: postgres
         cluster:
           instances: 2
+          affinity:
+            enablePodAntiAffinity: true
+            podAntiAffinityType: required
+            topologyKey: kubernetes.io/hostname
 
           storage:
             size: 20Gi
