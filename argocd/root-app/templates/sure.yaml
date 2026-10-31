@@ -72,7 +72,7 @@ spec:
           strategy: job
 
         web:
-          replicas: 1
+          replicas: 0
           resources:
             requests:
               cpu: 100m
@@ -81,7 +81,7 @@ spec:
               memory: 1Gi
 
         worker:
-          replicas: 1
+          replicas: 0
           resources:
             requests:
               cpu: 100m
