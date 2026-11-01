@@ -31,6 +31,9 @@ spec:
         timezone: "Europe/Tallinn"
 
         main:
+          count: 0
+          pdb:
+            enabled: false
           extraSecretNamesForEnvFrom:
             - n8n
           resources:
