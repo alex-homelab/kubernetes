@@ -54,7 +54,7 @@ spec:
                   config:
                     export_full_payload: false
                     max_payload_bytes_size: 10000
-          replicaCount: 3
+          replicaCount: 0
           hpa:
             enabled: false
           image:
@@ -126,6 +126,7 @@ spec:
           enabled: false
 
         mcpFastTimeServer:
+          replicaCount: 0
           ingress:
             enabled: false
 
@@ -135,7 +136,8 @@ spec:
             existingSecret: context-forge-postgres
 
         redis:
-          enabled: true
+          # Suspend ephemeral cache while Context Forge is stopped.
+          enabled: false
           auth:
             enabled: true
             existingSecret: context-forge-mcp-stack-redis-secret
