@@ -19,6 +19,8 @@ spec:
     path: charts/mcp-stack
     helm:
       releaseName: context-forge
+      # Chart schema requires replicas >= 1; allow intentional suspension.
+      skipSchemaValidation: true
       valuesObject:
         networkPolicies:
           enabled: false
